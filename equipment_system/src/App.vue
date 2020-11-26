@@ -1,12 +1,19 @@
 <template>
   <div id="app">
-    <router-view/>
+    <!--  导航栏  -->
+    <navigation v-if="!$route.meta.showNav"></navigation>
+    <!--  页面内容  -->
+    <router-view v-else/>
   </div>
 </template>
 
 <script>
+  import Navigation from "./components/Navigation";
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Navigation
+  }
 }
 </script>
 
