@@ -48,12 +48,12 @@
         </a-table>
       </div>
     </div>
-    <dev-modal :show="isShowModal" :data="modalData" :title="modalTitle"></dev-modal>
+    <dev-modal :show.sync="isShowModal" :data="modalData" :title="modalTitle"></dev-modal>
   </div>
 </template>
 
 <script>
-  import DevModal from "./DevModal/DevModal";
+  import DevModal from "./Modal/DevModal";
   const columns = [
     {
       title: '车间',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal v-model="show" :title="title" @ok="handleOk" cancelText="取消" okText="保存">
+    <a-modal :visible="show" :title="title" @ok="handleOk" @cancel="handleCancel" cancelText="取消" okText="保存">
       <div v-if="data.data">
         <!--  设备基本信息显示    -->
         <a-row>
@@ -88,10 +88,14 @@
       }
     },
     methods: {
+      //确定按钮事件
       handleOk(e) {
-        console.log(e);
-        this.show = false;
+        this.$emit("update:show",false)
       },
+      //取消按钮事件
+      handleCancel(e) {
+        this.$emit("update:show",false)
+      }
     }
   }
 </script>

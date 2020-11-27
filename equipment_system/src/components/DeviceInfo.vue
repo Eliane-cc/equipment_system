@@ -32,38 +32,30 @@
             slot-scope="text, record, index"
           >
             <div :key="col">
-              <a-input
-                v-if="record.editable"
-                style="margin: -5px 0"
-                :value="text"
-                @change="e => handleChange(e.target.value, record.key, col)"
-              />
-              <template v-else>
+              <template>
                 {{ text }}
               </template>
             </div>
           </template>
           <template slot="operation" slot-scope="text, record, index">
             <div class="editable-row-operations">
-              <span v-if="record.editable">
-                <a @click="() => save(record.key)">保存</a>
-                <a-popconfirm title="是否确定取消?" cancelText="取消" okText="确定" @confirm="() => cancel(record.key)">
-                  <a>取消</a>
-                </a-popconfirm>
-              </span>
-              <span v-else>
-                <a :disabled="editingKey !== ''" @click="() => edit(record.key)">编辑</a>
-                <a :disabled="editingKey !== ''" @click="() => delete(record.key)">删除</a>
-              </span>
+               <span>
+                  <a @click="() => editDev(record,text)">编辑</a>
+                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record.key)">
+                    <a>删除</a>
+                  </a-popconfirm>
+                </span>
             </div>
           </template>
         </a-table>
       </div>
     </div>
+    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle"></action-modal>
   </div>
 </template>
 
 <script>
+  import ActionModal from "./Modal/ActionModal";
   const columns = [
     {
       title: '车间',
@@ -115,6 +107,9 @@
   }
   export default {
     name: "DeviceInfo.vue",
+    components: {
+      ActionModal
+    },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
       return{
@@ -132,10 +127,12 @@
             placeholder: '请输入设备名称'
           }
         ],
+        isShowModal: false,
+        modalTitle: '',
+        modalData: [],
         form: this.$form.createForm(this, { name: 'advanced_search' }),
         data,
         columns,
-        editingKey: '',
       }
     },
     methods: {
@@ -146,63 +143,59 @@
           console.log('Received values of form: ', values);
         });
       },
-      handleChange(value, key, column) {
-        const newData = [...this.data];
-        const target = newData.filter(item => key === item.key)[0];
-        if (target) {
-          target[column] = value;
-          this.data = newData;
-        }
-      },
       //编辑
-      edit(key) {
-        const newData = [...this.data];
-        const target = newData.filter(item => key === item.key)[0];
-        this.editingKey = key;
+      editDev(value,text) {
+        let editData = [
+          {
+            title: '车间',
+            key: 'workshop',
+            content: value.workshop
+          },
+          {
+            title: '机台',
+            key: 'machine',
+            content: value.machine
+          },
+          {
+            title: '型号',
+            key: 'model',
+            content: value.model
+          },
+          {
+            title: '厂家',
+            key: 'factory',
+            content: value.factory
+          },
+          {
+            title: '设备名称',
+            key: 'equitment',
+            content: value.equitment
+          }
+        ]
+        this.isShowModal = true
+        this.modalTitle = '编辑'
+        this.modalData.editData = editData
+        console.log(value,text)
+      },
+      //删除当前行
+      deleteDev(key) {
+        let newData = [...this.data];
+        const target = newData.filter((item,index) => {
+          return key != item.key
+        })
         if (target) {
-          target.editable = true;
-          this.data = newData;
+          this.data = target;
         }
       },
-      //删除
-      delete(key) {
-        const newData = [...this.data];
-        const target = newData.filter(item => key === item.key)[0];
-        this.editingKey = key;
-        if (target) {
-          target.editable = true;
-          this.data = newData;
-        }
-      },
-      //保存修改
-      save(key) {
-        const newData = [...this.data];
-        const newCacheData = [...this.cacheData];
-        const target = newData.filter(item => key === item.key)[0];
-        const targetCache = newCacheData.filter(item => key === item.key)[0];
-        if (target && targetCache) {
-          delete target.editable;
-          this.data = newData;
-          Object.assign(targetCache, target);
-          this.cacheData = newCacheData;
-        }
-        this.editingKey = '';
-      },
-      //取消修改
-      cancel(key) {
-        const newData = [...this.data];
-        const target = newData.filter(item => key === item.key)[0];
-        this.editingKey = '';
-        if (target) {
-          Object.assign(target, this.cacheData.filter(item => key === item.key)[0]);
-          delete target.editable;
-          this.data = newData;
-        }
-      },
+
       //查询设备
       searchDev(){},
       //新增设备
-      createDev(){}
+      createDev(){
+        this.isShowModal = true
+        this.modalTitle = '新增'
+        this.modalData.label = ['车间','机台','设备名称','型号','厂家']
+      }
     },
   }
 </script>

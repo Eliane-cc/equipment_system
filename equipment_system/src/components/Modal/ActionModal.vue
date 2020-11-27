@@ -1,0 +1,103 @@
+<template>
+  <div>
+    <a-modal :visible="modalVisible" :title="title" @ok="handleCreate" @cancel="handleCancel" cancelText="取消" :okText="title" v-if="title=='新增'">
+      <div v-if="data.label">
+        <!--  输入    -->
+        <a-row class="margin-top" v-for="i in data.label" :key="i">
+          <div>
+            <a-col :span="4" class="title" offset="1">
+              {{i}}：
+            </a-col>
+          </div>
+          <a-col :span="15">
+            <a-input :placeholder=" `请输入${i}`" />
+          </a-col>
+        </a-row>
+      </div>
+    </a-modal>
+    <a-modal :visible="modalVisible" :title="title" @ok="handleEdit" @cancel="handleCancel" cancelText="取消" :okText="title" v-else>
+      <div>
+        <!--  设备基本信息显示    -->
+        <div class="display" v-if="data.displayData">
+          <div class="item" v-for="(item,index) in data.editData" :key="index">
+            <div class="title">{{item.title}}：</div>
+            <div class="content">{{item.content}}</div>
+          </div>
+        </div>
+        <!--  输入    -->
+        <div v-if="data.editData">
+          <a-row class="margin-top" v-for="(item,index) in data.editData" :key="index">
+            <div>
+              <a-col :span="5" class="title" offset="1">
+                {{item.title}}：
+              </a-col>
+            </div>
+            <a-col :span="15">
+              <a-input :placeholder="`请输入${item.title}`" v-model="item.content" @change="editContent(item,index)"/>
+            </a-col>
+          </a-row>
+        </div>
+      </div>
+
+    </a-modal>
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "ActionModal.vue",
+    props: ['data','modalVisible','title'],
+    data(){
+      return{
+        fileList: [],
+        tableData: this.data
+      }
+    },
+    methods: {
+      //编辑确定事件
+      handleEdit(e) {
+        this.$emit("update:modalVisible",false)
+        // console.log("更改后",this.tableData)
+        // this.$emit("update:data",this.tableData)
+      },
+      //新增确定事件
+      handleCreate(e) {
+        this.$emit("update:modalVisible",false)
+      },
+      //编辑内容
+      editContent(newValue,index){
+        this.tableData.editData[index].content = newValue.content
+      },
+      //取消按钮事件
+      handleCancel(e) {
+        this.$emit("update:modalVisible",false)
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .title{
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .margin-top{
+    margin-bottom: 15px;
+  }
+  .margin-top-input{
+    margin-top: 20px;
+  }
+  .item{
+    display: inline-flex;
+    padding: 0;
+    width: 49.5%;
+    text-align: right;
+    margin-bottom: 10px;
+  }
+  .content{
+   margin-left: 10px;
+  }
+  .display{
+
+  }
+</style>
