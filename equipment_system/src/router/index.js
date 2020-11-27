@@ -4,6 +4,7 @@ import Login from "../views/Login";
 import Index from "../views/Index";
 import DeviceInfo from "../components/DeviceInfo";
 import EquitmentPartInfo from "../components/EquitmentPartInfo";
+import PersonalInfo from "../components/PersonalInfo";
 
 Vue.use(Router)
 
@@ -31,6 +32,11 @@ export default new Router({
       path: '/equitmentPartInfo',
       name: 'equitmentPartInfo',
       component: EquitmentPartInfo
+    },
+    {
+      path: '/personalInfo',
+      name: 'personalInfo',
+      component: PersonalInfo
     },
   ]
 })
