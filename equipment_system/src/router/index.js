@@ -15,16 +15,16 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Index',
-      component: Index
-    },
-    {
-      path: '/login',
       name: 'Login',
       component: Login,
       meta:{
         showNav: true
       }
+    },
+    {
+      path: '/index',
+      name: 'Index',
+      component: Index
     },
     {
       path: '/devInfo',
