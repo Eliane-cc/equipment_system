@@ -18,16 +18,13 @@
             <a-button type="primary" html-type="submit" @click="searchDev">
               查询
             </a-button>
-            <a-button type="primary" :style="{ marginLeft: '8px' }" @click="createDev">
-              新增
-            </a-button>
           </a-col>
         </a-row>
       </a-form>
       <div class="table">
         <a-table :columns="columns" :data-source="data" bordered class="column">
           <template
-            v-for="col in ['workshop', 'machine', 'equitment','model','factory','partName','partModel','partFactory','serviceLife','startTime','operationTime','position','operation']"
+            v-for="col in ['workshop', 'machine', 'equitment','model','factory','partName','partModel','partFactory','maintenanceContent','maintenancePersonnel','maintenanceTime','operation']"
             :slot="col"
             slot-scope="text, record, index"
           >
@@ -60,13 +57,13 @@
     {
       title: '车间',
       dataIndex: 'workshop',
-      width: '8%',
+      width: '7%',
       scopedSlots: { customRender: 'workshop' },
     },
     {
       title: '机台',
       dataIndex: 'machine',
-      width: '8%',
+      width: '7%',
       scopedSlots: { customRender: 'machine' },
     },
     {
@@ -106,28 +103,22 @@
       scopedSlots: { customRender: 'partFactory' },
     },
     {
-      title: '使用寿命',
-      dataIndex: 'serviceLife',
-      width: '7%',
-      scopedSlots: { customRender: 'serviceLife' },
+      title: '维护人员',
+      dataIndex: 'maintenancePersonnel',
+      width: '10%',
+      scopedSlots: { customRender: 'maintenancePersonnel' },
     },
     {
-      title: '开始使用时间',
-      dataIndex: 'startTime',
-      width: '8%',
-      scopedSlots: { customRender: 'startTime' },
+      title: '维护内容',
+      dataIndex: 'maintenanceContent',
+      width: '10%',
+      scopedSlots: { customRender: 'maintenanceContent' },
     },
     {
-      title: '运行时间',
-      dataIndex: 'operationTime',
-      width: '7%',
-      scopedSlots: { customRender: 'operationTime' },
-    },
-    {
-      title: '位置',
-      dataIndex: 'position',
-      width: '7%',
-      scopedSlots: { customRender: 'position' },
+      title: '维护时间',
+      dataIndex: 'maintenanceTime',
+      width: '10%',
+      scopedSlots: { customRender: 'maintenanceTime' },
     },
     {
       title: '操作',
@@ -148,14 +139,13 @@
       partName: `零件名称 ${i}`,
       partModel: `零件型号 ${i}`,
       partFactory: `零件厂家. ${i}`,
-      serviceLife: `使用寿命. ${i}`,
-      startTime: `开始使用时间. ${i}`,
-      operationTime: `运行时间. ${i}`,
-      position: `位置. ${i}`
+      maintenanceContent: `维护内容. ${i}`,
+      maintenancePersonnel: `维护人员. ${i}`,
+      maintenanceTime: `维护时间. ${i}`
     });
   }
   export default {
-    name: "EquitmentPartInfo.vue",
+    name: "MaintainData.vue",
     components: {
       ActionModal
     },
@@ -168,17 +158,21 @@
             placeholder: '请输入车间'
           },
           {
-            title: '设备名称',
-            placeholder: '请输入设备名称'
-          },
-          {
             title: '零件名称',
             placeholder: '请输入零件名称'
+          },
+          {
+            title: '设备名称',
+            placeholder: '请输入设备名称'
           },
           {
             title: '机台',
             placeholder: '请输入机台'
           },
+          {
+            title: '维护人员',
+            placeholder: '请输入维护人员'
+          }
         ],
         isShowModal: false,
         modalTitle: '',
@@ -223,9 +217,7 @@
             title: '设备名称',
             key: 'equitment',
             content: value.equitment
-          }
-        ]
-        let editData = [
+          },
           {
             title: '零件名称',
             key: 'partName',
@@ -240,26 +232,23 @@
             title: '零件厂家',
             key: 'partFactory',
             content: value.partFactory
+          }
+        ]
+        let editData = [
+          {
+            title: '维护内容',
+            key: 'maintenanceContent',
+            content: value.maintenanceContent
           },
           {
-            title: '使用寿命',
-            key: 'serviceLife',
-            content: value.serviceLife
+            title: '维护人员',
+            key: 'maintenancePersonnel',
+            content: value.maintenancePersonnel
           },
           {
-            title: '运行时间',
-            key: 'operationTime',
-            content: value.operationTime
-          },
-          {
-            title: '位置',
-            key: 'position',
-            content: value.position
-          },
-          {
-            title: '开始使用时间',
-            key: 'startTime',
-            content: value.startTime
+            title: '维护时间',
+            key: 'maintenanceTime',
+            content: value.maintenanceTime
           }
         ]
         this.isShowModal = true
@@ -281,12 +270,6 @@
 
       //查询设备
       searchDev(){},
-      //新增设备
-      createDev(){
-        this.isShowModal = true
-        this.modalTitle = '新增'
-        this.modalData.label = ['车间','机台','设备名称','设备型号','设备厂家','零件名称','零件型号','零件厂家','使用寿命','运行时间','位置','开始使用时间']
-      }
     },
   }
 </script>
@@ -316,6 +299,6 @@
   .oper{
     display: flex;
     justify-content: space-between;
-    padding-right: 60px;
+    padding-right: 20px;
   }
 </style>

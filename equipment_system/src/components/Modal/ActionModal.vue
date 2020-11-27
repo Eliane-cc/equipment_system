@@ -19,7 +19,7 @@
       <div>
         <!--  设备基本信息显示    -->
         <div class="display" v-if="data.displayData">
-          <div class="item" v-for="(item,index) in data.editData" :key="index">
+          <div class="item" v-for="(item,index) in data.displayData" :key="index">
             <div class="title">{{item.title}}：</div>
             <div class="content">{{item.content}}</div>
           </div>

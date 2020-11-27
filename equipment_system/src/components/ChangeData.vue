@@ -27,7 +27,7 @@
       <div class="table">
         <a-table :columns="columns" :data-source="data" bordered class="column">
           <template
-            v-for="col in ['workshop', 'machine', 'equitment','model','factory','partName','partModel','partFactory','serviceLife','startTime','operationTime','position','operation']"
+            v-for="col in ['workshop', 'machine', 'equitment','model','factory','operation']"
             :slot="col"
             slot-scope="text, record, index"
           >
@@ -155,7 +155,7 @@
     });
   }
   export default {
-    name: "EquitmentPartInfo.vue",
+    name: "ChangeData.vue",
     components: {
       ActionModal
     },
@@ -168,17 +168,17 @@
             placeholder: '请输入车间'
           },
           {
+            title: '机台',
+            placeholder: '请输入机台'
+          },
+          {
             title: '设备名称',
             placeholder: '请输入设备名称'
           },
           {
             title: '零件名称',
             placeholder: '请输入零件名称'
-          },
-          {
-            title: '机台',
-            placeholder: '请输入机台'
-          },
+          }
         ],
         isShowModal: false,
         modalTitle: '',
@@ -210,12 +210,12 @@
             content: value.machine
           },
           {
-            title: '设备型号',
+            title: '型号',
             key: 'model',
             content: value.model
           },
           {
-            title: '设备厂家',
+            title: '厂家',
             key: 'factory',
             content: value.factory
           },
@@ -223,9 +223,7 @@
             title: '设备名称',
             key: 'equitment',
             content: value.equitment
-          }
-        ]
-        let editData = [
+          },
           {
             title: '零件名称',
             key: 'partName',
@@ -241,6 +239,8 @@
             key: 'partFactory',
             content: value.partFactory
           },
+        ]
+        let editData = [
           {
             title: '使用寿命',
             key: 'serviceLife',
