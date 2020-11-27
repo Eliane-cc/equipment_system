@@ -32,7 +32,7 @@
           </a-col>
         </a-row>
         <!--  输入    -->
-        <a-row class="margin-top-input" v-for="(item,index) in data.inputCon" :key="item">
+        <a-row class="margin-top-input" v-for="(item,index) in data.inputCon" :key="index">
           <div>
             <a-col :span="4" class="title" offset="1" v-if="title != '设备更换'">
               {{item.lable}}：
