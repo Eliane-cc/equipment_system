@@ -10,32 +10,38 @@
       <!--  导航栏  -->
       <a-col :span="navSpan">
         <a-menu
-          :default-open-keys="['sub1']"
+          :default-selected-keys="['1']"
+          :default-open-keys="['sub1','sub2']"
           mode="inline"
           theme="dark"
           :inline-collapsed="collapsed"
+          class="nav"
         >
+          <a-menu-item key="1" class="home" @click="navPage('/')">
+            <a-icon type="home" />
+            <span>首页</span>
+          </a-menu-item>
           <a-sub-menu key="sub1">
             <span slot="title"><a-icon type="database"/><span>基本数据</span></span>
-            <a-menu-item key="1">
+            <a-menu-item key="2" @click="navPage('/devInfo')">
               设备信息
             </a-menu-item>
-            <a-menu-item key="2">
+            <a-menu-item key="3" @click="navPage('/devInfo')">
               设备零件信息
             </a-menu-item>
-            <a-menu-item key="3">
+            <a-menu-item key="4" @click="navPage('/devInfo')">
               个人信息
             </a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub2">
             <span slot="title"><a-icon type="setting" /><span>查询管理</span></span>
-            <a-menu-item key="4">
+            <a-menu-item key="5" @click="navPage('/devInfo')">
               维护数据
             </a-menu-item>
-            <a-menu-item key="5">
+            <a-menu-item key="6" @click="navPage('/devInfo')">
               维修数据
             </a-menu-item>
-            <a-menu-item key="6">
+            <a-menu-item key="7" @click="navPage('/devInfo')">
               更换数据
             </a-menu-item>
           </a-sub-menu>
@@ -62,6 +68,7 @@
       };
     },
     methods: {
+      //左侧导航栏收缩
       toggleCollapsed() {
         this.collapsed = !this.collapsed;
         if(this.collapsed == true){
@@ -72,6 +79,10 @@
           this.mainSpan = '19'
         }
       },
+      // 页面跳转
+      navPage(path){
+        this.$router.push(path)
+      }
     },
   }
 </script>
@@ -81,7 +92,7 @@
     background-color: #040014;
   }
   .row{
-    padding: 20px 26px 10px 10px;
+    padding: 20px 20px 10px 6px;
   }
   .flex-row{
     display: flex;
@@ -105,5 +116,8 @@
   .main-content{
     width: 100%;
     background-color: #ffffff;
+  }
+  .nav{
+    text-align: left;
   }
 </style>

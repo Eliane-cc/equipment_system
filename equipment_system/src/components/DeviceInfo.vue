@@ -5,8 +5,8 @@
         <a-row :gutter="24">
           <a-col
             v-for="(item,index) in lable"
-            :key="item"
-            :span="6"
+            :key="index"
+            :span="8"
           >
             <a-form-item :label="item.title">
               <a-input :placeholder="item.placeholder"/>
@@ -15,14 +15,11 @@
         </a-row>
         <a-row>
           <a-col :span="24" :style="{ textAlign: 'right' }">
-            <a-button type="primary" html-type="submit">
+            <a-button type="primary" html-type="submit" @click="searchDev">
               查询
             </a-button>
-            <a-button :style="{ marginLeft: '8px' }" @click="QRCode">
-              设备二维码
-            </a-button>
-            <a-button :style="{ marginLeft: '8px' }" @click="devNFC">
-              设备NFC
+            <a-button type="primary" :style="{ marginLeft: '8px' }" @click="createDev">
+              新增
             </a-button>
           </a-col>
         </a-row>
@@ -30,7 +27,7 @@
       <div class="table">
         <a-table :columns="columns" :data-source="data" bordered class="column">
           <template
-            v-for="col in ['workshop', 'machine', 'equitment','part','operation']"
+            v-for="col in ['workshop', 'machine', 'equitment','model','factory','operation']"
             :slot="col"
             slot-scope="text, record, index"
           >
@@ -48,15 +45,16 @@
           </template>
           <template slot="operation" slot-scope="text, record, index">
             <div class="editable-row-operations">
-            <span v-if="record.editable">
-              <a @click="() => save(record.key)">Save</a>
-              <a-popconfirm title="Sure to cancel?" @confirm="() => cancel(record.key)">
-                <a>Cancel</a>
-              </a-popconfirm>
-            </span>
+              <span v-if="record.editable">
+                <a @click="() => save(record.key)">保存</a>
+                <a-popconfirm title="是否确定取消?" cancelText="取消" okText="确定" @confirm="() => cancel(record.key)">
+                  <a>取消</a>
+                </a-popconfirm>
+              </span>
               <span v-else>
-              <a :disabled="editingKey !== ''" @click="() => edit(record.key)">Edit</a>
-            </span>
+                <a :disabled="editingKey !== ''" @click="() => edit(record.key)">编辑</a>
+                <a :disabled="editingKey !== ''" @click="() => delete(record.key)">删除</a>
+              </span>
             </div>
           </template>
         </a-table>
@@ -70,26 +68,32 @@
     {
       title: '车间',
       dataIndex: 'workshop',
-      width: '20%',
+      width: '16.6%',
       scopedSlots: { customRender: 'workshop' },
     },
     {
       title: '机台',
       dataIndex: 'machine',
-      width: '20%',
+      width: '16.6%',
       scopedSlots: { customRender: 'machine' },
     },
     {
       title: '设备名称',
       dataIndex: 'equitment',
-      width: '20%',
+      width: '16.7%',
       scopedSlots: { customRender: 'equitment' },
     },
     {
-      title: '零件名称',
-      dataIndex: 'part',
-      width: '20%',
-      scopedSlots: { customRender: 'part' },
+      title: '型号',
+      dataIndex: 'model',
+      width: '16.6%',
+      scopedSlots: { customRender: 'model' },
+    },
+    {
+      title: '厂家',
+      dataIndex: 'factory',
+      width: '16.6%',
+      scopedSlots: { customRender: 'factory' },
     },
     {
       title: '操作',
@@ -102,10 +106,11 @@
   for (let i = 0; i < 100; i++) {
     data.push({
       key: i.toString(),
-      workshop: `Edrward ${i}`,
-      machine: 32,
-      equitment: `London Park no. ${i}`,
-      part: `London Park no. ${i}`
+      workshop: `车间 ${i}`,
+      machine: `机台 ${i}`,
+      equitment: `设备名称. ${i}`,
+      model: `型号. ${i}`,
+      factory: `厂家. ${i}`
     });
   }
   export default {
@@ -123,12 +128,8 @@
             placeholder: '请输入机台'
           },
           {
-            title: '设备名',
+            title: '设备名称',
             placeholder: '请输入设备名称'
-          },
-          {
-            title: '零件名',
-            placeholder: '请输入零件名称'
           }
         ],
         form: this.$form.createForm(this, { name: 'advanced_search' }),
@@ -138,20 +139,12 @@
       }
     },
     methods: {
-      //设备二维码
-      QRCode(){
-
-      },
       //表单查询
       handleSearch(e) {
         this.form.validateFields((error, values) => {
           console.log('error', error);
           console.log('Received values of form: ', values);
         });
-      },
-      //设备NFC
-      devNFC(){
-
       },
       handleChange(value, key, column) {
         const newData = [...this.data];
@@ -161,6 +154,7 @@
           this.data = newData;
         }
       },
+      //编辑
       edit(key) {
         const newData = [...this.data];
         const target = newData.filter(item => key === item.key)[0];
@@ -170,6 +164,17 @@
           this.data = newData;
         }
       },
+      //删除
+      delete(key) {
+        const newData = [...this.data];
+        const target = newData.filter(item => key === item.key)[0];
+        this.editingKey = key;
+        if (target) {
+          target.editable = true;
+          this.data = newData;
+        }
+      },
+      //保存修改
       save(key) {
         const newData = [...this.data];
         const newCacheData = [...this.cacheData];
@@ -183,6 +188,7 @@
         }
         this.editingKey = '';
       },
+      //取消修改
       cancel(key) {
         const newData = [...this.data];
         const target = newData.filter(item => key === item.key)[0];
@@ -193,6 +199,10 @@
           this.data = newData;
         }
       },
+      //查询设备
+      searchDev(){},
+      //新增设备
+      createDev(){}
     },
   }
 </script>
@@ -200,6 +210,7 @@
 <style scoped>
   .contain{
     color: #ffffff;
+    background-color: #040014;
   }
   .form {
     padding: 24px;
@@ -216,6 +227,12 @@
     border-radius: 6px;
   }
   .column{
-    background-color: #A5A5A5;
+    background-color: #ffffff;
   }
+  .oper{
+    display: flex;
+    justify-content: space-between;
+    padding-right: 25px;
+  }
+
 </style>
