@@ -316,6 +316,5 @@
   .oper{
     display: flex;
     justify-content: space-between;
-    padding-right: 60px;
   }
 </style>
