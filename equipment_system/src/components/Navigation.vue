@@ -21,7 +21,7 @@
               设备信息
             </a-menu-item>
             <a-menu-item key="2">
-              设备部件信息
+              设备零件信息
             </a-menu-item>
             <a-menu-item key="3">
               个人信息

@@ -86,7 +86,7 @@
       scopedSlots: { customRender: 'equitment' },
     },
     {
-      title: '部件名称',
+      title: '零件名称',
       dataIndex: 'part',
       width: '20%',
       scopedSlots: { customRender: 'part' },
@@ -127,8 +127,8 @@
             placeholder: '请输入设备名称'
           },
           {
-            title: '部件名',
-            placeholder: '请输入部件名称'
+            title: '零件名',
+            placeholder: '请输入零件名称'
           }
         ],
         form: this.$form.createForm(this, { name: 'advanced_search' }),

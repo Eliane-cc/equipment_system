@@ -5,7 +5,7 @@
         <a-row :gutter="24">
           <a-col
             v-for="(item,index) in lable"
-            :key="item"
+            :key="index"
             :span="6"
           >
             <a-form-item :label="item.title">
@@ -34,7 +34,7 @@
             :slot="col"
             slot-scope="text,record,index"
           >
-            <div :key="col" class="column-content">
+            <div :key="index" class="column-content">
               {{ text }}
             </div>
           </template>
@@ -74,7 +74,7 @@
       scopedSlots: { customRender: 'equitment' },
     },
     {
-      title: '部件名称',
+      title: '零件名称',
       dataIndex: 'part',
       width: '20%',
       scopedSlots: { customRender: 'part' },
@@ -93,7 +93,7 @@
       workshop: `车间 ${i}`,
       machine: `机台 ${i}`,
       equitment: `设备名称 ${i}`,
-      part: `部件名称 ${i}`
+      part: `零件名称 ${i}`
     });
   }
   export default {
@@ -118,8 +118,8 @@
             placeholder: '请输入设备名称'
           },
           {
-            title: '部件名',
-            placeholder: '请输入部件名称'
+            title: '零件名',
+            placeholder: '请输入零件名称'
           }
         ],
         isShowModal: false,
@@ -179,16 +179,16 @@
       replaceDev(value){
         let inputCon = [
           {
-            lable: '新部件名称',
-            placeholder: '请输入新部件名称'
+            lable: '新零件名称',
+            placeholder: '请输入新零件名称'
           },
           {
-            lable: '新部件型号',
-            placeholder: '请输入新部件型号'
+            lable: '新零件型号',
+            placeholder: '请输入新零件型号'
           },
           {
-            lable: '新部件厂家',
-            placeholder: '请输入新部件厂家'
+            lable: '新零件厂家',
+            placeholder: '请输入新零件厂家'
           },
         ]
         this.isShowModal = true

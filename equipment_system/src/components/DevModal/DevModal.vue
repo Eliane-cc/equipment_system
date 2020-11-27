@@ -1,7 +1,9 @@
 <template>
   <div>
-    <a-modal v-model="show" :title="title" @ok="handleOk">
-      <a-row>
+    <a-modal v-model="show" :title="title" @ok="handleOk" cancelText="取消" okText="保存">
+      <div v-if="data.data">
+        <!--  设备基本信息显示    -->
+        <a-row>
           <a-col :span="3" class="title" offset="2">
             车间：
           </a-col>
@@ -15,33 +17,63 @@
             {{data.data.machine}}
           </a-col>
         </a-row>
-      <a-row class="margin-top">
-        <a-col :span="4" class="title" offset="1">
-          设备名称：
-        </a-col>
-        <a-col :span="7">
-          {{data.data.equitment}}
-        </a-col>
-        <a-col :span="4" class="title" offset="1">
-          部件名称：
-        </a-col>
-        <a-col :span="7">
-          {{data.data.part}}
-        </a-col>
-      </a-row>
-      <a-row class="margin-top-input" v-for="(item,index) in data.inputCon" :key="item">
-        <div>
-          <a-col :span="4" class="title" offset="1" v-if="title != '设备更换'">
-            {{item.lable}}：
+        <a-row class="margin-top">
+          <a-col :span="4" class="title" offset="1">
+            设备名称：
           </a-col>
-          <a-col :span="5" class="title" offset="1" v-else>
-            {{item.lable}}：
+          <a-col :span="7">
+            {{data.data.equitment}}
           </a-col>
-        </div>
-        <a-col :span="15">
-          <a-textarea :placeholder="item.placeholder" :rows="3" />
-        </a-col>
-      </a-row>
+          <a-col :span="4" class="title" offset="1">
+            零件名称：
+          </a-col>
+          <a-col :span="7">
+            {{data.data.part}}
+          </a-col>
+        </a-row>
+        <!--  输入    -->
+        <a-row class="margin-top-input" v-for="(item,index) in data.inputCon" :key="item">
+          <div>
+            <a-col :span="4" class="title" offset="1" v-if="title != '设备更换'">
+              {{item.lable}}：
+            </a-col>
+            <a-col :span="5" class="title" offset="1" v-else>
+              {{item.lable}}：
+            </a-col>
+          </div>
+          <a-col :span="15">
+            <a-textarea :placeholder="item.placeholder" :rows="3" />
+          </a-col>
+        </a-row>
+        <!--  图片上传    -->
+        <a-row class="margin-top-input">
+          <a-col :span="4" class="title" offset="1">
+            图片上传：
+          </a-col>
+          <div>
+            <a-col :span="15" class="title" offset="1" v-if="title=='设备更换'">
+              <a-upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                list-type="picture"
+                :default-file-list="fileList"
+              >
+                <a-button> <a-icon type="upload" /> upload </a-button>
+              </a-upload>
+            </a-col>
+            <a-col :span="15" class="title" v-else>
+              <a-upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                list-type="picture"
+                :default-file-list="fileList"
+              >
+                <a-button> <a-icon type="upload" /> upload </a-button>
+              </a-upload>
+            </a-col>
+          </div>
+
+        </a-row>
+      </div>
+
     </a-modal>
   </div>
 </template>
@@ -52,13 +84,10 @@
     props: ['data','show','title'],
     data(){
       return{
-        show: true
+        fileList: []
       }
     },
     methods: {
-      showModal() {
-        this.show = true;
-      },
       handleOk(e) {
         console.log(e);
         this.show = false;
@@ -77,5 +106,17 @@
   }
   .margin-top-input{
     margin-top: 20px;
+  }
+  /* 上传图片样式 */
+  .upload-list-inline >>> .ant-upload-list-item {
+    float: left;
+    width: 200px;
+    margin-right: 8px;
+  }
+  .upload-list-inline >>> .ant-upload-animate-enter {
+    animation-name: uploadAnimateInlineIn;
+  }
+  .upload-list-inline >>> .ant-upload-animate-leave {
+    animation-name: uploadAnimateInlineOut;
   }
 </style>
