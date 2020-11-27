@@ -26,7 +26,7 @@
             <a-menu-item key="2" @click="navPage('/devInfo')">
               设备信息
             </a-menu-item>
-            <a-menu-item key="3" @click="navPage('/devInfo')">
+            <a-menu-item key="3" @click="navPage('/equitmentPartInfo')">
               设备零件信息
             </a-menu-item>
             <a-menu-item key="4" @click="navPage('/devInfo')">

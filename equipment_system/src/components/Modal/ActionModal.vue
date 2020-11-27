@@ -98,6 +98,6 @@
    margin-left: 10px;
   }
   .display{
-
+    margin-bottom: 20px;
   }
 </style>

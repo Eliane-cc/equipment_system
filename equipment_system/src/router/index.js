@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from "../views/Login";
 import Index from "../views/Index";
 import DeviceInfo from "../components/DeviceInfo";
+import EquitmentPartInfo from "../components/EquitmentPartInfo";
 
 Vue.use(Router)
 
@@ -25,6 +26,11 @@ export default new Router({
       path: '/devInfo',
       name: 'devInfo',
       component: DeviceInfo
+    },
+    {
+      path: '/equitmentPartInfo',
+      name: 'equitmentPartInfo',
+      component: EquitmentPartInfo
     },
   ]
 })
