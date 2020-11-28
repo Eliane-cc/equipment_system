@@ -32,7 +32,7 @@
               <icon-svg icon-class="icon-user" class="icon_svg" icon-size="20px"></icon-svg>
             </div>
             <div>
-              <input type="text" class="input" placeholder="用户名" v-model="username">
+              <input type="text" class="input" placeholder="用户名" v-model="username" name="p_name">
             </div>
           </div>
           <div class="flex-center input-row">
@@ -40,7 +40,7 @@
               <icon-svg icon-class="icon-unlock" class="icon_svg" icon-size="20px"></icon-svg>
             </div>
             <div>
-              <input type="password" class="input" placeholder="密码" v-model="password">
+              <input type="password" class="input" placeholder="密码" v-model="password" name="p_password">
             </div>
           </div>
           <!--    验证码      -->
