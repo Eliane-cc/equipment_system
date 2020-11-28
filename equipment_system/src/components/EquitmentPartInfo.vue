@@ -9,7 +9,7 @@
             :span="8"
           >
             <a-form-item :label="item.title">
-              <a-input :placeholder="item.placeholder"/>
+              <a-input :placeholder="item.placeholder" :name="item.name"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -165,19 +165,23 @@
         lable: [
           {
             title: '车间',
-            placeholder: '请输入车间'
+            placeholder: '请输入车间',
+            name: "e_workshop_id"
           },
           {
             title: '设备名称',
-            placeholder: '请输入设备名称'
+            placeholder: '请输入设备名称',
+            name: "e_name"
           },
           {
             title: '零件名称',
-            placeholder: '请输入零件名称'
+            placeholder: '请输入零件名称',
+            name: "c_name"
           },
           {
             title: '机台',
-            placeholder: '请输入机台'
+            placeholder: '请输入机台',
+            name: 'e_machine_id'
           },
         ],
         isShowModal: false,
@@ -229,37 +233,44 @@
           {
             title: '零件名称',
             key: 'partName',
-            content: value.partName
+            content: value.partName,
+            name: 'c_name'
           },
           {
             title: '零件型号',
             key: 'partModel',
-            content: value.partModel
+            content: value.partModel,
+            name: 'c_id'
           },
           {
             title: '零件厂家',
             key: 'partFactory',
-            content: value.partFactory
+            content: value.partFactory,
+            name: 'f_id'
           },
           {
             title: '使用寿命',
             key: 'serviceLife',
-            content: value.serviceLife
+            content: value.serviceLife,
+            name: 'working_life'
           },
           {
             title: '运行时间',
             key: 'operationTime',
-            content: value.operationTime
+            content: value.operationTime,
+            name: 'run_time'
           },
           {
             title: '位置',
             key: 'position',
-            content: value.position
+            content: value.position,
+            name: 'component_location'
           },
           {
             title: '开始使用时间',
             key: 'startTime',
-            content: value.startTime
+            content: value.startTime,
+            name: 'start_time'
           }
         ]
         this.isShowModal = true

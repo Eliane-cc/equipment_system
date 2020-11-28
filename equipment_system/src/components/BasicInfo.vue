@@ -9,7 +9,7 @@
             :span="6"
           >
             <a-form-item :label="item.title">
-              <a-input :placeholder="item.placeholder"/>
+              <a-input :placeholder="item.placeholder" :name="item.name"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -107,19 +107,23 @@
         lable: [
           {
             title: '车间',
-            placeholder: '请输入车间'
+            placeholder: '请输入车间',
+            name: 'e_workshop_id'
           },
           {
             title: '机台',
-            placeholder: '请输入机台'
+            placeholder: '请输入机台',
+            name: 'e_machine_id'
           },
           {
             title: '设备名',
-            placeholder: '请输入设备名称'
+            placeholder: '请输入设备名称',
+            name: 'e_name'
           },
           {
             title: '零件名',
-            placeholder: '请输入零件名称'
+            placeholder: '请输入零件名称',
+            name: 'c_name'
           }
         ],
         isShowModal: false,
@@ -153,7 +157,8 @@
         let inputCon = [
           {
             lable: '维护内容',
-            placeholder: '请输入维护内容'
+            placeholder: '请输入维护内容',
+            name: 'maintenance_text'
           }
         ]
         this.isShowModal = true
@@ -167,7 +172,8 @@
         let inputCon = [
           {
             lable: '维修内容',
-            placeholder: '请输入维修内容'
+            placeholder: '请输入维修内容',
+            name: 'servicing_text'
           }
         ]
         this.isShowModal = true
@@ -180,15 +186,18 @@
         let inputCon = [
           {
             lable: '新零件名称',
-            placeholder: '请输入新零件名称'
+            placeholder: '请输入新零件名称',
+            name: 'c_name'
           },
           {
             lable: '新零件型号',
-            placeholder: '请输入新零件型号'
+            placeholder: '请输入新零件型号',
+            name: 'c_id'
           },
           {
             lable: '新零件厂家',
-            placeholder: '请输入新零件厂家'
+            placeholder: '请输入新零件厂家',
+            name: 'f_id'
           },
         ]
         this.isShowModal = true

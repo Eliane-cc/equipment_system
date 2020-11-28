@@ -9,7 +9,7 @@
             :span="8"
           >
             <a-form-item :label="item.title">
-              <a-input :placeholder="item.placeholder"/>
+              <a-input :placeholder="item.placeholder" :name="item.name"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -116,15 +116,18 @@
         lable: [
           {
             title: '车间',
-            placeholder: '请输入车间'
+            placeholder: '请输入车间',
+            name: 'e_workshop_id'
           },
           {
             title: '机台',
-            placeholder: '请输入机台'
+            placeholder: '请输入机台',
+            name: 'e_machine_id'
           },
           {
             title: '设备名称',
-            placeholder: '请输入设备名称'
+            placeholder: '请输入设备名称',
+            name: 'e_name'
           }
         ],
         isShowModal: false,
@@ -149,27 +152,32 @@
           {
             title: '车间',
             key: 'workshop',
-            content: value.workshop
+            content: value.workshop,
+            name: 'e_workshop_id'
           },
           {
             title: '机台',
             key: 'machine',
-            content: value.machine
+            content: value.machine,
+            name: 'e_machine_id'
           },
           {
             title: '型号',
             key: 'model',
-            content: value.model
+            content: value.model,
+            name: 'e_type'
           },
           {
             title: '厂家',
             key: 'factory',
-            content: value.factory
+            content: value.factory,
+            name: 'f_id'
           },
           {
             title: '设备名称',
             key: 'equitment',
-            content: value.equitment
+            content: value.equitment,
+            name: 'e_name'
           }
         ]
         this.isShowModal = true

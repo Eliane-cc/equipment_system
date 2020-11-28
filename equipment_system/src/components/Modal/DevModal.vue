@@ -42,7 +42,7 @@
             </a-col>
           </div>
           <a-col :span="15">
-            <a-textarea :placeholder="item.placeholder" :rows="3" />
+            <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name"/>
           </a-col>
         </a-row>
         <!--  图片上传    -->

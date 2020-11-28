@@ -9,7 +9,7 @@
             :span="8"
           >
             <a-form-item :label="item.title">
-              <a-input :placeholder="item.placeholder"/>
+              <a-input :placeholder="item.placeholder" :name="item.name"/>
             </a-form-item>
           </a-col>
         </a-row>
@@ -169,23 +169,28 @@
         lable: [
           {
             title: '车间',
-            placeholder: '请输入车间'
+            placeholder: '请输入车间',
+            name: 'e_workshop_id'
           },
           {
             title: '设备名称',
-            placeholder: '请输入设备名称'
+            placeholder: '请输入设备名称',
+            name: 'e_name'
           },
           {
             title: '新零件名称',
-            placeholder: '请输入新零件名称'
+            placeholder: '请输入新零件名称',
+            name: 'c_id'
           },
           {
             title: '机台',
-            placeholder: '请输入机台'
+            placeholder: '请输入机台',
+            name: 'e_machine_id'
           },
           {
             title: '更换人员',
-            placeholder: '请输入更换人员'
+            placeholder: '请输入更换人员',
+            name: 'change _People'
           },
         ],
         isShowModal: false,

@@ -33,7 +33,7 @@
               </a-col>
             </div>
             <a-col :span="15">
-              <a-input :placeholder="`请输入${item.title}`" v-model="item.content" @change="editContent(item,index)"/>
+              <a-input :placeholder="`请输入${item.title}`" v-model="item.content" @change="editContent(item,index)" :name="item.name"/>
             </a-col>
           </a-row>
         </div>
