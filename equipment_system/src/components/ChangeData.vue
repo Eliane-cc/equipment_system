@@ -4,7 +4,7 @@
       <a-form class="form" :form="form" @submit="handleSearch">
         <a-row :gutter="24">
           <a-col
-            v-for="(item,index) in lable"
+            v-for="(item,index) in label"
             :key="index"
             :span="8"
           >
@@ -166,7 +166,7 @@
     data(){
       this.cacheData = data.map(item => ({ ...item }));
       return{
-        lable: [
+        label: [
           {
             title: '车间',
             placeholder: '请输入车间',

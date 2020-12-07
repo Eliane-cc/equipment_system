@@ -17,7 +17,7 @@
           :inline-collapsed="collapsed"
           class="nav"
         >
-          <a-menu-item key="1" class="home" @click="navPage('/')">
+          <a-menu-item key="1" class="home" @click="navPage('/index')">
             <a-icon type="home" />
             <span>首页</span>
           </a-menu-item>

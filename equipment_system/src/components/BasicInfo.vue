@@ -1,10 +1,12 @@
 <template>
+  <!-- 首页 -->
   <div class="contain">
     <div>
+      <!--  查询    -->
       <a-form class="form" :form="form" @submit="handleSearch">
         <a-row :gutter="24">
           <a-col
-            v-for="(item,index) in lable"
+            v-for="(item,index) in label"
             :key="index"
             :span="6"
           >
@@ -27,14 +29,15 @@
           </a-col>
         </a-row>
       </a-form>
+      <!--  表格列表信息    -->
       <div class="table">
         <a-table :columns="columns" :data-source="data" bordered class="column">
           <template
-            v-for="col in ['workshop', 'machine', 'equitment','part','operation']"
+            v-for="col in ['workshop', 'machine', 'equitment','equitmentCode','part','partCode','operation']"
             :slot="col"
             slot-scope="text,record,index"
           >
-            <div :key="index" class="column-content">
+            <div :key="index" class="column-content" slot="title" :title="text">
               {{ text }}
             </div>
           </template>
@@ -48,52 +51,83 @@
         </a-table>
       </div>
     </div>
+
+    <!--  维修、维护、更换弹窗  -->
     <dev-modal :show.sync="isShowModal" :data="modalData" :title="modalTitle"></dev-modal>
   </div>
 </template>
 
 <script>
   import DevModal from "./Modal/DevModal";
+  //表格格式
   const columns = [
     {
       title: '车间',
       dataIndex: 'workshop',
-      width: '20%',
+      width: '11%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'workshop' },
     },
     {
       title: '机台',
       dataIndex: 'machine',
-      width: '20%',
+      width: '11%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'machine' },
     },
     {
       title: '设备名称',
       dataIndex: 'equitment',
-      width: '20%',
+      width: '16%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'equitment' },
+    },
+    {
+      title: '设备编码',
+      dataIndex: 'equitmentCode',
+      width: '15%',
+      ellipsis: true,
+      align: 'center',
+      scopedSlots: { customRender: 'equitmentCode' },
     },
     {
       title: '零件名称',
       dataIndex: 'part',
-      width: '20%',
+      width: '16%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'part' },
+    },
+    {
+      title: '零件编码',
+      dataIndex: 'partCode',
+      width: '15%',
+      ellipsis: true,
+      align: 'center',
+      scopedSlots: { customRender: 'partCode' },
     },
     {
       title: '操作',
       dataIndex: 'operation',
+      align: 'center',
       scopedSlots: { customRender: 'operation' },
     },
   ];
 
   const data = [];
+  //表格数据
   for (let i = 0; i < 100; i++) {
     data.push({
       key: i.toString(),
       workshop: `车间 ${i}`,
-      machine: `机台 ${i}`,
-      equitment: `设备名称 ${i}`,
-      part: `零件名称 ${i}`
+      machine: `卫卷${i}#`,
+      equitment: `双面对齿橡胶齿形带4326-14M-${i}`,
+      equitmentCode: `${i}01430022`,
+      part: `滚珠丝杆轴承${i}20A1D-A`,
+      partCode: `${i}41430022`,
     });
   }
   export default {
@@ -104,7 +138,7 @@
     data(){
       this.cacheData = data.map(item => ({ ...item }));
       return{
-        lable: [
+        label: [
           {
             title: '车间',
             placeholder: '请输入车间',
@@ -156,7 +190,7 @@
       maintainDev(value){
         let inputCon = [
           {
-            lable: '维护内容',
+            label: '维护内容',
             placeholder: '请输入维护内容',
             name: 'maintenance_text'
           }
@@ -171,7 +205,7 @@
       serviceDev(value){
         let inputCon = [
           {
-            lable: '维修内容',
+            label: '维修内容',
             placeholder: '请输入维修内容',
             name: 'servicing_text'
           }
@@ -185,19 +219,29 @@
       replaceDev(value){
         let inputCon = [
           {
-            lable: '新零件名称',
+            label: '新零件名称',
             placeholder: '请输入新零件名称',
             name: 'c_name'
           },
           {
-            lable: '新零件型号',
+            label: '新零件编码',
+            placeholder: '请输入新零件编码',
+            name: 'c_code'
+          },
+          {
+            label: '新零件型号',
             placeholder: '请输入新零件型号',
             name: 'c_id'
           },
           {
-            lable: '新零件厂家',
+            label: '新零件厂家',
             placeholder: '请输入新零件厂家',
             name: 'f_id'
+          },
+          {
+            label: '使用寿命',
+            placeholder: '请输入数字',
+            name: 'f_used'
           },
         ]
         this.isShowModal = true
@@ -233,7 +277,9 @@
   .oper{
     display: flex;
     justify-content: space-between;
-    padding-right: 25px;
+  }
+  .column-content{
+    overflow: hidden;
   }
 
 </style>
