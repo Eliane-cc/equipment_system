@@ -8,11 +8,63 @@
           <a-col
             v-for="(item,index) in label"
             :key="index"
-            :span="6"
+            :span="8"
+            class="margin-bottom"
           >
-            <a-form-item :label="item.title">
-              <a-input :placeholder="item.placeholder" :name="item.name"/>
-            </a-form-item>
+            <div class="flex-center">
+              <a-col :span="7">
+                {{item.title}}：
+              </a-col>
+              <a-col :span="17">
+                <a-tree-select
+                  v-model="value"
+                  show-search
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                  placeholder="请选择"
+                  allow-clear
+                  tree-default-expand-all
+                >
+                  <a-tree-select-node key="random1" value="车间0">
+                    <div slot="title">车间0</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random2" value="sss">
+                    <div slot="title">车间1</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间2</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间4</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间0</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间0</div>
+                  </a-tree-select-node>
+                 <a-tree-select-node key="random3" value="sss">
+                  <div slot="title">车间0</div>
+                </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
+                  <div slot="title">车间0</div>
+                </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
+                  <div slot="title">车间0</div>
+                </a-tree-select-node>  <a-tree-select-node key="random3" value="车间0">
+                  <div slot="title">车间0</div>
+                </a-tree-select-node>  <a-tree-select-node key="random3" value="车间8">
+                  <div slot="title">车间8</div>
+                </a-tree-select-node>
+                </a-tree-select>
+              </a-col>
+
+            </div>
+
+<!--            <a-form-item :label="item.title">-->
+<!--              <div>-->
+
+<!--              </div>-->
+<!--&lt;!&ndash;              <a-input :placeholder="item.placeholder" :name="item.name"/>&ndash;&gt;-->
+<!--            </a-form-item>-->
           </a-col>
         </a-row>
         <a-row>
@@ -168,6 +220,8 @@
         data,
         columns,
         editingKey: '',
+        treeExpandedKeys: [],
+        value: undefined,
       }
     },
     methods: {
@@ -280,6 +334,15 @@
   }
   .column-content{
     overflow: hidden;
+  }
+  .flex-center{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+  }
+  .margin-bottom{
+    margin-bottom: 20px;
   }
 
 </style>
