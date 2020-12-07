@@ -74,14 +74,14 @@
             <a-col :span="16">
               <template v-if="title == '设备更换'">
                 <template v-if="item.label == '使用寿命'">
-                  <a-input-number v-model="value" :min="1" :max="16" :name="item.name" @change="onChange" /> 天
+                  <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear/> 天
                 </template>
                 <template v-else>
-                  <a-input :placeholder="item.placeholder" :rows="3" allow-clear :name="item.name"/>
+                  <a-input :placeholder="item.placeholder" :rows="3" allow-clear :name="item.name" allowClear/>
                 </template>
               </template>
               <template v-else>
-                <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name"/>
+                <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
               </template>
             </a-col>
           </a-col>
