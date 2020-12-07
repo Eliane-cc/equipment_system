@@ -2,15 +2,59 @@
   <div class="contain">
     <div>
       <a-form class="form" :form="form" @submit="handleSearch">
-        <a-row :gutter="24">
+        <a-row>
           <a-col
             v-for="(item,index) in label"
             :key="index"
             :span="8"
+            class="margin-bottom"
           >
-            <a-form-item :label="item.title">
-              <a-input :placeholder="item.placeholder" :name="item.name"/>
-            </a-form-item>
+            <div class="flex-center">
+              <a-col :span="7">
+                {{item.title}}：
+              </a-col>
+              <a-col :span="17">
+                <a-tree-select
+                  v-model="value"
+                  show-search
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                  placeholder="请选择"
+                  allow-clear
+                  tree-default-expand-all
+                >
+                  <a-tree-select-node key="random1" value="车间0">
+                    <div slot="title">车间0</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random2" value="sss">
+                    <div slot="title">车间1</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间2</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间4</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间0</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间0</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random3" value="sss">
+                    <div slot="title">车间0</div>
+                  </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
+                  <div slot="title">车间0</div>
+                </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
+                  <div slot="title">车间0</div>
+                </a-tree-select-node>  <a-tree-select-node key="random3" value="车间0">
+                  <div slot="title">车间0</div>
+                </a-tree-select-node>  <a-tree-select-node key="random3" value="车间8">
+                  <div slot="title">车间8</div>
+                </a-tree-select-node>
+                </a-tree-select>
+              </a-col>
+            </div>
           </a-col>
         </a-row>
         <a-row>
@@ -27,22 +71,20 @@
       <div class="table">
         <a-table :columns="columns" :data-source="data" bordered class="column">
           <template
-            v-for="col in ['workshop', 'machine', 'equitment','model','factory','operation']"
+            v-for="col in ['workshop', 'machine', 'equitment','equitmentCode','model','factory','operation']"
             :slot="col"
             slot-scope="text, record, index"
           >
-            <div :key="col">
-              <template>
-                {{ text }}
-              </template>
+            <div :key="index" class="column-content" slot="title" :title="text">
+              {{ text }}
             </div>
           </template>
           <template slot="operation" slot-scope="text, record, index">
             <div class="editable-row-operations">
-               <span>
-                  <a @click="() => editDev(record,text)">编辑</a>
+               <span class="oper">
+                  <a @click="() => editDev(record,text)"><a-icon type="edit" />编辑</a>
                   <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record.key)">
-                    <a>删除</a>
+                    <a><a-icon type="delete" />删除</a>
                   </a-popconfirm>
                 </span>
             </div>
@@ -60,36 +102,55 @@
     {
       title: '车间',
       dataIndex: 'workshop',
-      width: '16.6%',
+      width: '11%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'workshop' },
     },
     {
       title: '机台',
       dataIndex: 'machine',
-      width: '16.6%',
+      width: '11%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'machine' },
     },
     {
       title: '设备名称',
       dataIndex: 'equitment',
-      width: '16.7%',
+      width: '16%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'equitment' },
+    },
+    {
+      title: '设备编码',
+      dataIndex: 'equitmentCode',
+      width: '16%',
+      ellipsis: true,
+      align: 'center',
+      scopedSlots: { customRender: 'equitmentCode' },
     },
     {
       title: '型号',
       dataIndex: 'model',
-      width: '16.6%',
+      width: '16%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'model' },
     },
     {
       title: '厂家',
       dataIndex: 'factory',
-      width: '16.6%',
+      width: '16%',
+      ellipsis: true,
+      align: 'center',
       scopedSlots: { customRender: 'factory' },
     },
     {
       title: '操作',
       dataIndex: 'operation',
+      align: 'center',
       scopedSlots: { customRender: 'operation' },
     },
   ];
@@ -100,7 +161,8 @@
       key: i.toString(),
       workshop: `车间 ${i}`,
       machine: `机台 ${i}`,
-      equitment: `设备名称. ${i}`,
+      equitment: `铝合金夹梅花联轴器-${i}`,
+      equitmentCode: `${i}50143046324`,
       model: `型号. ${i}`,
       factory: `厂家. ${i}`
     });
@@ -136,6 +198,9 @@
         form: this.$form.createForm(this, { name: 'advanced_search' }),
         data,
         columns,
+        editingKey: '',
+        treeExpandedKeys: [],
+        value: undefined,
       }
     },
     methods: {
@@ -178,6 +243,12 @@
             key: 'equitment',
             content: value.equitment,
             name: 'e_name'
+          },
+          {
+            title: '设备编号',
+            key: 'equitmentCode',
+            content: value.equitmentCode,
+            name: 'e_code'
           }
         ]
         this.isShowModal = true
@@ -202,7 +273,7 @@
       createDev(){
         this.isShowModal = true
         this.modalTitle = '新增'
-        this.modalData.label = ['车间','机台','设备名称','型号','厂家']
+        this.modalData.label = ['车间','机台','设备名称','设备编码','型号','厂家']
       }
     },
   }
@@ -233,7 +304,17 @@
   .oper{
     display: flex;
     justify-content: space-between;
-    padding-right: 25px;
   }
-
+  .column-content{
+    overflow: hidden;
+  }
+  .flex-center{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+  }
+  .margin-bottom{
+    margin-bottom: 20px;
+  }
 </style>

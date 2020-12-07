@@ -63,21 +63,16 @@
         <!--  输入    -->
         <a-row class="margin-top-input" v-for="(item,index) in data.inputCon" :key="index"  type="flex" justify="center">
           <a-col :span="22" offset="2">
-            <template>
-              <a-col :span="5" class="title" v-if="title != '设备更换'">
-                {{item.label}}：
-              </a-col>
-              <a-col :span="5" class="title" v-else>
-                {{item.label}}：
-              </a-col>
-            </template>
+            <a-col :span="5" class="title">
+              {{item.label}}：
+            </a-col>
             <a-col :span="16">
               <template v-if="title == '设备更换'">
                 <template v-if="item.label == '使用寿命'">
                   <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear/> 天
                 </template>
                 <template v-else>
-                  <a-input :placeholder="item.placeholder" :rows="3" allow-clear :name="item.name" allowClear/>
+                  <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
                 </template>
               </template>
               <template v-else>

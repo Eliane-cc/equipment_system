@@ -58,13 +58,6 @@
               </a-col>
 
             </div>
-
-<!--            <a-form-item :label="item.title">-->
-<!--              <div>-->
-
-<!--              </div>-->
-<!--&lt;!&ndash;              <a-input :placeholder="item.placeholder" :name="item.name"/>&ndash;&gt;-->
-<!--            </a-form-item>-->
           </a-col>
         </a-row>
         <a-row>
