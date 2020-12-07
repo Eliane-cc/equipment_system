@@ -54,7 +54,7 @@
         </a-menu>
       </a-col>
       <!--  主体内容  -->
-      <a-col :span="mainSpan" :offset="1">
+      <a-col :span="mainSpan" :offset="offset">
         <div class="main-content">
           <router-view></router-view>
         </div>
@@ -70,7 +70,8 @@
       return {
         collapsed: false,
         mainSpan: '19',
-        navSpan: '4'
+        navSpan: '4',
+        offset: '1'
       };
     },
     methods: {
@@ -79,10 +80,12 @@
         this.collapsed = !this.collapsed;
         if(this.collapsed == true){
           this.navSpan = '2'
-          this.mainSpan = '21'
+          this.mainSpan = '22'
+          this.offset = '0'
         }else{
           this.navSpan = '4'
           this.mainSpan = '19'
+          this.offset = '1'
         }
       },
       // 页面跳转
