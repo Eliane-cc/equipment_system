@@ -8,6 +8,7 @@ import PersonalInfo from "../components/PersonalInfo";
 import MaintainData from "../components/MaintainData";
 import RepairData from "../components/RepairData";
 import ChangeData from "../components/ChangeData";
+import UserManagement from "../components/UserManagement";
 
 Vue.use(Router)
 
@@ -56,5 +57,10 @@ export default new Router({
       name: 'changeData',
       component: ChangeData
     },
+    {
+      path: '/userManagement',
+      name: 'userManagement',
+      component: UserManagement
+    }
   ]
 })
