@@ -75,17 +75,6 @@
             </div>
           </a-col>
         </a-row>
-<!--        <a-row :gutter="24">-->
-<!--          <a-col-->
-<!--            v-for="(item,index) in label"-->
-<!--            :key="index"-->
-<!--            :span="8"-->
-<!--          >-->
-<!--            <a-form-item :label="item.title">-->
-<!--              <a-input :placeholder="item.placeholder" :name="item.name"/>-->
-<!--            </a-form-item>-->
-<!--          </a-col>-->
-<!--        </a-row>-->
         <a-row>
           <a-col :span="24" :style="{ textAlign: 'right' }">
             <a-button type="primary" html-type="submit" @click="searchDev">
