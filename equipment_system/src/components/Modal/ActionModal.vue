@@ -10,22 +10,59 @@
               {{i}}：
             </a-col>
             <a-col :span="16">
-              <a-input :placeholder="`请输入${i}`" :rows="3" allowClear/>
+              <template v-if="i == '使用寿命'">
+                <a-input-number v-model="value" :min="0" @change="onChange" allowClear/> 天
+              </template>
+              <template v-else-if="i == '开始使用时间'">
+                <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" />
+              </template>
+<!--              <template v-else-if="i == '运行时间'">-->
+<!--                <div>{{operTime}}</div>-->
+<!--              </template>-->
+              <template v-else>
+                <a-input :placeholder="`请输入${i}`" :rows="3" allowClear/>
+              </template>
             </a-col>
           </a-col>
         </a-row>
+      </div>
+    </a-modal>
+    <!--  详情  -->
+    <a-modal :visible="modalVisible" :title="title" @ok="handleEdit" @cancel="handleCancel" cancelText="取消" okText="确定" v-else-if="title == '详情'">
+      <div>
+        <!--  设备基本信息显示    -->
+        <div v-if="data.displayData">
+          <a-row type="flex" justify="center">
+            <a-col :span="12" v-for="(item,index) in data.displayData" :key="index" class="margin-top" >
+              <a-col :span="8" class="title">
+                {{item.title}}：
+              </a-col>
+              <a-col :span="16" class="text_center">
+                {{item.content}}
+              </a-col>
+            </a-col>
+          </a-row>
+        </div>
       </div>
     </a-modal>
     <!--  编辑  -->
     <a-modal :visible="modalVisible" :title="title" @ok="handleEdit" @cancel="handleCancel" cancelText="取消" :okText="title" v-else>
       <div>
         <!--  设备基本信息显示    -->
-        <div class="display" v-if="data.displayData">
-          <div class="item" v-for="(item,index) in data.displayData" :key="index">
-            <div class="title">{{item.title}}：</div>
-            <div class="content">{{item.content}}</div>
-          </div>
+        <div v-if="data.displayData">
+          <a-row type="flex" justify="center">
+            <a-col :span="12" v-for="(item,index) in data.displayData" :key="index" class="margin-top" >
+              <a-col :span="8" class="title">
+                {{item.title}}：
+              </a-col>
+              <a-col :span="16" class="text_center">
+                {{item.content}}
+              </a-col>
+            </a-col>
+          </a-row>
+          <a-divider dashed/>
         </div>
+
         <!--  输入    -->
         <div v-if="data.editData">
           <a-row class="margin-top" v-for="(item,index) in data.editData" :key="index" type="flex" justify="center">
@@ -34,7 +71,18 @@
                 {{item.title}}：
               </a-col>
               <a-col :span="16">
-                <a-input :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name"/>
+                <template v-if="item.title == '使用寿命'">
+                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :default-value="item.content"/> 天
+                </template>
+                <template v-else-if="item.title == '开始使用时间'">
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="item.content" :format="dateFormat" />
+                </template>
+                <template v-else-if="item.title == '运行时间'">
+                  <div>{{operTime}}</div>
+                </template>
+                <template v-else>
+                  <a-input :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name"/>
+                </template>
               </a-col>
             </a-col>
           </a-row>
@@ -46,16 +94,23 @@
 </template>
 
 <script>
+  import moment from 'moment'
   export default {
     name: "ActionModal.vue",
     props: ['data','modalVisible','title'],
     data(){
       return{
         fileList: [],
-        tableData: this.data
+        tableData: this.data,
+        value: '',
+        operTime: '0天0小时0分',
+        dateFormat: 'YYYY-MM-DD hh:mm',
+        valueEdit: ''
       }
     },
     methods: {
+      //引入时间格式处理moment
+      moment,
       //编辑确定事件
       handleEdit(e) {
         this.$emit("update:modalVisible",false)
@@ -73,7 +128,15 @@
       //取消按钮事件
       handleCancel(e) {
         this.$emit("update:modalVisible",false)
-      }
+      },
+      //使用寿命改变事件
+      onChange(){
+
+      },
+      //计算运行时间
+      selectTime(value){
+        this.operTime = moment().diff(value, 'day') + '天' + moment().diff(value, 'hour')%24 + '小时' + moment().diff(value, 'minute')%60 + '分钟';
+      },
     }
   }
 </script>
