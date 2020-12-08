@@ -234,6 +234,9 @@
         form: this.$form.createForm(this, { name: 'advanced_search' }),
         data,
         columns,
+        editingKey: '',
+        treeExpandedKeys: [],
+        value: undefined,
       }
     },
     methods: {
