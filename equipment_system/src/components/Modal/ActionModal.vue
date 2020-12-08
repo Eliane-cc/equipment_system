@@ -77,6 +77,12 @@
                 <template v-else-if="item.title == '开始使用时间'">
                   <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="item.content" :format="dateFormat" />
                 </template>
+                <template v-else-if="item.title == '维护时间' || item.title == '维修时间' || item.title == '更换时间'">
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :default-value="item.content" :format="dateFormat" />
+                </template>
+                <template v-else-if="item.title == '维护内容' || item.title == '维修内容' || item.title == '更换内容'">
+                  <a-textarea :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name"/>
+                </template>
                 <template v-else-if="item.title == '运行时间'">
                   <div>{{operTime}}</div>
                 </template>
@@ -104,7 +110,7 @@
         tableData: this.data,
         value: '',
         operTime: '0天0小时0分',
-        dateFormat: 'YYYY-MM-DD hh:mm',
+        dateFormat: 'YYYY-MM-DD HH:mm',
         valueEdit: ''
       }
     },
