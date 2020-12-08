@@ -16,9 +16,9 @@
               <template v-else-if="i == '开始使用时间'">
                 <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" />
               </template>
-<!--              <template v-else-if="i == '运行时间'">-->
-<!--                <div>{{operTime}}</div>-->
-<!--              </template>-->
+              <template v-else-if="i == '密码'">
+                <a-input-password placeholder="请输入密码"  allowClear/>
+              </template>
               <template v-else>
                 <a-input :placeholder="`请输入${i}`" :rows="3" allowClear/>
               </template>
@@ -82,6 +82,9 @@
                 </template>
                 <template v-else-if="item.title == '维护内容' || item.title == '维修内容' || item.title == '更换内容'">
                   <a-textarea :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name"/>
+                </template>
+                <template v-else-if="item.title == '密码'">
+                  <a-input-password :placeholder="`请输入${item.title}`"  allowClear/>
                 </template>
                 <template v-else-if="item.title == '运行时间'">
                   <div>{{operTime}}</div>
