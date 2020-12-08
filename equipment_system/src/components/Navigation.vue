@@ -124,6 +124,7 @@
   }
   .main-content{
     width: 100%;
+    height: 550px;
     background-color: #ffffff;
   }
   .nav{
