@@ -1,11 +1,30 @@
 <template>
   <div class="container">
-    <div class="nav-title flex-row">
-      <div class="nav-icon" @click="toggleCollapsed">
-        <a-icon :type="collapsed ? 'menu-unfold' : 'menu-fold'" class="icon"/>
+    <div class="flex-space">
+      <div class="nav-title flex-row">
+        <div class="nav-icon" @click="toggleCollapsed">
+          <a-icon :type="collapsed ? 'menu-unfold' : 'menu-fold'" class="icon"/>
+        </div>
+        <div class="nav-title-text">设备生命周期管理系统</div>
       </div>
-      <div class="nav-title-text">设备生命周期管理系统</div>
+      <div>
+        <a-dropdown placement="bottomCenter">
+          <a class="nav-title-user" @click="e => e.preventDefault()">
+            <a-icon type="poweroff" />
+            <div class="username">Elaine</div>
+          </a>
+          <a-menu slot="overlay">
+            <a-menu-item key="0">
+              <a @click="logout">退出登录</a>
+            </a-menu-item>
+
+          </a-menu>
+        </a-dropdown>
+<!--        <a-icon type="poweroff" />-->
+<!--        苏奕娜-->
+      </div>
     </div>
+
     <a-row class="row">
       <!--  导航栏  -->
       <a-col :span="navSpan">
@@ -91,6 +110,11 @@
       // 页面跳转
       navPage(path){
         this.$router.push(path)
+      },
+      //注销登录
+      logout(){
+        console.log("注销登录，清除缓存")
+        this.$router.replace({path: '/',replace:true})
       }
     },
   }
@@ -120,7 +144,6 @@
   .nav-title{
     justify-content: left;
     align-items: center;
-    padding: 10px;
   }
   .main-content{
     width: 100%;
@@ -129,5 +152,24 @@
   }
   .nav{
     text-align: left;
+  }
+  .flex-space{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+  }
+  .nav-title-user{
+    color: #ffffff;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  .username{
+    padding-left: 15px;
+    padding-right: 16px;
   }
 </style>
