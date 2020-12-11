@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Equipment life cycle management system",
   "author": "Elaine <1807332757@qq.com>",
+  "main": "app.js",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
