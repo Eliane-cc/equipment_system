@@ -61,26 +61,70 @@
         <a-divider dashed/>
 
         <!--  输入    -->
-        <a-row class="margin-top-input" v-for="(item,index) in data.inputCon" :key="index"  type="flex" justify="center">
-          <a-col :span="22" offset="2">
-            <a-col :span="5" class="title">
-              {{item.label}}：
-            </a-col>
-            <a-col :span="16">
-              <template v-if="title == '设备更换'">
-                <template v-if="item.label == '使用寿命'">
-                  <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear/> 天
+        <template v-for="(item,index) in data.inputCon">
+          <a-row class="margin-top-input" :key="index"  type="flex" justify="center" v-if="!isShow && !(item.label == '新零件名称' ||item.label == '新零件编码' || item.label == '新零件型号' || item.label == '新零件厂家')">
+            <a-col :span="22" offset="2">
+              <a-col :span="5" class="title">
+                {{item.label}}：
+              </a-col>
+              <a-col :span="16">
+                <template v-if="title == '设备维修'">
+                  <template v-if="item.label == '使用寿命'">
+                    <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear/> 天
+                  </template>
+                  <template v-else-if="item.label == '维修内容'">
+                    <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                  </template>
+                  <template v-else-if="item.label == '零件更换'">
+                    <a-switch checked-children="是" un-checked-children="否" @change="switchChange" v-model="isShow" @click="switchClick"/>
+                  </template>
+                  <template v-else-if="item.label == '新零件名称' ||item.label == '新零件编码' || item.label == '新零件型号' || item.label == '新零件厂家'">
+                    <template v-if="isShow">
+                      <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                  </template>
                 </template>
                 <template v-else>
-                  <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                  <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
                 </template>
-              </template>
-              <template v-else>
-                <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
-              </template>
+              </a-col>
             </a-col>
-          </a-col>
-        </a-row>
+          </a-row>
+          <a-row class="margin-top-input" :key="index"  type="flex" justify="center" v-else-if="isShow">
+            <a-col :span="22" offset="2">
+              <a-col :span="5" class="title">
+                {{item.label}}：
+              </a-col>
+              <a-col :span="16">
+                <template v-if="title == '设备维修'">
+                  <template v-if="item.label == '使用寿命'">
+                    <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear/> 天
+                  </template>
+                  <template v-else-if="item.label == '维修内容'">
+                    <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                  </template>
+                  <template v-else-if="item.label == '零件更换'">
+                    <a-switch checked-children="是" un-checked-children="否" @change="switchChange" v-model="isShow" @click="switchClick"/>
+                  </template>
+                  <template v-else-if="item.label == '新零件名称' ||item.label == '新零件编码' || item.label == '新零件型号' || item.label == '新零件厂家'">
+                    <template v-if="isShow">
+                      <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                    </template>
+                  </template>
+                  <template v-else>
+                    <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                  </template>
+                </template>
+                <template v-else>
+                  <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                </template>
+              </a-col>
+            </a-col>
+          </a-row>
+        </template>
         <!--  图片上传    -->
         <a-row class="margin-top-input" type="flex" justify="center">
           <a-col :span="22" offset="2">
@@ -111,7 +155,8 @@
     data(){
       return{
         fileList: [],
-        value: ''
+        value: '',
+        isShow: false
       }
     },
     methods: {
@@ -126,6 +171,15 @@
       //使用寿命改变事件
       onChange(){
 
+      },
+      //是否更换零件
+      switchChange(){
+        console.log("更换")
+        this.isShow = !this.isShow
+      },
+      switchClick(){
+        console.log("点击")
+        this.isShow = !this.isShow
       }
     }
   }

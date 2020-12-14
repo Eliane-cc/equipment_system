@@ -97,7 +97,6 @@
           </a-row>
         </div>
       </div>
-
     </a-modal>
   </div>
 </template>

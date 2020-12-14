@@ -8,11 +8,11 @@
           <a-col
             v-for="(item,index) in label"
             :key="index"
-            :span="8"
+            :span="10"
             class="margin-bottom"
           >
             <div class="flex-center">
-              <a-col :span="7">
+              <a-col :span="8">
                 {{item.title}}：
               </a-col>
               <a-col :span="17">
@@ -62,14 +62,14 @@
         </a-row>
         <a-row>
           <a-col :span="24" :style="{ textAlign: 'right' }">
-            <a-button type="primary" html-type="submit">
-              查询
-            </a-button>
-            <a-button :style="{ marginLeft: '8px' }" @click="QRCode">
+            <a-button @click="QRCode" size="large">
               设备二维码
             </a-button>
-            <a-button :style="{ marginLeft: '8px' }" @click="devNFC">
+            <a-button :style="{ marginLeft: '8px' }" @click="devNFC" size="large">
               设备NFC
+            </a-button>
+            <a-button :style="{ marginLeft: '8px' }" type="primary" html-type="submit" size="large">
+              筛选
             </a-button>
           </a-col>
         </a-row>
@@ -90,7 +90,6 @@
             <div class="oper">
               <a @click="maintainDev(record)">维护</a>
               <a @click="serviceDev(record)">维修</a>
-              <a @click="replaceDev(record)">更换</a>
             </div>
           </template>
         </a-table>
@@ -107,41 +106,17 @@
   //表格格式
   const columns = [
     {
-      title: '车间',
-      dataIndex: 'workshop',
-      width: '11%',
-      ellipsis: true,
-      align: 'center',
-      scopedSlots: { customRender: 'workshop' },
-    },
-    {
-      title: '机台',
-      dataIndex: 'machine',
-      width: '11%',
-      ellipsis: true,
-      align: 'center',
-      scopedSlots: { customRender: 'machine' },
-    },
-    {
       title: '设备名称',
       dataIndex: 'equitment',
-      width: '16%',
+      width: '26%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'equitment' },
     },
     {
-      title: '设备编码',
-      dataIndex: 'equitmentCode',
-      width: '15%',
-      ellipsis: true,
-      align: 'center',
-      scopedSlots: { customRender: 'equitmentCode' },
-    },
-    {
       title: '零件名称',
       dataIndex: 'part',
-      width: '16%',
+      width: '26%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'part' },
@@ -149,7 +124,7 @@
     {
       title: '零件编码',
       dataIndex: 'partCode',
-      width: '15%',
+      width: '26%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'partCode' },
@@ -184,21 +159,6 @@
       this.cacheData = data.map(item => ({ ...item }));
       return{
         label: [
-          {
-            title: '车间',
-            placeholder: '请输入车间',
-            name: 'e_workshop_id'
-          },
-          {
-            title: '机台',
-            placeholder: '请输入机台',
-            name: 'e_machine_id'
-          },
-          {
-            title: '设备名',
-            placeholder: '请输入设备名称',
-            name: 'e_name'
-          },
           {
             title: '零件名',
             placeholder: '请输入零件名称',
@@ -255,7 +215,37 @@
             label: '维修内容',
             placeholder: '请输入维修内容',
             name: 'servicing_text'
-          }
+          },
+          {
+            label: '使用寿命',
+            placeholder: '请输入数字',
+            name: 'f_used'
+          },
+          {
+            label: '零件更换',
+            placeholder: '请输入维修内容',
+            name: 'change'
+          },
+          {
+            label: '新零件名称',
+            placeholder: '请输入新零件名称',
+            name: 'c_name'
+          },
+          {
+            label: '新零件编码',
+            placeholder: '请输入新零件编码',
+            name: 'c_code'
+          },
+          {
+            label: '新零件型号',
+            placeholder: '请输入新零件型号',
+            name: 'c_id'
+          },
+          {
+            label: '新零件厂家',
+            placeholder: '请输入新零件厂家',
+            name: 'f_id'
+          },
         ]
         this.isShowModal = true
         this.modalTitle = '设备维修'
