@@ -62,9 +62,6 @@
             <a-button type="primary" html-type="submit" @click="searchDev">
               查询
             </a-button>
-            <a-button type="primary" :style="{ marginLeft: '8px' }" @click="createDev">
-              新增
-            </a-button>
           </a-col>
         </a-row>
       </a-form>
@@ -421,12 +418,6 @@
 
       //查询设备
       searchDev(){},
-      //新增设备
-      createDev(){
-        this.isShowModal = true
-        this.modalTitle = '新增'
-        this.modalData.label = ['车间','机台','设备名称','设备型号','设备厂家','零件名称','零件型号','零件厂家','位置','使用寿命','开始使用时间']
-      }
     },
   }
 </script>

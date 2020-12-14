@@ -82,9 +82,10 @@
           <template slot="operation" slot-scope="text, record, index">
             <div class="editable-row-operations">
                <span class="oper">
-                  <a @click="() => editDev(record,text)"><a-icon type="edit" />编辑</a>
+                  <a @click="() => createRepair(record,text)">新增</a>
+                  <a @click="() => editDev(record,text)">编辑</a>
                   <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record.key)">
-                    <a><a-icon type="delete" />删除</a>
+                    <a>删除</a>
                   </a-popconfirm>
                 </span>
             </div>
@@ -274,6 +275,12 @@
         this.isShowModal = true
         this.modalTitle = '新增'
         this.modalData.label = ['车间','机台','设备名称','设备编码','型号','厂家']
+      },
+      //新增零件
+      createRepair(){
+        this.isShowModal = true
+        this.modalTitle = '新增'
+        this.modalData.label = ['车间','机台','设备名称','设备型号','设备厂家','零件名称','零件型号','零件厂家','位置','使用寿命','开始使用时间']
       }
     },
   }
