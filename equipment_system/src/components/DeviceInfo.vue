@@ -82,7 +82,7 @@
           <template slot="operation" slot-scope="text, record, index">
             <div class="editable-row-operations">
                <span class="oper">
-                  <a @click="() => createRepair(record,text)">新增</a>
+                  <a @click="() => createRepair(record,text)">新增零件</a>
                   <a @click="() => editDev(record,text)">编辑</a>
                   <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record.key)">
                     <a>删除</a>
@@ -127,7 +127,7 @@
     {
       title: '设备编码',
       dataIndex: 'equitmentCode',
-      width: '16%',
+      width: '14%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'equitmentCode' },
@@ -135,7 +135,7 @@
     {
       title: '型号',
       dataIndex: 'model',
-      width: '16%',
+      width: '14%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'model' },
@@ -255,6 +255,7 @@
         this.isShowModal = true
         this.modalTitle = '编辑'
         this.modalData.editData = editData
+        this.modalData.displayData = ""
         console.log(value,text)
       },
       //删除当前行
@@ -275,12 +276,46 @@
         this.isShowModal = true
         this.modalTitle = '新增'
         this.modalData.label = ['车间','机台','设备名称','设备编码','型号','厂家']
+        this.modalData.displayData = ""
       },
       //新增零件
-      createRepair(){
+      createRepair(value,text){
         this.isShowModal = true
         this.modalTitle = '新增'
-        this.modalData.label = ['车间','机台','设备名称','设备型号','设备厂家','零件名称','零件型号','零件厂家','位置','使用寿命','开始使用时间']
+        let displayData = [
+          {
+            title: '车间',
+            key: 'workshop',
+            content: value.workshop
+          },
+          {
+            title: '机台',
+            key: 'machine',
+            content: value.machine
+          },
+          {
+            title: '设备型号',
+            key: 'model',
+            content: value.model
+          },
+          {
+            title: '设备厂家',
+            key: 'factory',
+            content: value.factory
+          },
+          {
+            title: '设备名称',
+            key: 'equitment',
+            content: value.equitment
+          },
+          {
+            title: '设备编码',
+            key: 'equitmentCode',
+            content: value.equitmentCode
+          }
+        ]
+        this.modalData.label = ['零件名称','零件型号','零件编码','零件厂家','使用寿命','开始使用时间']
+        this.modalData.displayData = displayData
       }
     },
   }

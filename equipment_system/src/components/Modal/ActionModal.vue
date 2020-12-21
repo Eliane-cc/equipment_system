@@ -3,6 +3,20 @@
     <!--  新增  -->
     <a-modal :visible="modalVisible" :title="title" @ok="handleCreate" @cancel="handleCancel" cancelText="取消" :okText="title" v-if="title=='新增'">
       <div v-if="data.label">
+        <!--  设备基本信息显示    -->
+        <div v-if="data.displayData">
+          <a-row type="flex" justify="center">
+            <a-col :span="12" v-for="(item,index) in data.displayData" :key="index" class="margin-top" >
+              <a-col :span="8" class="title">
+                {{item.title}}：
+              </a-col>
+              <a-col :span="16" class="text_center">
+                {{item.content}}
+              </a-col>
+            </a-col>
+          </a-row>
+          <a-divider dashed/>
+        </div>
         <!--  输入    -->
         <a-row class="margin-top" v-for="i in data.label" :key="i" type="flex" justify="center">
           <a-col :span="22" offset="2">
