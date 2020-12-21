@@ -148,6 +148,7 @@
       equitmentCode: `${i}01430022`,
       part: `滚珠丝杆轴承${i}20A1D-A`,
       partCode: `${i}41430022`,
+      partModel: "零件型号"
     });
   }
   export default {

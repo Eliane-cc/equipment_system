@@ -57,6 +57,19 @@
             </a-col>
           </a-col>
         </a-row>
+        <a-row class="margin-top"  type="flex" justify="center">
+          <a-col :span="12">
+            <a-col :span="8" class="title">
+              零件型号：
+            </a-col>
+            <a-col :span="16" class="text_center">
+              {{data.data.partModel}}
+            </a-col>
+          </a-col>
+          <a-col :span="12">
+
+          </a-col>
+        </a-row>
 
         <a-divider dashed/>
 
