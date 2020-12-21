@@ -1,30 +1,12 @@
 <template>
-  <div class="container">
-    <div class="flex-space">
-      <div class="nav-title flex-row">
-        <div class="nav-icon" @click="toggleCollapsed">
-          <a-icon :type="collapsed ? 'menu-unfold' : 'menu-fold'" class="icon"/>
-        </div>
-        <div class="nav-title-text">设备生命周期管理系统</div>
-      </div>
-      <div>
-        <a-dropdown placement="bottomCenter">
-          <a class="nav-title-user" @click="e => e.preventDefault()">
-            <a-icon type="poweroff" />
-            <div class="username">Elaine</div>
-          </a>
-          <a-menu slot="overlay">
-            <a-menu-item key="0">
-              <a @click="logout">退出登录</a>
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
-      </div>
-    </div>
-
-    <a-row class="row">
-      <!--  导航栏  -->
-      <a-col :span="navSpan">
+  <div>
+    <a-layout id="components-layout-demo-responsive">
+      <a-layout-sider
+        breakpoint="lg"
+        collapsed-width="0"
+        @collapse="onCollapse"
+        @breakpoint="onBreakpoint"
+      >
         <a-menu
           :default-selected-keys="['1']"
           :default-open-keys="['sub1','sub2']"
@@ -68,41 +50,46 @@
             </a-menu-item>
           </a-sub-menu>
         </a-menu>
-      </a-col>
-      <!--  主体内容  -->
-      <a-col :span="mainSpan" :offset="offset">
-        <div class="main-content">
-          <router-view></router-view>
-        </div>
-      </a-col>
-    </a-row>
+      </a-layout-sider>
+      <a-layout>
+        <a-layout-header class="header">
+          <div class="nav-title flex-row">
+            <div class="nav-title-text">设备生命周期管理系统</div>
+          </div>
+          <div>
+            <a-dropdown placement="bottomCenter">
+              <a class="nav-title-user" @click="e => e.preventDefault()">
+                <a-icon type="poweroff" />
+                <div class="username">Elaine</div>
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item key="0">
+                  <a @click="logout">退出登录</a>
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
+          </div>
+
+        </a-layout-header>
+        <a-layout-content>
+          <div :style="{ padding: '10px', background: '#fff', minHeight: '360px',height: '100vh' }">
+            <router-view></router-view>
+          </div>
+        </a-layout-content>
+      </a-layout>
+    </a-layout>
   </div>
 </template>
 
 <script>
   export default {
-    name: "Navigation.vue",
-    data() {
-      return {
-        collapsed: false,
-        mainSpan: '19',
-        navSpan: '4',
-        offset: '1'
-      };
-    },
+    name: "MoNavigation.vue",
     methods: {
-      //左侧导航栏收缩
-      toggleCollapsed() {
-        this.collapsed = !this.collapsed;
-        if(this.collapsed == true){
-          this.navSpan = '2'
-          this.mainSpan = '22'
-          this.offset = '0'
-        }else{
-          this.navSpan = '4'
-          this.mainSpan = '19'
-          this.offset = '1'
-        }
+      onCollapse(collapsed, type) {
+        console.log(collapsed, type);
+      },
+      onBreakpoint(broken) {
+        console.log(broken);
       },
       // 页面跳转
       navPage(path){
@@ -113,61 +100,32 @@
         console.log("注销登录，清除缓存")
         this.$router.replace({path: '/',replace:true})
       }
-    },
+    }
   }
 </script>
 
 <style scoped>
-  .container{
-    background-color: #040014;
-    /*height: 100vh;*/
-  }
-  .row{
-    padding: 20px 20px 10px 6px;
-  }
-  .flex-row{
-    display: flex;
-    flex-direction: row;
-  }
-  .icon{
-    color: #F1F1F1;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  .nav-title-text{
-    color: #ffffff;
-    font-size: 17px;
-    margin-left: 30px;
-  }
-  .nav-title{
-    justify-content: left;
-    align-items: center;
-  }
-  .main-content{
-    width: 100%;
-    height: 550px;
-    background-color: #ffffff;
-  }
-  .nav{
-    text-align: left;
-  }
-  .flex-space{
+  .header{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 10px;
+    padding: 0px;
+  }
+  .nav-title-text{
+    margin-left: 10px;
+    color: #ffffff;
   }
   .nav-title-user{
-    color: #ffffff;
     font-size: 15px;
     display: flex;
     justify-content: space-between;
     align-content: center;
     align-items: center;
     cursor: pointer;
+    color: #ffffff;
   }
   .username{
-    padding-left: 15px;
-    padding-right: 16px;
+    padding-left: 6px;
+    padding-right: 10px;
   }
 </style>
