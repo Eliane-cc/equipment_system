@@ -216,6 +216,7 @@
           part: "滚珠丝杆轴承020A1D-A",
           partCode: "041430022",
           workshop: "车间 0",
+          partModel: "零件型号"
         }
         this.isShowModal = true
         this.modalTitle = '设备维护'
@@ -229,11 +230,6 @@
             label: '维修内容',
             placeholder: '请输入维修内容',
             name: 'servicing_text'
-          },
-          {
-            label: '使用寿命',
-            placeholder: '请输入数字',
-            name: 'f_used'
           },
           {
             label: '零件更换',
@@ -260,6 +256,11 @@
             placeholder: '请输入新零件厂家',
             name: 'f_id'
           },
+          {
+            label: '使用寿命',
+            placeholder: '请输入数字',
+            name: 'f_used'
+          },
         ]
         let value = {
           equitment: "双面对齿橡胶齿形带4326-14M-0",
@@ -269,6 +270,7 @@
           part: "滚珠丝杆轴承020A1D-A",
           partCode: "041430022",
           workshop: "车间 0",
+          partModel: "零件型号"
         }
         this.isShowModal = true
         this.modalTitle = '设备维修'

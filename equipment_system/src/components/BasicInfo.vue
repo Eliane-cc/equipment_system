@@ -217,11 +217,6 @@
             name: 'servicing_text'
           },
           {
-            label: '使用寿命',
-            placeholder: '请输入数字',
-            name: 'f_used'
-          },
-          {
             label: '零件更换',
             placeholder: '请输入维修内容',
             name: 'change'
@@ -245,6 +240,11 @@
             label: '新零件厂家',
             placeholder: '请输入新零件厂家',
             name: 'f_id'
+          },
+          {
+            label: '使用寿命',
+            placeholder: '请输入数字',
+            name: 'f_used'
           },
         ]
         this.isShowModal = true
