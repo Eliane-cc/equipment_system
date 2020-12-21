@@ -314,7 +314,7 @@
             content: value.equitmentCode
           }
         ]
-        this.modalData.label = ['零件名称','零件型号','零件编码','零件厂家','使用寿命','开始使用时间']
+        this.modalData.label = ['零件名称','零件型号','零件编码','零件厂家','位置','使用寿命','开始使用时间']
         this.modalData.displayData = displayData
       }
     },
