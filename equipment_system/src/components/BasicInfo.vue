@@ -215,31 +215,37 @@
           {
             label: '维修内容',
             placeholder: '请输入维修内容',
+            defaultContent: '',
             name: 'servicing_text'
           },
           {
             label: '零件更换',
             placeholder: '请输入维修内容',
+            defaultContent: '',
             name: 'change'
           },
           {
             label: '新零件名称',
             placeholder: '请输入新零件名称',
+            defaultContent: value.part,
             name: 'c_name'
           },
           {
             label: '新零件编码',
             placeholder: '请输入新零件编码',
+            defaultContent: value.partCode,
             name: 'c_code'
           },
           {
             label: '新零件型号',
             placeholder: '请输入新零件型号',
+            defaultContent: value.partModel,
             name: 'c_id'
           },
           {
             label: '新零件厂家',
             placeholder: '请输入新零件厂家',
+            defaultContent: '新零件厂家',
             name: 'f_id'
           },
           {

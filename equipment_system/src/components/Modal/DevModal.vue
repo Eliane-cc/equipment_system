@@ -129,7 +129,7 @@
                       </template>
 
                       <template v-else>
-                        <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                        <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear :default-value="item.defaultContent"/>
                       </template>
                     </template>
                   </template>

@@ -225,43 +225,6 @@
       },
       //维修设备
       serviceDev(){
-        let inputCon = [
-          {
-            label: '维修内容',
-            placeholder: '请输入维修内容',
-            name: 'servicing_text'
-          },
-          {
-            label: '零件更换',
-            placeholder: '请输入维修内容',
-            name: 'change'
-          },
-          {
-            label: '新零件名称',
-            placeholder: '请输入新零件名称',
-            name: 'c_name'
-          },
-          {
-            label: '新零件编码',
-            placeholder: '请输入新零件编码',
-            name: 'c_code'
-          },
-          {
-            label: '新零件型号',
-            placeholder: '请输入新零件型号',
-            name: 'c_id'
-          },
-          {
-            label: '新零件厂家',
-            placeholder: '请输入新零件厂家',
-            name: 'f_id'
-          },
-          {
-            label: '使用寿命',
-            placeholder: '请输入数字',
-            name: 'f_used'
-          },
-        ]
         let value = {
           equitment: "双面对齿橡胶齿形带4326-14M-0",
           equitmentCode: "001430022",
@@ -272,6 +235,49 @@
           workshop: "车间 0",
           partModel: "零件型号"
         }
+        let inputCon = [
+          {
+            label: '维修内容',
+            placeholder: '请输入维修内容',
+            defaultContent: '',
+            name: 'servicing_text'
+          },
+          {
+            label: '零件更换',
+            placeholder: '请输入维修内容',
+            defaultContent: '',
+            name: 'change'
+          },
+          {
+            label: '新零件名称',
+            placeholder: '请输入新零件名称',
+            defaultContent: value.part,
+            name: 'c_name'
+          },
+          {
+            label: '新零件编码',
+            placeholder: '请输入新零件编码',
+            defaultContent: value.partCode,
+            name: 'c_code'
+          },
+          {
+            label: '新零件型号',
+            placeholder: '请输入新零件型号',
+            defaultContent: value.partModel,
+            name: 'c_id'
+          },
+          {
+            label: '新零件厂家',
+            placeholder: '请输入新零件厂家',
+            defaultContent: '新零件厂家',
+            name: 'f_id'
+          },
+          {
+            label: '使用寿命',
+            placeholder: '请输入数字',
+            name: 'f_used'
+          },
+        ]
         this.isShowModal = true
         this.modalTitle = '设备维修'
         this.modalData.data = value
