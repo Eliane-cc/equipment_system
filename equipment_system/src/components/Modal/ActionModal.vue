@@ -100,6 +100,23 @@
                 <template v-else-if="item.title == '密码'">
                   <a-input-password :placeholder="`请输入${item.title}`"  allowClear/>
                 </template>
+                <template v-else-if="item.title == '用户角色'">
+                  <a-tree-select
+                    v-model="value"
+                    style="width: 100%"
+                    :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                    placeholder="请选择"
+                    allow-clear
+                    tree-default-expand-all
+                  >
+                    <a-tree-select-node key="random1" value="操作工">
+                      <div slot="title">操作工</div>
+                    </a-tree-select-node>
+                    <a-tree-select-node key="random2" value="管理员">
+                      <div slot="title">管理员</div>
+                    </a-tree-select-node>
+                  </a-tree-select>
+                </template>
                 <template v-else-if="item.title == '运行时间'">
                   <div>{{operTime}}</div>
                 </template>

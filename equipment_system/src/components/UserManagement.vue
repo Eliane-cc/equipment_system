@@ -64,7 +64,7 @@
     {
       title: '序号',
       dataIndex: 'index',
-      width: '8%',
+      width: '10%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'index' },
@@ -72,7 +72,7 @@
     {
       title: '姓名',
       dataIndex: 'username',
-      width: '12%',
+      width: '15%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'username' },
@@ -80,7 +80,7 @@
     {
       title: '工号',
       dataIndex: 'workNo',
-      width: '15%',
+      width: '19%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'workNo' },
@@ -88,26 +88,18 @@
     {
       title: '联系方式',
       dataIndex: 'telephone',
-      width: '17%',
+      width: '19%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'telephone' },
     },
     {
-      title: 'XXXXX暂定',
-      dataIndex: 'telephone',
-      width: '17%',
+      title: '用户角色',
+      dataIndex: 'role',
+      width: '19%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'telephone' },
-    },
-    {
-      title: 'XXXX暂定',
-      dataIndex: 'telephone',
-      width: '17%',
-      ellipsis: true,
-      align: 'center',
-      scopedSlots: { customRender: 'telephone' },
+      scopedSlots: { customRender: 'role' },
     },
     {
       title: '操作',
@@ -124,7 +116,8 @@
       index: `${i+1}`,
       username: `Elaine ${i}`,
       workNo: `322000071${i}`,
-      telephone: `17${i}39564023`
+      telephone: `17${i}39564023`,
+      role: '操作员'
     });
   }
   export default {
@@ -195,6 +188,12 @@
             title: '密码',
             key: 'password',
             content: value.password,
+            name: 'e_workshop_id'
+          },
+          {
+            title: '用户角色',
+            key: 'role',
+            content: value.role,
             name: 'e_workshop_id'
           }
         ]
