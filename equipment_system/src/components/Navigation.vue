@@ -26,7 +26,7 @@
       <!--  导航栏  -->
       <a-col :span="navSpan">
         <a-menu
-          :default-selected-keys="['1']"
+          :default-selected-keys="defaultNav"
           :default-open-keys="['sub1','sub2']"
           mode="inline"
           theme="dark"
@@ -87,10 +87,41 @@
         collapsed: false,
         mainSpan: '19',
         navSpan: '4',
-        offset: '1'
+        offset: '1',
+        defaultNav: []
       };
     },
+    created() {
+      this.initNav()
+    },
     methods: {
+      //初始化导航栏跳转显示
+      initNav(){
+        if (this.$route.path == '/index'){
+          this.defaultNav[0] = '1'
+        }
+        else if(this.$route.path == '/devInfo'){
+          this.defaultNav[1] = '2'
+        }
+        else if(this.$route.path == '/equitmentPartInfo'){
+          this.defaultNav[1] = '3'
+        }
+        else if(this.$route.path == '/maintainData'){
+          this.defaultNav[1] = '4'
+        }
+        else if(this.$route.path == '/repairData'){
+          this.defaultNav[1] = '5'
+        }
+        else if(this.$route.path == '/changeData'){
+          this.defaultNav[1] = '6'
+        }
+        else if(this.$route.path == '/personalInfo'){
+          this.defaultNav[1] = '7'
+        }
+        else if(this.$route.path == '/userManagement'){
+          this.defaultNav[1] = '8'
+        }
+      },
       //左侧导航栏收缩
       toggleCollapsed() {
         this.collapsed = !this.collapsed;
