@@ -1,5 +1,6 @@
 import axios from 'axios';
-import router from "../router";
+import router from "../router/index";
+
 axios.defaults.timeout = 5000;       //超时时间5s
 // axios.defaults.withCredentials = true;     //允许跨域
 
@@ -7,7 +8,8 @@ axios.defaults.timeout = 5000;       //超时时间5s
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 //基础Url
-axios.defaults.baseURL = "http://localhost:8888";
+//局域网
+axios.defaults.baseURL = "http://100.2.252.253:8080";
 
 /*
 * 封装get方法
