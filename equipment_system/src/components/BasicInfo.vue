@@ -207,7 +207,6 @@
         this.modalTitle = '设备维护'
         this.modalData.data = value
         this.modalData.inputCon = inputCon
-        console.log(value)
       },
       //维修设备
       serviceDev(value){

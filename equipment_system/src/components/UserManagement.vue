@@ -60,6 +60,7 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
+  import {getUserList} from  "../api/index";
   const columns = [
     {
       title: '序号',
@@ -124,6 +125,10 @@
     name: "UserManagement.vue",
     components: {
       ActionModal
+    },
+    created() {
+      //用户分页显示
+      this.userList()
     },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
@@ -215,11 +220,24 @@
 
       //查询设备
       searchDev(){},
-      //新增设备
+      //新增用户
       createDev(){
         this.isShowModal = true
         this.modalTitle = '新增'
-        this.modalData.label = ['姓名','联系方式','工号/账号','密码']
+        this.modalData.actionText = '新增用户'
+        this.modalData.label = ['姓名','联系方式','工号/账号','用户角色','密码']
+        this.modalData.displayData = ""
+      },
+
+      //用户列表显示
+      userList(){
+        let params = new URLSearchParams();
+        params.append("pageNum", 1);
+        params.append("pageSize ", 10);
+        getUserList(params)
+          .then((res) => {
+            console.log("用户管理列表", res);
+          })
       }
     },
   }

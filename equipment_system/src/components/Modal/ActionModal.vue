@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  新增  -->
-    <a-modal :visible="modalVisible" :title="title" @ok="handleCreate" @cancel="handleCancel" cancelText="取消" :okText="title" v-if="title=='新增'">
+    <a-modal :visible="modalVisible" :title="title" @ok="handleCreate(data.actionText)" @cancel="handleCancel" cancelText="取消" :okText="title" v-if="title=='新增'">
       <div v-if="data.label">
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
@@ -32,6 +32,23 @@
               </template>
               <template v-else-if="i == '密码'">
                 <a-input-password placeholder="请输入密码"  allowClear/>
+              </template>
+              <template v-else-if="i == '用户角色'">
+                <a-tree-select
+                  v-model="value"
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                  placeholder="请选择用户角色"
+                  allow-clear
+                  tree-default-expand-all
+                >
+                  <a-tree-select-node key="random1" value="操作工">
+                    <div slot="title">操作工</div>
+                  </a-tree-select-node>
+                  <a-tree-select-node key="random2" value="管理员">
+                    <div slot="title">管理员</div>
+                  </a-tree-select-node>
+                </a-tree-select>
               </template>
               <template v-else>
                 <a-input :placeholder="`请输入${i}`" :rows="3" allowClear/>
@@ -157,7 +174,11 @@
         // this.$emit("update:data",this.tableData)
       },
       //新增确定事件
-      handleCreate(e) {
+      handleCreate(text) {
+        //新增用户
+        if (text == "新增用户"){
+
+        }
         this.$emit("update:modalVisible",false)
       },
       //编辑内容
