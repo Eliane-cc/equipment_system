@@ -43,7 +43,7 @@
           </a-col>
           <a-col :span="2"></a-col>
           <a-col :span="6">
-            <div class="vertify">{{verificationCode}}</div>
+            <div class="vertify" @click="refreshCode">{{verificationCode}}</div>
           </a-col>
         </a-row>
         <a-row>
@@ -128,6 +128,10 @@
               this.verificationCode = res.data
             }
           })
+      },
+      //刷新二维码
+      refreshCode(){
+        this.generateVerifyCode()
       },
       //是否自动登录
       onChange(e){
