@@ -8,3 +8,6 @@ export const login = (params) => post(`login`,params);
 
 //获取用户列表
 export const getUserList =(params) => post(`admin/user/list`,params);
+
+//添加用户
+export const addUser =(params) => post(`admin/user/addUser`,params);

@@ -9,7 +9,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 //基础Url
 //局域网
-axios.defaults.baseURL = "http://100.2.252.253:8080";
+axios.defaults.baseURL = "http://10.10.3.168:8080";
 
 /*
 * 封装get方法

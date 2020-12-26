@@ -27,7 +27,7 @@
       <a-col :span="navSpan">
         <a-menu
           :default-selected-keys="defaultNav"
-          :default-open-keys="['sub1','sub2']"
+          :default-open-keys="['sub1','sub2','sub3']"
           mode="inline"
           theme="dark"
           :inline-collapsed="collapsed"

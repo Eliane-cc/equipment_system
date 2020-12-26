@@ -2,7 +2,7 @@
   <div>
     <!--  新增  -->
     <a-modal :visible="modalVisible" :title="title" @ok="handleCreate(data.actionText)" @cancel="handleCancel" cancelText="取消" :okText="title" v-if="title=='新增'">
-      <div v-if="data.label">
+      <div v-if="data.createData">
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
           <a-row type="flex" justify="center">
@@ -18,22 +18,19 @@
           <a-divider dashed/>
         </div>
         <!--  输入    -->
-        <a-row class="margin-top" v-for="i in data.label" :key="i" type="flex" justify="center">
-          <a-col :span="22" offset="2">
-            <a-col :span="5" class="title">
-              {{i}}：
-            </a-col>
-            <a-col :span="16">
-              <template v-if="i == '使用寿命'">
-                <a-input-number v-model="value" :min="0" @change="onChange" allowClear/> 天
+        <a-row class="margin-top" v-for="(item,index) in data.createData" :key="index">
+          <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
+            <a-form-item :label="item.label">
+              <template v-if="item.label == '使用寿命'">
+                <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"/> 天
               </template>
-              <template v-else-if="i == '开始使用时间'">
-                <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" />
+              <template v-else-if="item.label == '开始使用时间'">
+                <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" :ref="item.name" v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"/>
               </template>
-              <template v-else-if="i == '密码'">
-                <a-input-password placeholder="请输入密码"  allowClear/>
+              <template v-else-if="item.label == '密码'">
+                <a-input-password placeholder="请输入密码"  allowClear :ref="item.name" v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"/>
               </template>
-              <template v-else-if="i == '用户角色'">
+              <template v-else-if="item.label == '用户角色'">
                 <a-tree-select
                   v-model="value"
                   style="width: 100%"
@@ -41,6 +38,8 @@
                   placeholder="请选择用户角色"
                   allow-clear
                   tree-default-expand-all
+                  :ref="item.name"
+                  v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请选择!' }] }]"
                 >
                   <a-tree-select-node key="random1" value="操作工">
                     <div slot="title">操作工</div>
@@ -51,10 +50,50 @@
                 </a-tree-select>
               </template>
               <template v-else>
-                <a-input :placeholder="`请输入${i}`" :rows="3" allowClear/>
+                <a-input :placeholder="`请输入${item.label}`" :rows="3" allowClear :ref="item.name" v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"/>
               </template>
-            </a-col>
-          </a-col>
+            </a-form-item>
+          </a-form>
+<!--          <a-input-->
+<!--            v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"-->
+<!--            :ref="item.name"-->
+<!--          />-->
+<!--          <a-col :span="22" offset="2">-->
+<!--            <a-col :span="5" class="title">-->
+<!--              {{i}}：-->
+<!--            </a-col>-->
+<!--            <a-col :span="16">-->
+<!--              <template v-if="i == '使用寿命'">-->
+<!--                <a-input-number v-model="value" :min="0" @change="onChange" allowClear/> 天-->
+<!--              </template>-->
+<!--              <template v-else-if="i == '开始使用时间'">-->
+<!--                <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" />-->
+<!--              </template>-->
+<!--              <template v-else-if="i == '密码'">-->
+<!--                <a-input-password placeholder="请输入密码"  allowClear/>-->
+<!--              </template>-->
+<!--              <template v-else-if="i == '用户角色'">-->
+<!--                <a-tree-select-->
+<!--                  v-model="value"-->
+<!--                  style="width: 100%"-->
+<!--                  :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"-->
+<!--                  placeholder="请选择用户角色"-->
+<!--                  allow-clear-->
+<!--                  tree-default-expand-all-->
+<!--                >-->
+<!--                  <a-tree-select-node key="random1" value="操作工">-->
+<!--                    <div slot="title">操作工</div>-->
+<!--                  </a-tree-select-node>-->
+<!--                  <a-tree-select-node key="random2" value="管理员">-->
+<!--                    <div slot="title">管理员</div>-->
+<!--                  </a-tree-select-node>-->
+<!--                </a-tree-select>-->
+<!--              </template>-->
+<!--              <template v-else>-->
+<!--                <a-input :placeholder="`请输入${i}`" :rows="3" allowClear/>-->
+<!--              </template>-->
+<!--            </a-col>-->
+<!--          </a-col>-->
         </a-row>
       </div>
     </a-modal>
@@ -151,11 +190,13 @@
 
 <script>
   import moment from 'moment'
+  import {addUser} from "../../api";
   export default {
     name: "ActionModal.vue",
     props: ['data','modalVisible','title'],
     data(){
       return{
+        form: this.$form.createForm(this, { name: 'coordinated' }),
         fileList: [],
         tableData: this.data,
         value: '',
@@ -175,9 +216,29 @@
       },
       //新增确定事件
       handleCreate(text) {
+        let data;
+        // 拉取表单数据的方法
+        this.form.validateFields((err, values) => {
+          if (!err) {
+            data = this.form.getFieldsValue()
+            console.log("dataform", data);
+          }
+        })
+
         //新增用户
         if (text == "新增用户"){
-
+          console.log("我是新增用户", data)
+          addUser(data)
+            .then((res) => {
+              console.log("res",res)
+              if (res.msg == "SUCCESS"){
+                console.log("res.msg", res.msg)
+                this.$message.success("添加用户成功！");
+              }else{
+                this.$message.error(res.msg);
+              }
+            })
+          console.log("user",user)
         }
         this.$emit("update:modalVisible",false)
       },
@@ -201,13 +262,13 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .title{
     font-weight: 600;
     font-size: 14px;
   }
   .margin-top{
-    margin-bottom: 15px;
+    /*margin-bottom: 15px;*/
   }
   .margin-top-input{
     margin-top: 20px;
@@ -224,5 +285,12 @@
   }
   .display{
     margin-bottom: 20px;
+  }
+
+  /* 覆盖默认的ant样式 */
+  .margin-top{
+    :global(.ant-form-item){
+      margin-bottom: 8px;
+    }
   }
 </style>

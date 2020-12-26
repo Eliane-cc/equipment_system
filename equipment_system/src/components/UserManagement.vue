@@ -225,7 +225,29 @@
         this.isShowModal = true
         this.modalTitle = '新增'
         this.modalData.actionText = '新增用户'
-        this.modalData.label = ['姓名','联系方式','工号/账号','用户角色','密码']
+        let data = [
+          {
+            label: '姓名',
+            name: 'uName'
+          },
+          {
+            label: '联系方式',
+            name: 'uPhone'
+          },
+          {
+            label: '工号/账号',
+            name: 'uWorknumber'
+          },
+          {
+            label: '用户角色',
+            name: 'isadmin'
+          },
+          {
+            label: '密码',
+            name: 'uPassword'
+          },
+        ]
+        this.modalData.createData = data
         this.modalData.displayData = ""
       },
 
