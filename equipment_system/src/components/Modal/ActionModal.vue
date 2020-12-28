@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  新增  -->
-    <a-modal :visible="modalVisible" :title="title" @ok="handleCreate(data.actionText)" @cancel="handleCancel" cancelText="取消" :okText="title" v-if="title=='新增'">
+    <a-modal :visible="modalVisible" :title="title" @ok="handleCreate(data.actionText)" @cancel="handleCancel" cancelText="取消" :okText="title" v-if="title=='新增'"  :confirm-loading="confirmCreateLoading">
       <div v-if="data.createData">
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
@@ -18,82 +18,41 @@
           <a-divider dashed/>
         </div>
         <!--  输入    -->
-        <a-row class="margin-top" v-for="(item,index) in data.createData" :key="index">
+        <a-row v-for="(item,index) in data.createData" :key="index" class="margin-top">
           <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
             <a-form-item :label="item.label">
               <template v-if="item.label == '使用寿命'">
-                <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"/> 天
+                <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" v-decorator="[item.name, validatorRules.common]"/> 天
               </template>
               <template v-else-if="item.label == '开始使用时间'">
-                <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" :ref="item.name" v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"/>
+                <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" :ref="item.name" v-decorator="[item.name, validatorRules.common]"/>
               </template>
               <template v-else-if="item.label == '密码'">
-                <a-input-password placeholder="请输入密码"  allowClear :ref="item.name" v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"/>
+                <a-input-password placeholder="请输入密码"  allowClear :ref="item.name" v-decorator="[item.name, validatorRules.pwd]"/>
               </template>
               <template v-else-if="item.label == '用户角色'">
-                <a-tree-select
-                  v-model="value"
-                  style="width: 100%"
-                  :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                <a-select
                   placeholder="请选择用户角色"
+                  style="width: 100%"
                   allow-clear
-                  tree-default-expand-all
-                  :ref="item.name"
-                  v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请选择!' }] }]"
+                  v-decorator="[item.name, validatorRules.common]"
                 >
-                  <a-tree-select-node key="random1" value="操作工">
-                    <div slot="title">操作工</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random2" value="管理员">
-                    <div slot="title">管理员</div>
-                  </a-tree-select-node>
-                </a-tree-select>
+                  <a-select-option v-for="(Item,Index) in item.children" :key="Item.id" :value="Item.id">
+                    {{Item.name}}
+                  </a-select-option>
+                </a-select>
+              </template>
+              <template v-else-if="item.label == '联系方式'">
+                <a-input :placeholder="`请输入${item.label}`" :rows="3"  allowClear :ref="item.name" v-decorator="[item.name, validatorRules.phone]"/>
+              </template>
+              <template v-else-if="item.label == '工号/账号'">
+                <a-input :placeholder="`请输入${item.label}`" :rows="3"  allowClear :ref="item.name" v-decorator="[item.name, validatorRules.workNumber]"/>
               </template>
               <template v-else>
-                <a-input :placeholder="`请输入${item.label}`" :rows="3" allowClear :ref="item.name" v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"/>
+                <a-input :placeholder="`请输入${item.label}`" :rows="3" allowClear :ref="item.name" v-decorator="[item.name, validatorRules.common]"/>
               </template>
             </a-form-item>
           </a-form>
-<!--          <a-input-->
-<!--            v-decorator="[item.name, { rules: [{ required: true, message: '该字段不能为空，请输入!' }] }]"-->
-<!--            :ref="item.name"-->
-<!--          />-->
-<!--          <a-col :span="22" offset="2">-->
-<!--            <a-col :span="5" class="title">-->
-<!--              {{i}}：-->
-<!--            </a-col>-->
-<!--            <a-col :span="16">-->
-<!--              <template v-if="i == '使用寿命'">-->
-<!--                <a-input-number v-model="value" :min="0" @change="onChange" allowClear/> 天-->
-<!--              </template>-->
-<!--              <template v-else-if="i == '开始使用时间'">-->
-<!--                <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" />-->
-<!--              </template>-->
-<!--              <template v-else-if="i == '密码'">-->
-<!--                <a-input-password placeholder="请输入密码"  allowClear/>-->
-<!--              </template>-->
-<!--              <template v-else-if="i == '用户角色'">-->
-<!--                <a-tree-select-->
-<!--                  v-model="value"-->
-<!--                  style="width: 100%"-->
-<!--                  :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"-->
-<!--                  placeholder="请选择用户角色"-->
-<!--                  allow-clear-->
-<!--                  tree-default-expand-all-->
-<!--                >-->
-<!--                  <a-tree-select-node key="random1" value="操作工">-->
-<!--                    <div slot="title">操作工</div>-->
-<!--                  </a-tree-select-node>-->
-<!--                  <a-tree-select-node key="random2" value="管理员">-->
-<!--                    <div slot="title">管理员</div>-->
-<!--                  </a-tree-select-node>-->
-<!--                </a-tree-select>-->
-<!--              </template>-->
-<!--              <template v-else>-->
-<!--                <a-input :placeholder="`请输入${i}`" :rows="3" allowClear/>-->
-<!--              </template>-->
-<!--            </a-col>-->
-<!--          </a-col>-->
         </a-row>
       </div>
     </a-modal>
@@ -190,7 +149,7 @@
 
 <script>
   import moment from 'moment'
-  import {addUser} from "../../api";
+  import {addUser, addDev, getUserList} from "../../api";
   export default {
     name: "ActionModal.vue",
     props: ['data','modalVisible','title'],
@@ -202,17 +161,86 @@
         value: '',
         operTime: '0天0小时0分',
         dateFormat: 'YYYY-MM-DD HH:mm',
-        valueEdit: ''
+        valueEdit: '',
+        validatorRules: {
+          common: {
+            rules: [
+              {
+                required: true,
+                message: '该字段不能为空，请重新输入'
+              }
+            ]
+          },
+          pwd: {
+            rules: [
+              {
+                required: true,
+                message: '该字段不能为空，请重新输入'
+              },
+              {
+                validator: this.pwdCheck.bind(this)
+              }
+            ]
+          },
+          phone: {
+            rules: [
+              {
+                required: true,
+                message: '该字段不能为空，请重新输入'
+              },
+              {
+                validator: this.phoneCheck.bind(this)
+              }
+            ]
+          },
+          workNumber: {
+            rules: [
+              {
+                required: true,
+                message: '该字段不能为空，请重新输入'
+              },
+              {
+                validator: this.workNumberCheck.bind(this)
+              }
+            ]
+          }
+        },
+        confirmCreateLoading: false
       }
     },
     methods: {
       //引入时间格式处理moment
       moment,
+      //手机号码校验
+      phoneCheck(rule, value, callbackFn) {
+        const reg = /^(13[0-9]|14[5679]|15[0-3,5-9]|16[56]|17[0-9]|18[0-9]|19[189])\d{8}$/
+        if (!reg.test(value) && value) {
+          callbackFn('请输入格式正确的手机号码')
+          return
+        }
+        callbackFn()
+      },
+      //密码校验
+      pwdCheck(rule, value, callbackFn) {
+        const reg = /^[a-zA-Z0-9]{8,16}$/
+        if (!reg.test(value) && value) {
+          callbackFn('密码需由8-16位字母和数字组成，请重新输入')
+          return
+        }
+        callbackFn()
+      },
+      //工号校验
+      workNumberCheck(rule, value, callbackFn) {
+        const reg = /^[a-zA-Z0-9]{10,10}$/
+        if (!reg.test(value) && value) {
+          callbackFn('工号需由10位的数字和字母组成，请重新输入')
+          return
+        }
+        callbackFn()
+      },
       //编辑确定事件
       handleEdit(e) {
         this.$emit("update:modalVisible",false)
-        // console.log("更改后",this.tableData)
-        // this.$emit("update:data",this.tableData)
       },
       //新增确定事件
       handleCreate(text) {
@@ -221,33 +249,67 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             data = this.form.getFieldsValue()
-            console.log("dataform", data);
+            this.confirmCreateLoading = true
+            if (data){
+              //新增用户
+              if (text == "新增用户"){
+                addUser(data)
+                  .then((res) => {
+                    if (res.msg == "SUCCESS"){
+                      this.$message.success("添加用户成功！");
+                      this.$emit("update:modalVisible",false);
+                      this.form.resetFields();
+                      //重新刷新用户列表
+                      this.userList();
+                    }else{
+                      this.$message.error(res.msg);
+                      this.$emit("update:modalVisible",false);
+                      this.form.resetFields();
+                    }
+                  })
+                this.confirmCreateLoading = false
+              }
+              else if (text == '新增设备'){
+                addDev(data)
+                  .then((res) => {
+                    console.log("res",res)
+                    if (res.msg == "SUCCESS"){
+                      this.$message.success("添加用户成功！");
+                      this.$emit("update:modalVisible",false);
+                      this.form.resetFields();
+                    }else{
+                      this.$message.error(res.msg);
+                      this.$emit("update:modalVisible",false);
+                      this.form.resetFields();
+                    }
+                  })
+                this.confirmCreateLoading = false
+              }
+            }
           }
         })
-
-        //新增用户
-        if (text == "新增用户"){
-          console.log("我是新增用户", data)
-          addUser(data)
-            .then((res) => {
-              console.log("res",res)
-              if (res.msg == "SUCCESS"){
-                console.log("res.msg", res.msg)
-                this.$message.success("添加用户成功！");
-              }else{
-                this.$message.error(res.msg);
-              }
-            })
-          console.log("user",user)
-        }
-        this.$emit("update:modalVisible",false)
+      },
+      //
+      userList(){
+        let params = new URLSearchParams();
+        params.append("pageNum", 1);
+        params.append("pageSize", 10);
+        getUserList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$emit("update:data",res.data.list);
+            }
+            console.log("用户管理列表", res);
+          })
       },
       //编辑内容
       editContent(newValue,index){
         this.tableData.editData[index].content = newValue.content
+        console.log("编辑",newValue,index)
       },
       //取消按钮事件
       handleCancel(e) {
+        this.form.resetFields();
         this.$emit("update:modalVisible",false)
       },
       //使用寿命改变事件
@@ -268,7 +330,7 @@
     font-size: 14px;
   }
   .margin-top{
-    /*margin-bottom: 15px;*/
+    margin-bottom: 10px;
   }
   .margin-top-input{
     margin-top: 20px;
@@ -290,7 +352,7 @@
   /* 覆盖默认的ant样式 */
   .margin-top{
     :global(.ant-form-item){
-      margin-bottom: 8px;
+      margin-bottom: 0px;
     }
   }
 </style>

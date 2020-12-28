@@ -275,7 +275,34 @@
       createDev(){
         this.isShowModal = true
         this.modalTitle = '新增'
-        this.modalData.label = ['车间','机台','设备名称','设备编码','型号','厂家']
+        this.modalData.actionText = '新增设备'
+        let data = [
+          {
+            label: '车间',
+            name: 'eWorkshop'
+          },
+          {
+            label: '机台',
+            name: 'eMachine'
+          },
+          {
+            label: '设备名称',
+            name: 'eName'
+          },
+          {
+            label: '设备编码',
+            name: 'eCode'
+          },
+          {
+            label: '型号',
+            name: 'eType'
+          },
+          {
+            label: '厂家',
+            name: 'fName'
+          }
+        ]
+        this.modalData.createData = data
         this.modalData.displayData = ""
       },
       //新增零件
@@ -314,6 +341,38 @@
             content: value.equitmentCode
           }
         ]
+        this.modalData.actionText = '新增零件'
+        let data = [
+          {
+            label: '零件名称',
+            name: 'c_name'
+          },
+          {
+            label: '零件型号',
+            name: 'c_type'
+          },
+          {
+            label: '零件编码',
+            name: 'c_code'
+          },
+          {
+            label: '零件厂家',
+            name: 'eCode'
+          },
+          {
+            label: '位置',
+            name: 'c_location'
+          },
+          {
+            label: '使用寿命',
+            name: 'lifespan'
+          },
+          {
+            label: '开始使用时间',
+            name: 'starttime'
+          }
+        ]
+        this.modalData.createData = data
         this.modalData.label = ['零件名称','零件型号','零件编码','零件厂家','位置','使用寿命','开始使用时间']
         this.modalData.displayData = displayData
       }
