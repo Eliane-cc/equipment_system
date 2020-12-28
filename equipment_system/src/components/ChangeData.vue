@@ -76,7 +76,7 @@
         </a-row>
       </a-form>
       <div class="table">
-        <a-table :columns="columns" :data-source="data" bordered class="column">
+        <a-table :columns="columns" :data-source.sync="data" bordered class="column" :pagination="pagination" :loading="isLoading">
           <template
             v-for="col in ['workshop', 'machine', 'equitment','model','factory','partName','partModel','partFactory','repairContent','repairPersonnel','repairTime','operation']"
             :slot="col"
@@ -108,70 +108,71 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
+  import {getchangeList} from "../api";
   const columns = [
     {
       title: '车间',
-      dataIndex: 'workshop',
+      dataIndex: 'eWorkshop',
       width: '9%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'workshop' },
+      scopedSlots: { customRender: 'eWorkshop' },
     },
     {
       title: '机台',
-      dataIndex: 'machine',
+      dataIndex: 'eMachine',
       width: '9%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'machine' },
+      scopedSlots: { customRender: 'eMachine' },
     },
     {
       title: '设备名称',
-      dataIndex: 'equitment',
+      dataIndex: 'eName',
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'equitment' },
+      scopedSlots: { customRender: 'eName' },
     },
     {
       title: '零件名称',
-      dataIndex: 'partName',
+      dataIndex: 'cName',
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'partName' },
+      scopedSlots: { customRender: 'cName' },
     },
     {
       title: '新零件名称',
-      dataIndex: 'newPartName',
+      dataIndex: 'newCname',
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'newPartName' },
+      scopedSlots: { customRender: 'newCname' },
     },
     {
       title: '更换人员',
-      dataIndex: 'changePersonnel',
+      dataIndex: 'changePeople',
       width: '10%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'changePersonnel' },
+      scopedSlots: { customRender: 'changePeople' },
     },
     {
       title: '更换时间',
-      dataIndex: 'changeTime',
+      dataIndex: 'cTime',
       width: '13%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'changeTime' },
+      scopedSlots: { customRender: 'cTime' },
     },
     {
       title: '位置',
-      dataIndex: 'position',
+      dataIndex: 'cLocation',
       width: '13%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'position' },
+      scopedSlots: { customRender: 'cLocation' },
     },
     {
       title: '操作',
@@ -182,33 +183,15 @@
   ];
 
   const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i.toString(),
-      workshop: `车间 ${i}`,
-      machine: `机台 ${i}`,
-      equitment: `设备名称. ${i}`,
-      equitmentCode: `50143083409${i}`,
-      model: `型号. ${i}`,
-      factory: `厂家. ${i}`,
-      partName: `零件名称 ${i}`,
-      partNameCode: `50143080647${i}`,
-      partModel: `零件型号 ${i}`,
-      partFactory: `零件厂家. ${i}`,
-      newPartName: `新零件名称 ${i}`,
-      newPartNameCode: `new-3080647${i}`,
-      newPartModel: `新零件型号 ${i}`,
-      newPartFactory: `新零件厂家. ${i}`,
-      changePersonnel: `更换人员 ${i}`,
-      changeTime: `更换时间. ${i}`,
-      position: `纸架推杆丝杆轴承 ${i}`,
-      picture: `图片(样式先暂定)`
-    });
-  }
+
   export default {
     name: "ChangeData.vue",
     components: {
       ActionModal
+    },
+    created() {
+      //维护分页查询
+      this.changeList()
     },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
@@ -244,6 +227,13 @@
         modalTitle: '',
         modalData: [],
         form: this.$form.createForm(this, { name: 'advanced_search' }),
+        isLoading: true, //表格分页加载
+        pageNum: 1,   //记录当前页码
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          onChange:(page,pageSize)=>this.devList(page,pageSize),//点击页码事件
+        },
         data,
         columns,
         editingKey: '',
@@ -252,6 +242,24 @@
       }
     },
     methods: {
+      //更换列表显示
+      changeList(pageNum=1, pageSize=10){
+        this.isLoading = true
+        this.pageNum = pageNum
+        let params = {
+          pageNum: pageNum,
+          pageSize: pageSize
+        }
+        getchangeList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.data = res.data.list
+              this.pagination.total = res.data.total
+              this.isLoading = false
+            }
+            console.log("更换列表", res);
+          })
+      },
       //表单查询
       handleSearch(e) {
         this.form.validateFields((error, values) => {

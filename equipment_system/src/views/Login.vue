@@ -89,9 +89,13 @@
         if (this.code){
           if(this.code == this.verificationCode){
             if(this.username && this.password){
-              let params = new URLSearchParams();
-              params.append("uWorknumber", this.username);
-              params.append("uPassword", this.password);
+              //let params = new URLSearchParams();
+              //params.append("uWorknumber", this.username);
+              //params.append("uPassword", this.password);
+              let params = {
+                uWorknumber: this.username,
+                uPassword: this.password
+              }
               console.log("params",params)
               login(params)
                 .then((res) => {

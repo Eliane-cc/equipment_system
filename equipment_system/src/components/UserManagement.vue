@@ -238,8 +238,11 @@
       //删除用户
       deleteDev(record) {
         this.isLoading = true
-        let params = new URLSearchParams();
-        params.append("uWorknumber", record.uWorknumber);
+        //let params = new URLSearchParams();
+        //params.append("uWorknumber", record.uWorknumber);
+        let params = {
+          uWorknumber: record.uWorknumber
+        }
         deleteUser(params)
           .then((res) => {
             if (res.msg == "SUCCESS"){
@@ -299,9 +302,13 @@
       userList(pageNum=1, pageSize=10){
         this.isLoading = true
         this.pageNum = pageNum
-        let params = new URLSearchParams();
-        params.append("pageNum", pageNum);
-        params.append("pageSize", pageSize);
+        //let params = new URLSearchParams();
+        //params.append("pageNum", pageNum);
+        //params.append("pageSize", pageSize);
+        let params = {
+          pageNum: pageNum,
+          pageSize: pageSize
+        }
         getUserList(params)
           .then((res) => {
             if (res.msg == "SUCCESS"){

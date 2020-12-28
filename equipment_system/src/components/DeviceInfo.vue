@@ -69,7 +69,7 @@
         </a-row>
       </a-form>
       <div class="table">
-        <a-table :columns="columns" :data-source="data" bordered class="column">
+        <a-table :columns="columns" :data-source.sync="data" bordered class="column" :pagination="pagination" :loading="isLoading">
           <template
             v-for="col in ['workshop', 'machine', 'equitment','equitmentCode','model','factory','operation']"
             :slot="col"
@@ -99,54 +99,55 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
+  import {getDevList} from "../api/index";
   const columns = [
     {
       title: '车间',
-      dataIndex: 'workshop',
+      dataIndex: 'eWorkshop',
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'workshop' },
+      scopedSlots: { customRender: 'eWorkshop' },
     },
     {
       title: '机台',
-      dataIndex: 'machine',
+      dataIndex: 'eMachine',
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'machine' },
+      scopedSlots: { customRender: 'eMachine' },
     },
     {
       title: '设备名称',
-      dataIndex: 'equitment',
+      dataIndex: 'eName',
       width: '16%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'equitment' },
+      scopedSlots: { customRender: 'eName' },
     },
     {
       title: '设备编码',
-      dataIndex: 'equitmentCode',
+      dataIndex: 'eCode',
       width: '14%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'equitmentCode' },
+      scopedSlots: { customRender: 'eCode' },
     },
     {
       title: '型号',
-      dataIndex: 'model',
+      dataIndex: 'eType',
       width: '14%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'model' },
+      scopedSlots: { customRender: 'eType' },
     },
     {
       title: '厂家',
-      dataIndex: 'factory',
+      dataIndex: 'fId',
       width: '16%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'factory' },
+      scopedSlots: { customRender: 'fId' },
     },
     {
       title: '操作',
@@ -157,21 +158,15 @@
   ];
 
   const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i.toString(),
-      workshop: `车间 ${i}`,
-      machine: `机台 ${i}`,
-      equitment: `铝合金夹梅花联轴器-${i}`,
-      equitmentCode: `${i}50143046324`,
-      model: `型号. ${i}`,
-      factory: `厂家. ${i}`
-    });
-  }
+
   export default {
     name: "DeviceInfo.vue",
     components: {
       ActionModal
+    },
+    created() {
+      //设备分页查询
+      this.devList()
     },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
@@ -197,6 +192,13 @@
         modalTitle: '',
         modalData: [],
         form: this.$form.createForm(this, { name: 'advanced_search' }),
+        isLoading: true, //表格分页加载
+        pageNum: 1,   //记录当前页码
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          onChange:(page,pageSize)=>this.devList(page,pageSize),//点击页码事件
+        },
         data,
         columns,
         editingKey: '',
@@ -205,6 +207,27 @@
       }
     },
     methods: {
+      //设备列表显示
+      devList(pageNum=1, pageSize=10){
+        this.isLoading = true
+        this.pageNum = pageNum
+        //let params = new URLSearchParams();
+        //params.append("pageNum", pageNum);
+        //params.append("pageSize", pageSize);
+        let params = {
+          pageNum: pageNum,
+          pageSize: pageSize
+        }
+        getDevList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.data = res.data.list
+              this.pagination.total = res.data.total
+              this.isLoading = false
+            }
+            console.log("设备管理列表", res);
+          })
+      },
       //表单查询
       handleSearch(e) {
         this.form.validateFields((error, values) => {
@@ -304,6 +327,7 @@
         ]
         this.modalData.createData = data
         this.modalData.displayData = ""
+        this.modalData.pageNum = this.pageNum
       },
       //新增零件
       createRepair(value,text){

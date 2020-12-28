@@ -66,7 +66,7 @@
         </a-row>
       </a-form>
       <div class="table">
-        <a-table :columns="columns" :data-source="data" bordered class="column">
+        <a-table :columns="columns" :data-source.sync="data" bordered class="column" :pagination="pagination" :loading="isLoading">
           <template
             v-for="col in ['workshop', 'machine', 'equitment','equitmentCode','model','factory','partName','partNameCode','partModel','partFactory','serviceLife','startTime','operationTime','position','operation']"
             :slot="col"
@@ -96,70 +96,71 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
+  import {getequitmentList} from "../api";
   const columns = [
     {
       title: '车间',
-      dataIndex: 'workshop',
+      dataIndex: 'eWorkshop',
       width: '9%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'workshop' },
+      scopedSlots: { customRender: 'eWorkshop' },
     },
     {
       title: '机台',
-      dataIndex: 'machine',
+      dataIndex: 'eMachine',
       width: '9%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'machine' },
+      scopedSlots: { customRender: 'eMachine' },
     },
     {
       title: '设备名称',
-      dataIndex: 'equitment',
+      dataIndex: 'eName',
       width: '13%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'equitment' },
+      scopedSlots: { customRender: 'eName' },
     },
     {
       title: '零件名称',
-      dataIndex: 'partName',
+      dataIndex: 'cName',
       width: '13%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'partName' },
+      scopedSlots: { customRender: 'cName' },
     },
     {
       title: '使用寿命',
-      dataIndex: 'serviceLife',
+      dataIndex: 'lifespan',
       width: '10%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'serviceLife' },
+      scopedSlots: { customRender: 'lifespan' },
     },
     {
       title: '开始使用时间',
-      dataIndex: 'startTime',
+      dataIndex: 'starttime',
       width: '12%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'startTime' },
+      scopedSlots: { customRender: 'starttime' },
     },
     {
       title: '运行时间',
-      dataIndex: 'operationTime',
+      dataIndex: 'runtime',
       width: '10%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'operationTime' },
+      scopedSlots: { customRender: 'runtime' },
     },
     {
       title: '位置',
-      dataIndex: 'position',
+      dataIndex: 'cPosition',
       width: '10%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'position' },
+      scopedSlots: { customRender: 'cPosition' },
     },
     {
       title: '操作',
@@ -170,29 +171,15 @@
   ];
 
   const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i.toString(),
-      workshop: `车间 ${i}`,
-      machine: `机台 ${i}`,
-      equitment: `设备名称. ${i}`,
-      equitmentCode: `50143083409${i}`,
-      model: `型号. ${i}`,
-      factory: `厂家. ${i}`,
-      partName: `零件名称 ${i}`,
-      partNameCode: `50143080647${i}`,
-      partModel: `零件型号 ${i}`,
-      partFactory: `零件厂家. ${i}`,
-      serviceLife: `${i}`,
-      startTime: `2020-3-7 14:00`,
-      operationTime: `运行时间. ${i}`,
-      position: `位置. ${i}`
-    });
-  }
+
   export default {
     name: "EquitmentPartInfo.vue",
     components: {
       ActionModal
+    },
+    created() {
+      //零件分页查询
+      this.equitmentList()
     },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
@@ -223,6 +210,13 @@
         modalTitle: '',
         modalData: [],
         form: this.$form.createForm(this, { name: 'advanced_search' }),
+        isLoading: true, //表格分页加载
+        pageNum: 1,   //记录当前页码
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          onChange:(page,pageSize)=>this.devList(page,pageSize),//点击页码事件
+        },
         data,
         columns,
         editingKey: '',
@@ -231,6 +225,24 @@
       }
     },
     methods: {
+      //零件列表显示
+      equitmentList(pageNum=1, pageSize=10){
+        this.isLoading = true
+        this.pageNum = pageNum
+        let params = {
+          pageNum: pageNum,
+          pageSize: pageSize
+        }
+        getequitmentList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.data = res.data.list
+              this.pagination.total = res.data.total
+              this.isLoading = false
+            }
+            console.log("零件管理列表", res);
+          })
+      },
       //表单查询
       handleSearch(e) {
         this.form.validateFields((error, values) => {

@@ -307,6 +307,7 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             data = this.form.getFieldsValue()
+            console.log("表单数据",data)
             this.confirmCreateLoading = true
             if (data){
               //新增用户
@@ -315,31 +316,30 @@
                   .then((res) => {
                     if (res.msg == "SUCCESS"){
                       this.$message.success("添加用户成功！");
-                      this.$emit("update:modalVisible",false);
                       this.form.resetFields();
                       //重新刷新用户列表
                       this.userList();
                     }else{
                       this.$message.error(res.msg);
-                      this.$emit("update:modalVisible",false);
                       this.form.resetFields();
                     }
+                    this.$emit("update:modalVisible",false);
                   })
                 this.confirmCreateLoading = false
               }
               else if (text == '新增设备'){
+                console.log("我是新增设备。", data)
                 addDev(data)
                   .then((res) => {
                     console.log("res",res)
                     if (res.msg == "SUCCESS"){
-                      this.$message.success("添加用户成功！");
-                      this.$emit("update:modalVisible",false);
+                      this.$message.success("添加设备成功！");
                       this.form.resetFields();
                     }else{
                       this.$message.error(res.msg);
-                      this.$emit("update:modalVisible",false);
                       this.form.resetFields();
                     }
+                    this.$emit("update:modalVisible",false);
                   })
                 this.confirmCreateLoading = false
               }
@@ -349,9 +349,13 @@
       },
       //用户列表
       userList(){
-        let params = new URLSearchParams();
-        params.append("pageNum", this.data.pageNum);
-        params.append("pageSize", 10);
+        //let params = new URLSearchParams();
+        //params.append("pageNum", this.data.pageNum);
+        //params.append("pageSize", 10);
+        let params = {
+          pageNum: this.data.pageNum,
+          pageSize: 10
+        }
         getUserList(params)
           .then((res) => {
             if (res.msg == "SUCCESS"){

@@ -6,6 +6,7 @@ axios.defaults.timeout = 5000;       //超时时间5s
 
 //Content-Type响应头
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.headers.get['Content-Type'] = 'application/json;charset=UTF-8';
 
 //基础Url
 //局域网

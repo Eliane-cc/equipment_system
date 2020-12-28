@@ -76,7 +76,7 @@
         </a-row>
       </a-form>
       <div class="table">
-        <a-table :columns="columns" :data-source="data" bordered class="column">
+        <a-table :columns="columns" :data-source.sync="data" bordered class="column" :pagination="pagination" :loading="isLoading">
           <template
             v-for="col in ['workshop', 'machine', 'equitment','model','factory','partName','partModel','partFactory','repairContent','repairPersonnel','repairTime','operation']"
             :slot="col"
@@ -108,62 +108,63 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
+  import {getrepairList} from "../api";
   const columns = [
     {
       title: '车间',
-      dataIndex: 'workshop',
+      dataIndex: 'eWorkshop',
       width: '9%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'workshop' },
+      scopedSlots: { customRender: 'eWorkshop' },
     },
     {
       title: '机台',
-      dataIndex: 'machine',
+      dataIndex: 'eMachine',
       width: '9%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'machine' },
+      scopedSlots: { customRender: 'eMachine' },
     },
     {
       title: '设备名称',
-      dataIndex: 'equitment',
+      dataIndex: 'eName',
       width: '12%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'equitment' },
+      scopedSlots: { customRender: 'eName' },
     },
     {
       title: '零件名称',
-      dataIndex: 'partName',
+      dataIndex: 'cName',
       width: '12%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'partName' },
+      scopedSlots: { customRender: 'cName' },
     },
     {
       title: '维修人员',
-      dataIndex: 'repairPersonnel',
+      dataIndex: 'rPeopleId',
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'repairPersonnel' },
+      scopedSlots: { customRender: 'rPeopleId' },
     },
     {
       title: '维修内容',
-      dataIndex: 'repairContent',
+      dataIndex: 'rContent',
       width: '16%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'repairContent' },
+      scopedSlots: { customRender: 'rContent' },
     },
     {
       title: '维修时间',
-      dataIndex: 'repairTime',
+      dataIndex: 'rTime',
       width: '16%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'repairTime' },
+      scopedSlots: { customRender: 'rTime' },
     },
     {
       title: '操作',
@@ -174,29 +175,15 @@
   ];
 
   const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i.toString(),
-      workshop: `车间 ${i}`,
-      machine: `机台 ${i}`,
-      equitment: `设备名称. ${i}`,
-      equitmentCode: `50143083409${i}`,
-      model: `型号. ${i}`,
-      factory: `厂家. ${i}`,
-      partName: `零件名称 ${i}`,
-      partNameCode: `50143080647${i}`,
-      partModel: `零件型号 ${i}`,
-      partFactory: `零件厂家. ${i}`,
-      repairContent: `维修内容. ${i}`,
-      repairPersonnel: `维修人员. ${i}`,
-      repairTime: `2020-6-6 14:00`,
-      picture: `图片(样式先暂定)`
-    });
-  }
+
   export default {
     name: "RepairData.vue",
     components: {
       ActionModal
+    },
+    created() {
+      //维护分页查询
+      this.repairList()
     },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
@@ -232,6 +219,13 @@
         modalTitle: '',
         modalData: [],
         form: this.$form.createForm(this, { name: 'advanced_search' }),
+        isLoading: true, //表格分页加载
+        pageNum: 1,   //记录当前页码
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          onChange:(page,pageSize)=>this.devList(page,pageSize),//点击页码事件
+        },
         data,
         columns,
         editingKey: '',
@@ -240,6 +234,24 @@
       }
     },
     methods: {
+      //维护列表显示
+      repairList(pageNum=1, pageSize=10){
+        this.isLoading = true
+        this.pageNum = pageNum
+        let params = {
+          pageNum: pageNum,
+          pageSize: pageSize
+        }
+        getrepairList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.data = res.data.list
+              this.pagination.total = res.data.total
+              this.isLoading = false
+            }
+            console.log("维护列表", res);
+          })
+      },
       //表单查询
       handleSearch(e) {
         this.form.validateFields((error, values) => {
