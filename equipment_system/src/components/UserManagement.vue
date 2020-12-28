@@ -62,7 +62,7 @@
         </a-table>
       </div>
     </div>
-    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle"></action-modal>
+    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle" :dataList.sync="data"></action-modal>
   </div>
 </template>
 
@@ -149,6 +149,7 @@
         modalData: [],
         form: this.$form.createForm(this, { name: 'advanced_search' }),
         isLoading: true, //表格分页加载
+        pageNum: 1,   //记录当前页码
         pagination: {
           total: 0,
           defaultPageSize: 10,
@@ -172,6 +173,7 @@
       },
       //编辑
       editDev(value,text) {
+        //console.log("编辑",value,text);
         let displayData = [
           {
             title: '序号',
@@ -202,16 +204,35 @@
             name: 'uPassword'
           },
           {
+            title: '确认密码',
+            key: 'uPasswordConfirm',
+            content: '',
+            name: 'uPasswordConfirm'
+          },
+          {
             title: '用户角色',
             key: 'isadmin',
             content: value.isadmin,
-            name: 'isadmin'
+            name: 'isadmin',
+            children: [
+              {
+                id: '1',
+                name: '操作工'
+              },
+              {
+                id: '2',
+                name: '管理员'
+              },
+            ]
           }
         ]
         this.isShowModal = true
         this.modalTitle = '编辑'
+        this.modalData.actionText = '编辑用户'
         this.modalData.displayData = displayData
         this.modalData.editData = editData
+        this.modalData.value = value
+        this.modalData.pageNum = this.pageNum
       },
       //删除当前行
       deleteDev(key) {
@@ -265,11 +286,13 @@
         ]
         this.modalData.createData = data
         this.modalData.displayData = ""
+        this.modalData.pageNum = this.pageNum
       },
 
       //用户列表显示
       userList(pageNum=1, pageSize=10){
         this.isLoading = true
+        this.pageNum = pageNum
         let params = new URLSearchParams();
         params.append("pageNum", pageNum);
         params.append("pageSize", pageSize);

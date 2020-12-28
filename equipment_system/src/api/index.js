@@ -12,5 +12,8 @@ export const getUserList =(params) => post(`admin/user/list`,params);
 //添加用户
 export const addUser =(params) => post(`admin/user/addUser`,params);
 
+//修改用户信息
+export const updateUser =(params) => post(`admin/user/update`,params);
+
 //新增设备
 export const addDev =(params) => post(`admin/equipment/add`,params);

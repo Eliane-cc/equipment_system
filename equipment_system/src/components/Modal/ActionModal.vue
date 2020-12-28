@@ -75,7 +75,7 @@
       </div>
     </a-modal>
     <!--  编辑  -->
-    <a-modal :visible="modalVisible" :title="title" @ok="handleEdit" @cancel="handleCancel" cancelText="取消" :okText="title" v-else>
+    <a-modal :visible="modalVisible" :title="title" @ok="handleEdit(data.actionText)" @cancel="handleCancel" cancelText="取消" :okText="title" v-else>
       <div>
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
@@ -94,52 +94,47 @@
 
         <!--  输入    -->
         <div v-if="data.editData">
-          <a-row class="margin-top" v-for="(item,index) in data.editData" :key="index" type="flex" justify="center">
-            <a-col :span="22" offset="2">
-              <a-col :span="5" class="title">
-                {{item.title}}：
-              </a-col>
-              <a-col :span="16">
-                <template v-if="item.title == '使用寿命'">
-                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :default-value="item.content"/> 天
+          <a-row class="margin-top" v-for="(item,index) in data.editData" :key="index">
+            <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
+              <a-form-item :label="item.title">
+                <template v-if="item.title == '使用寿命'">-->
+                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :default-value="item.content" :ref="item.name"/> 天
                 </template>
                 <template v-else-if="item.title == '开始使用时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="item.content" :format="dateFormat" />
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="item.content" :format="dateFormat" :ref="item.name"/>
                 </template>
                 <template v-else-if="item.title == '维护时间' || item.title == '维修时间' || item.title == '更换时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :default-value="item.content" :format="dateFormat" />
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :default-value="item.content" :format="dateFormat" :ref="item.name"/>
                 </template>
                 <template v-else-if="item.title == '维护内容' || item.title == '维修内容' || item.title == '更换内容'">
-                  <a-textarea :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name"/>
+                  <a-textarea :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name" :ref="item.name"/>
                 </template>
-                <template v-else-if="item.title == '密码'">
-                  <a-input-password :placeholder="`请输入${item.title}`"  allowClear/>
+                <template v-else-if="item.title == '重置密码'">
+                  <a-input-password :placeholder="`请输入${item.title}`" allowClear v-model="pwd" v-decorator="[item.name, validatorRules.resetPwd]"/>
+                </template>
+                <template v-else-if="item.title == '确认密码'">
+                  <a-input-password :placeholder="`请输入${item.title}`" v-model="pwdConfirm" allowClear :ref="item.name"/>
                 </template>
                 <template v-else-if="item.title == '用户角色'">
-                  <a-tree-select
-                    v-model="value"
+                  <a-select
+                    placeholder="请选择用户角色"
                     style="width: 100%"
-                    :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
-                    placeholder="请选择"
                     allow-clear
-                    tree-default-expand-all
+                    v-decorator="[item.name, validatorRules.common]"
                   >
-                    <a-tree-select-node key="random1" value="操作工">
-                      <div slot="title">操作工</div>
-                    </a-tree-select-node>
-                    <a-tree-select-node key="random2" value="管理员">
-                      <div slot="title">管理员</div>
-                    </a-tree-select-node>
-                  </a-tree-select>
+                    <a-select-option v-for="(Item,Index) in item.children" :key="Item.id" :value="Item.id">
+                      {{Item.name}}
+                    </a-select-option>
+                  </a-select>
                 </template>
                 <template v-else-if="item.title == '运行时间'">
                   <div>{{operTime}}</div>
                 </template>
                 <template v-else>
-                  <a-input :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name"/>
+                  <a-input :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name" :ref="item.name"/>
                 </template>
-              </a-col>
-            </a-col>
+              </a-form-item>
+            </a-form>
           </a-row>
         </div>
       </div>
@@ -149,16 +144,18 @@
 
 <script>
   import moment from 'moment'
-  import {addUser, addDev, getUserList} from "../../api";
+  import {addUser, addDev, getUserList,updateUser} from "../../api";
   export default {
     name: "ActionModal.vue",
-    props: ['data','modalVisible','title'],
+    props: ['data','modalVisible','title','dataList'],
     data(){
       return{
         form: this.$form.createForm(this, { name: 'coordinated' }),
         fileList: [],
         tableData: this.data,
         value: '',
+        pwd: '',
+        pwdConfirm: '',
         operTime: '0天0小时0分',
         dateFormat: 'YYYY-MM-DD HH:mm',
         valueEdit: '',
@@ -177,6 +174,13 @@
                 required: true,
                 message: '该字段不能为空，请重新输入'
               },
+              {
+                validator: this.pwdCheck.bind(this)
+              }
+            ]
+          },
+          resetPwd: {
+            rules: [
               {
                 validator: this.pwdCheck.bind(this)
               }
@@ -222,7 +226,7 @@
       },
       //密码校验
       pwdCheck(rule, value, callbackFn) {
-        const reg = /^[a-zA-Z0-9]{8,16}$/
+        const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/
         if (!reg.test(value) && value) {
           callbackFn('密码需由8-16位字母和数字组成，请重新输入')
           return
@@ -231,7 +235,7 @@
       },
       //工号校验
       workNumberCheck(rule, value, callbackFn) {
-        const reg = /^[a-zA-Z0-9]{10,10}$/
+        const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{10,10}$/
         if (!reg.test(value) && value) {
           callbackFn('工号需由10位的数字和字母组成，请重新输入')
           return
@@ -239,8 +243,62 @@
         callbackFn()
       },
       //编辑确定事件
-      handleEdit(e) {
-        this.$emit("update:modalVisible",false)
+      handleEdit(text) {
+        let data;
+        console.log("编辑数据",this.data.value)
+        //判断重置密码和确认密码是否一致
+        if(this.pwdConfirm == this.pwd){
+          // 拉取表单数据的方法
+          this.form.validateFields((err, values) => {
+            if (!err) {
+              data = this.form.getFieldsValue()
+              data.uId = this.data.value.uId
+              if(this.pwdConfirm){
+                data.uPassword = this.pwdConfirm
+              }
+              this.confirmCreateLoading = true
+              if (data){
+                //编辑用户
+                if (text == "编辑用户"){
+                  updateUser(data)
+                    .then((res) => {
+                      if (res.msg == "SUCCESS"){
+                        this.$message.success("修改用户成功！");
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                        //重新刷新用户列表
+                        this.userList();
+                      }else{
+                        this.$message.error(res.msg);
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                      }
+                    })
+                  this.confirmCreateLoading = false
+                }
+                else if (text == '编辑设备'){
+                  addDev(data)
+                    .then((res) => {
+                      console.log("res",res)
+                      if (res.msg == "SUCCESS"){
+                        this.$message.success("添加用户成功！");
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                      }else{
+                        this.$message.error(res.msg);
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                      }
+                    })
+                  this.confirmCreateLoading = false
+                }
+              }
+            }
+          })
+        }else{
+          this.$message.info('两次密码输入不一致，请重新输入！');
+        }
+
       },
       //新增确定事件
       handleCreate(text) {
@@ -289,17 +347,16 @@
           }
         })
       },
-      //
+      //用户列表
       userList(){
         let params = new URLSearchParams();
-        params.append("pageNum", 1);
+        params.append("pageNum", this.data.pageNum);
         params.append("pageSize", 10);
         getUserList(params)
           .then((res) => {
             if (res.msg == "SUCCESS"){
-              this.$emit("update:data",res.data.list);
+              this.$emit("update:dataList",res.data.list);
             }
-            console.log("用户管理列表", res);
           })
       },
       //编辑内容
