@@ -105,6 +105,8 @@
                     if (this.isAutoLogin){
 
                     }
+                    //本地保存当前信用户信息
+                    window.localStorage.setItem('userInfo', res.data)
                     this.$message.success("登录成功！");
                     this.$router.replace('/index')
                   }else{
