@@ -48,6 +48,9 @@
               <template v-else-if="item.label == '工号/账号'">
                 <a-input :placeholder="`请输入${item.label}`" :rows="3"  allowClear :ref="item.name" v-decorator="[item.name, validatorRules.workNumber]"/>
               </template>
+              <template v-else-if="item.label == '设备编码'">
+                <a-input :placeholder="`请输入${item.label}`" :rows="3"  allowClear :ref="item.name" v-decorator="[item.name, validatorRules.devCode]"/>
+              </template>
               <template v-else>
                 <a-input :placeholder="`请输入${item.label}`" :rows="3" allowClear :ref="item.name" v-decorator="[item.name, validatorRules.common]"/>
               </template>
@@ -207,7 +210,18 @@
                 validator: this.workNumberCheck.bind(this)
               }
             ]
-          }
+          },
+          devCode: {
+            rules: [
+              {
+                required: true,
+                message: '该字段不能为空，请重新输入'
+              },
+              {
+                validator: this.devCodeCheck.bind(this)
+              }
+            ]
+          },
         },
         confirmCreateLoading: false
       }
@@ -238,6 +252,15 @@
         const reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{10,10}$/
         if (!reg.test(value) && value) {
           callbackFn('工号需由10位的数字和字母组成，请重新输入')
+          return
+        }
+        callbackFn()
+      },
+      //设备编码校验
+      devCodeCheck(rule, value, callbackFn){
+        const reg = /^[0-9]{11,11}$/
+        if (!reg.test(value) && value) {
+          callbackFn('设备编码需由11位数字组成')
           return
         }
         callbackFn()
