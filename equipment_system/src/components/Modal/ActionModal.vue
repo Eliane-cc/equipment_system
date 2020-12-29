@@ -150,7 +150,17 @@
 
 <script>
   import moment from 'moment'
-  import {addUser, addDev, getUserList, updateUser, updateDev, getDevList} from "../../api";
+  import {
+    getDevList,
+    getUserList,
+    addUser,
+    addDev,
+    addEquipment,
+    updateUser,
+    updateDev,
+    updateEquipment,
+    getequitmentList
+  } from "../../api";
   export default {
     name: "ActionModal.vue",
     props: ['data','modalVisible','title','dataList'],
@@ -323,6 +333,27 @@
                     })
                   this.confirmCreateLoading = false
                 }
+                //编辑零件
+                else if (text == '编辑零件'){
+                  console.log("data编辑",data)
+                  data.eId = this.data.value.eId
+                  updateEquipment(data)
+                    .then((res) => {
+                      console.log("res",res)
+                      if (res.msg == "SUCCESS"){
+                        this.$message.success("修改零件信息成功！");
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                        //重新刷新用户列表
+                        this.devList();
+                      }else{
+                        this.$message.error(res.msg);
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                      }
+                    })
+                  this.confirmCreateLoading = false
+                }
               }
             }
           })
@@ -374,6 +405,22 @@
                   })
                 this.confirmCreateLoading = false
               }
+              else if (text == '新增零件'){
+                console.log("我是新增零件。", data)
+                addEquipment(data)
+                  .then((res) => {
+                    console.log("res",res)
+                    if (res.msg == "SUCCESS"){
+                      this.$message.success("添加零件成功！");
+                      this.form.resetFields();
+                    }else{
+                      this.$message.error(res.msg);
+                      this.form.resetFields();
+                    }
+                    this.$emit("update:modalVisible",false);
+                  })
+                this.confirmCreateLoading = false
+              }
             }
           }
         })
@@ -391,8 +438,7 @@
             }
           })
       },
-      //设备例表
-      //设备列表显示
+      //设备列表
       devList(){
         let params = {
           pageNum: this.data.pageNum,
@@ -403,6 +449,20 @@
             if (res.msg == "SUCCESS"){
               this.$emit("update:dataList",res.data.list);
             }
+          })
+      },
+      //零件列表
+      equitmentList(){
+        let params = {
+          pageNum: this.data.pageNum,
+          pageSize: 10
+        }
+        getequitmentList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$emit("update:dataList",res.data.list);
+            }
+            console.log("零件管理列表", res);
           })
       },
       //编辑内容

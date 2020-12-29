@@ -81,7 +81,7 @@
                <span class="oper">
                   <a @click="() => detailDev(record,text)">详情</a>
                   <a @click="() => editDev(record,text)">编辑</a>
-                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record.key)">
+                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record)">
                     <a>删除</a>
                   </a-popconfirm>
                 </span>
@@ -90,13 +90,13 @@
         </a-table>
       </div>
     </div>
-    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle"></action-modal>
+    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle" :dataList.sync="data"></action-modal>
   </div>
 </template>
 
 <script>
   import ActionModal from "./Modal/ActionModal";
-  import {getequitmentList} from "../api";
+  import {deleteEquipment, getequitmentList} from "../api";
   const columns = [
     {
       title: '车间',
@@ -203,7 +203,7 @@
           {
             title: '零件名称',
             placeholder: '请输入零件名称',
-            name: "c_name"
+            name: "cName"
           },
         ],
         isShowModal: false,
@@ -255,33 +255,33 @@
         let displayData = [
           {
             title: '车间',
-            key: 'workshop',
-            content: value.workshop
+            key: 'eWorkshop',
+            content: value.eWorkshop
           },
           {
             title: '机台',
-            key: 'machine',
-            content: value.machine
+            key: 'eMachine',
+            content: value.eMachine
           },
           {
             title: '设备型号',
-            key: 'model',
-            content: value.model
+            key: 'eType',
+            content: value.eType
           },
           {
             title: '设备厂家',
-            key: 'factory',
-            content: value.factory
+            key: 'fName',
+            content: value.fName
           },
           {
             title: '设备名称',
-            key: 'equitment',
-            content: value.equitment
+            key: 'eName',
+            content: value.eName
           },
           {
             title: '设备编码',
-            key: 'equitmentCode',
-            content: value.equitmentCode
+            key: 'eCode',
+            content: value.eCode
           }
         ]
         let editData = [
@@ -336,8 +336,11 @@
         ]
         this.isShowModal = true
         this.modalTitle = '编辑'
+        this.modalData.actionText = '编辑零件'
         this.modalData.displayData = displayData
         this.modalData.editData = editData
+        this.modalData.value = value
+        this.modalData.pageNum = this.pageNum
       },
       //查看详情
       detailDev(value,text){
@@ -418,14 +421,21 @@
         this.modalData.displayData = displayData
       },
       //删除当前行
-      deleteDev(key) {
-        let newData = [...this.data];
-        const target = newData.filter((item,index) => {
-          return key != item.key
-        })
-        if (target) {
-          this.data = target;
+      deleteDev(record) {
+        this.isLoading = true
+
+        let params = {
+          eId: record.eId
         }
+        deleteEquipment(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$message.success("删除零件成功！");
+              //重新刷新用户列表
+              this.equitmentList(this.pageNum, 10);
+            }
+            this.isLoading = false
+          })
       },
 
       //查询设备

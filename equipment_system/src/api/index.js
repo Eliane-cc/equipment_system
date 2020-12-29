@@ -46,11 +46,26 @@ export const deleteDev =(params) => post(`equipment/deleteEquipment`,params);
 //零件列表分页查询
 export const getequitmentList =(params) => post(`component/allList`,params);
 
+//新增零件
+export const addEquipment =(params) => post(`component/add`,params);
+
+//修改零件
+export const updateEquipment =(params) => post(`equipment/update`,params);
+
+//删除零件
+export const deleteEquipment =(params) => post(`equipment/deleteEquipment`,params);
+
 /*
 维护接口
  */
 //维护列表分页查询
 export const getmaintainList =(params) => post(`maintain/allList`,params);
+
+//维护编辑
+export const updateMaintain =(params) => post(`maintain/update`,params);
+
+//维护删除
+export const deleteMaintain =(params) => post(`maintain/deleteMaintain`,params);
 
 /*
 维修接口
@@ -58,7 +73,20 @@ export const getmaintainList =(params) => post(`maintain/allList`,params);
 //维修列表分页查询
 export const getrepairList =(params) => post(`repair/allList`,params);
 
-/*更换接口
+//维修编辑
+export const updateRepair =(params) => post(`repair/update`,params);
+
+//维修删除
+export const deleteRepair =(params) => post(`repair/deleteRepair`,params);
+
+/*
+更换接口
  */
 //更换列表分页查询
 export const getchangeList =(params) => post(`change/allList`,params);
+
+//维护编辑
+export const updateChange =(params) => post(`change/update`,params);
+
+//维护删除
+export const deleteChange =(params) => post(`change/deleteChange`,params);

@@ -93,7 +93,7 @@
                <span class="oper">
                  <a @click="() => detailDev(record,text)">详情</a>
                   <a @click="() => editDev(record,text)">编辑</a>
-                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record.key)">
+                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record)">
                     <a>删除</a>
                   </a-popconfirm>
                 </span>
@@ -102,13 +102,13 @@
         </a-table>
       </div>
     </div>
-    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle"></action-modal>
+    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle" :dataList.sync="data"></action-modal>
   </div>
 </template>
 
 <script>
   import ActionModal from "./Modal/ActionModal";
-  import {getrepairList} from "../api";
+  import {deleteEquipment, getrepairList} from "../api";
   const columns = [
     {
       title: '车间',
@@ -332,9 +332,11 @@
         ]
         this.isShowModal = true
         this.modalTitle = '编辑'
+        this.modalData.actionText = '编辑维修'
         this.modalData.displayData = displayData
         this.modalData.editData = editData
-        console.log(value,text)
+        this.modalData.value = value
+        this.modalData.pageNum = this.pageNum
       },
       //查看详情
       detailDev(value,text){
@@ -415,14 +417,21 @@
         this.modalData.displayData = displayData
       },
       //删除当前行
-      deleteDev(key) {
-        let newData = [...this.data];
-        const target = newData.filter((item,index) => {
-          return key != item.key
-        })
-        if (target) {
-          this.data = target;
+      deleteDev(record) {
+        this.isLoading = true
+
+        let params = {
+          eId: record.eId
         }
+        deleteEquipment(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$message.success("删除零件成功！");
+              //重新刷新用户列表
+              this.equitmentList(this.pageNum, 10);
+            }
+            this.isLoading = false
+          })
       },
 
       //查询设备

@@ -108,7 +108,7 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
-  import {getchangeList} from "../api";
+  import {deleteEquipment, getchangeList} from "../api";
   const columns = [
     {
       title: '车间',
@@ -360,9 +360,11 @@
         ]
         this.isShowModal = true
         this.modalTitle = '编辑'
+        this.modalData.actionText = '编辑更换'
         this.modalData.displayData = displayData
         this.modalData.editData = editData
-        console.log(value,text)
+        this.modalData.value = value
+        this.modalData.pageNum = this.pageNum
       },
       //查看详情
       detailDev(value,text){
@@ -463,14 +465,21 @@
         this.modalData.displayData = displayData
       },
       //删除当前行
-      deleteDev(key) {
-        let newData = [...this.data];
-        const target = newData.filter((item,index) => {
-          return key != item.key
-        })
-        if (target) {
-          this.data = target;
+      deleteDev(record) {
+        this.isLoading = true
+
+        let params = {
+          eId: record.eId
         }
+        deleteEquipment(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$message.success("删除零件成功！");
+              //重新刷新用户列表
+              this.equitmentList(this.pageNum, 10);
+            }
+            this.isLoading = false
+          })
       },
 
       //查询设备
