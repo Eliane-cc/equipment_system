@@ -40,7 +40,6 @@ export const updateDev =(params) => post(`equipment/update`,params);
 //删除设备
 export const deleteDev =(params) => post(`equipment/deleteEquipment`,params);
 
-
 /*
 零件接口
  */

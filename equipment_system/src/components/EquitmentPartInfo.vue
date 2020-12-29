@@ -188,17 +188,17 @@
           {
             title: '车间',
             placeholder: '请输入车间',
-            name: "e_workshop_id"
+            name: "eWorkshop"
           },
           {
             title: '机台',
             placeholder: '请输入机台',
-            name: 'e_machine_id'
+            name: 'eMachine'
           },
           {
             title: '设备名称',
             placeholder: '请输入设备名称',
-            name: "e_name"
+            name: "eName"
           },
           {
             title: '零件名称',

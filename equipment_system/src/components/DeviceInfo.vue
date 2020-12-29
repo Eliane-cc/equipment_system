@@ -93,7 +93,7 @@
         </a-table>
       </div>
     </div>
-    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle"></action-modal>
+    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle" :dataList.sync="data"></action-modal>
   </div>
 </template>
 
@@ -143,11 +143,11 @@
     },
     {
       title: '厂家',
-      dataIndex: 'fId',
+      dataIndex: 'fName',
       width: '16%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'fId' },
+      scopedSlots: { customRender: 'fName' },
     },
     {
       title: '操作',
@@ -240,46 +240,48 @@
         let editData = [
           {
             title: '车间',
-            key: 'workshop',
-            content: value.workshop,
-            name: 'e_workshop_id'
+            key: 'eWorkshop',
+            content: value.eWorkshop,
+            name: 'eWorkshop'
           },
           {
             title: '机台',
-            key: 'machine',
-            content: value.machine,
-            name: 'e_machine_id'
+            key: 'eMachine',
+            content: value.eMachine,
+            name: 'eMachine'
           },
           {
             title: '型号',
-            key: 'model',
-            content: value.model,
-            name: 'e_type'
+            key: 'eType',
+            content: value.eType,
+            name: 'eType'
           },
           {
             title: '厂家',
-            key: 'factory',
-            content: value.factory,
-            name: 'f_id'
+            key: 'fName',
+            content: value.fName,
+            name: 'fName'
           },
           {
             title: '设备名称',
-            key: 'equitment',
-            content: value.equitment,
-            name: 'e_name'
+            key: 'eName',
+            content: value.eName,
+            name: 'eName'
           },
           {
-            title: '设备编号',
-            key: 'equitmentCode',
-            content: value.equitmentCode,
-            name: 'e_code'
+            title: '设备编码',
+            key: 'eCode',
+            content: value.eCode,
+            name: 'eCode'
           }
         ]
         this.isShowModal = true
         this.modalTitle = '编辑'
+        this.modalData.actionText = '编辑设备'
         this.modalData.editData = editData
+        this.modalData.value = value
         this.modalData.displayData = ""
-        console.log(value,text)
+        this.modalData.pageNum = this.pageNum
       },
       //删除当前行
       deleteDev(record) {
@@ -343,33 +345,33 @@
         let displayData = [
           {
             title: '车间',
-            key: 'workshop',
-            content: value.workshop
+            key: 'eWorkshop',
+            content: value.eWorkshop
           },
           {
             title: '机台',
-            key: 'machine',
-            content: value.machine
+            key: 'eMachine',
+            content: value.eMachine
           },
           {
             title: '设备型号',
-            key: 'model',
-            content: value.model
+            key: 'eType',
+            content: value.eType
           },
           {
             title: '设备厂家',
-            key: 'factory',
-            content: value.factory
+            key: 'fId',
+            content: value.fId
           },
           {
             title: '设备名称',
-            key: 'equitment',
-            content: value.equitment
+            key: 'eName',
+            content: value.eName
           },
           {
             title: '设备编码',
-            key: 'equitmentCode',
-            content: value.equitmentCode
+            key: 'eCode',
+            content: value.eCode
           }
         ]
         this.modalData.actionText = '新增零件'
