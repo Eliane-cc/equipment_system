@@ -84,7 +84,7 @@
                <span class="oper">
                   <a @click="() => createRepair(record,text)">新增零件</a>
                   <a @click="() => editDev(record,text)">编辑</a>
-                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record.key)">
+                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record)">
                     <a>删除</a>
                   </a-popconfirm>
                 </span>
@@ -99,7 +99,7 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
-  import {getDevList} from "../api/index";
+  import {deleteDev, getDevList} from "../api/index";
   const columns = [
     {
       title: '车间',
@@ -282,14 +282,21 @@
         console.log(value,text)
       },
       //删除当前行
-      deleteDev(key) {
-        let newData = [...this.data];
-        const target = newData.filter((item,index) => {
-          return key != item.key
-        })
-        if (target) {
-          this.data = target;
+      deleteDev(record) {
+        this.isLoading = true
+
+        let params = {
+          eId: record.eId
         }
+        deleteDev(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$message.success("删除设备成功！");
+              //重新刷新用户列表
+              this.devList(this.pageNum, 10);
+            }
+            this.isLoading = false
+          })
       },
 
       //查询设备

@@ -29,10 +29,17 @@ export const deleteUser =(params) => post(`user/delete`,params);
 设备接口
  */
 //设备列表分页查询
-export const getDevList =(params) => post(`equipment/allList`,params);
+export const getDevList =(params) => post(`equipment/allEquipmentList`,params);
 
 //新增设备
 export const addDev =(params) => post(`equipment/add`,params);
+
+//修改设备
+export const updateDev =(params) => post(`equipment/update`,params);
+
+//删除设备
+export const deleteDev =(params) => post(`equipment/deleteEquipment`,params);
+
 
 /*
 零件接口
