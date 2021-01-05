@@ -143,11 +143,11 @@
     },
     {
       title: '厂家',
-      dataIndex: 'fName',
+      dataIndex: 'e_fName',
       width: '16%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'fName' },
+      scopedSlots: { customRender: 'e_fName' },
     },
     {
       title: '操作',
@@ -258,9 +258,9 @@
           },
           {
             title: '厂家',
-            key: 'fName',
-            content: value.fName,
-            name: 'fName'
+            key: 'e_fName',
+            content: value.e_fName,
+            name: 'e_fName'
           },
           {
             title: '设备名称',
@@ -378,23 +378,23 @@
         let data = [
           {
             label: '零件名称',
-            name: 'c_name'
+            name: 'cName'
           },
           {
             label: '零件型号',
-            name: 'c_type'
+            name: 'cType'
           },
           {
             label: '零件编码',
-            name: 'c_code'
+            name: 'cCode'
           },
           {
             label: '零件厂家',
-            name: 'eCode'
+            name: 'fName'
           },
           {
             label: '位置',
-            name: 'c_location'
+            name: 'cLocation'
           },
           {
             label: '使用寿命',
@@ -405,8 +405,9 @@
             name: 'starttime'
           }
         ]
+        this.modalData.value = value
         this.modalData.createData = data
-        this.modalData.label = ['零件名称','零件型号','零件编码','零件厂家','位置','使用寿命','开始使用时间']
+        this.modalData.pageNum = this.pageNum
         this.modalData.displayData = displayData
       }
     },
