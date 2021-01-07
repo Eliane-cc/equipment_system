@@ -108,7 +108,7 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
-  import {deleteEquipment, getchangeList} from "../api";
+  import {deleteChange, generateCode, getchangeList, getDropDownList} from "../api";
   const columns = [
     {
       title: '车间',
@@ -192,6 +192,8 @@
     created() {
       //维护分页查询
       this.changeList()
+      //下拉列表数据
+      this.dropDownList()
     },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
@@ -258,6 +260,15 @@
               this.isLoading = false
             }
             console.log("更换列表", res);
+          })
+      },
+      //下拉列表数据
+      dropDownList(){
+        getDropDownList()
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              console.log("更换列表数据", res)
+            }
           })
       },
       //表单查询
@@ -371,78 +382,78 @@
         let displayData = [
           {
             title: '车间',
-            key: 'workshop',
-            content: value.workshop
+            key: 'eWorkshop',
+            content: value.eWorkshop
           },
           {
             title: '机台',
-            key: 'machine',
-            content: value.machine
+            key: 'eMachine',
+            content: value.eMachine
           },
           {
             title: '设备名称',
-            key: 'equitment',
-            content: value.equitment
+            key: 'eName',
+            content: value.eName
           },
           {
             title: '设备编码',
-            key: 'equitmentCode',
-            content: value.equitmentCode
+            key: 'eCode',
+            content: value.eCode
           },
           {
             title: '设备型号',
-            key: 'model',
-            content: value.model
+            key: 'eType',
+            content: value.eType
           },
           {
             title: '设备厂家',
-            key: 'factory',
-            content: value.factory
+            key: 'eFname',
+            content: value.eFname
           },
           {
             title: '零件名称',
-            key: 'partName',
-            content: value.partName
+            key: 'ocName',
+            content: value.ocName
           },
           {
             title: '零件编码',
-            key: 'partNameCode',
-            content: value.partNameCode
+            key: 'ocCode',
+            content: value.ocCode
           },
           {
             title: '零件型号',
-            key: 'partModel',
-            content: value.partModel
+            key: 'ocType',
+            content: value.ocType
           },
           {
             title: '零件厂家',
-            key: 'partFactory',
-            content: value.partFactory
+            key: 'ocFactory',
+            content: value.ocFactory
           },
           {
             title: '新零件名称',
-            key: 'newPartName',
-            content: value.newPartName
+            key: 'cName',
+            content: value.cName
           },
           {
             title: '新零件编码',
-            key: 'newPartNameCode',
-            content: value.newPartNameCode
+            key: 'cCode',
+            content: value.cCode
           },
           {
             title: '新零件型号',
-            key: 'newPartModel',
-            content: value.newPartModel
+            key: 'cType',
+            content: value.cType
           },
           {
             title: '新零件厂家',
-            key: 'newPartFactory',
-            content: value.newPartFactory
+            key: 'cFname',
+            content: value.cFname
           },
           {
             title: '更换人员',
-            key: 'changePersonnel',
-            content: value.changePersonnel
+            key: 'changePeopleName',
+            content: value.changePeopleName
           },
           {
             title: '更换时间',
@@ -469,14 +480,14 @@
         this.isLoading = true
 
         let params = {
-          eId: record.eId
+          cId: record.cId
         }
-        deleteEquipment(params)
+        deleteChange(params)
           .then((res) => {
             if (res.msg == "SUCCESS"){
-              this.$message.success("删除零件成功！");
+              this.$message.success("删除该条更换数据成功！");
               //重新刷新用户列表
-              this.equitmentList(this.pageNum, 10);
+              this.changeList(this.pageNum, 10);
             }
             this.isLoading = false
           })

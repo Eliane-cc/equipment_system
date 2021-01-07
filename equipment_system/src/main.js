@@ -5,8 +5,10 @@ import App from './App'
 import router from './router'
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
-import IconSvg from './components/IconSvg'
+import IconSvg from './components/IconSvg';
+import moment from 'moment';
 
+Vue.prototype.$moment = moment;
 Vue.config.productionTip = false
 
 Vue.use(IconSvg);

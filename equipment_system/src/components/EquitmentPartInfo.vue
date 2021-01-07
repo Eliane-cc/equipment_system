@@ -270,8 +270,8 @@
           },
           {
             title: '设备厂家',
-            key: 'fName',
-            content: value.fName
+            key: 'e_fName',
+            content: value.e_fName
           },
           {
             title: '设备名称',

@@ -108,7 +108,7 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
-  import {deleteEquipment, getrepairList} from "../api";
+  import {deleteRepair, getrepairList} from "../api";
   const columns = [
     {
       title: '车间',
@@ -144,11 +144,11 @@
     },
     {
       title: '维修人员',
-      dataIndex: 'rPeopleId',
+      dataIndex: 'rPeopleName',
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'rPeopleId' },
+      scopedSlots: { customRender: 'rPeopleName' },
     },
     {
       title: '维修内容',
@@ -343,73 +343,73 @@
         let displayData = [
           {
             title: '车间',
-            key: 'workshop',
-            content: value.workshop
+            key: 'eWorkshop',
+            content: value.eWorkshop
           },
           {
             title: '机台',
-            key: 'machine',
-            content: value.machine
+            key: 'eMachine',
+            content: value.eMachine
           },
           {
             title: '设备名称',
-            key: 'equitment',
-            content: value.equitment
+            key: 'eName',
+            content: value.eName
           },
           {
             title: '设备编码',
-            key: 'equitmentCode',
-            content: value.equitmentCode
+            key: 'eCode',
+            content: value.eCode
           },
           {
             title: '设备型号',
-            key: 'model',
-            content: value.model
+            key: 'eType',
+            content: value.eType
           },
           {
             title: '设备厂家',
-            key: 'factory',
-            content: value.factory
+            key: 'eFname',
+            content: value.eFname
           },
           {
             title: '零件名称',
-            key: 'partName',
-            content: value.partName
+            key: 'cName',
+            content: value.cName
           },
           {
             title: '零件编码',
-            key: 'partNameCode',
-            content: value.partNameCode
+            key: 'cCode',
+            content: value.cCode
           },
           {
             title: '零件型号',
-            key: 'partModel',
-            content: value.partModel
+            key: 'cType',
+            content: value.cType
           },
           {
             title: '零件厂家',
-            key: 'partFactory',
-            content: value.partFactory
+            key: 'cFname',
+            content: value.cFname
           },
           {
             title: '维修人员',
-            key: 'repairPersonnel',
-            content: value.repairPersonnel
+            key: 'rPeopleName',
+            content: value.rPeopleName
           },
           {
             title: '维修内容',
-            key: 'repairContent',
-            content: value.repairContent
+            key: 'rContent',
+            content: value.rContent
           },
           {
             title: '维修时间',
-            key: 'repairTime',
-            content: value.repairTime
+            key: 'rTime',
+            content: value.rTime
           },
           {
             title: '图片',
-            key: 'picture',
-            content: value.picture
+            key: 'pName',
+            content: value.pName
           }
         ]
         this.isShowModal = true
@@ -421,14 +421,14 @@
         this.isLoading = true
 
         let params = {
-          eId: record.eId
+          rId : record.rId
         }
-        deleteEquipment(params)
+        deleteRepair(params)
           .then((res) => {
             if (res.msg == "SUCCESS"){
-              this.$message.success("删除零件成功！");
+              this.$message.success("删除该条维修数据成功！");
               //重新刷新用户列表
-              this.equitmentList(this.pageNum, 10);
+              this.repairList(this.pageNum, 10);
             }
             this.isLoading = false
           })

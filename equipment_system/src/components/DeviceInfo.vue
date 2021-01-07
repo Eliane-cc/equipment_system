@@ -331,7 +331,7 @@
           },
           {
             label: '厂家',
-            name: 'fName'
+            name: 'e_fName'
           }
         ]
         this.modalData.createData = data
