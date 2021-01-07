@@ -143,11 +143,11 @@
     },
     {
       title: '厂家',
-      dataIndex: 'e_fName',
+      dataIndex: 'fName',
       width: '16%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'e_fName' },
+      scopedSlots: { customRender: 'fName' },
     },
     {
       title: '操作',
@@ -258,9 +258,9 @@
           },
           {
             title: '厂家',
-            key: 'e_fName',
-            content: value.e_fName,
-            name: 'e_fName'
+            key: 'fName',
+            content: value.fName,
+            name: 'fName'
           },
           {
             title: '设备名称',
@@ -331,7 +331,7 @@
           },
           {
             label: '厂家',
-            name: 'e_fName'
+            name: 'fName'
           }
         ]
         this.modalData.createData = data

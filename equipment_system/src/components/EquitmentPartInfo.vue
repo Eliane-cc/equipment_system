@@ -101,7 +101,7 @@
     {
       title: '车间',
       dataIndex: 'eWorkshop',
-      width: '9%',
+      width: '8%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'eWorkshop' },
@@ -109,7 +109,7 @@
     {
       title: '机台',
       dataIndex: 'eMachine',
-      width: '9%',
+      width: '8%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'eMachine' },
@@ -117,7 +117,7 @@
     {
       title: '设备名称',
       dataIndex: 'eName',
-      width: '13%',
+      width: '10%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'eName' },
@@ -125,7 +125,7 @@
     {
       title: '零件名称',
       dataIndex: 'cName',
-      width: '13%',
+      width: '10%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'cName' },
@@ -133,7 +133,7 @@
     {
       title: '使用寿命',
       dataIndex: 'lifespan',
-      width: '10%',
+      width: '8%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'lifespan' },
@@ -141,7 +141,7 @@
     {
       title: '开始使用时间',
       dataIndex: 'starttime',
-      width: '12%',
+      width: '16%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'starttime' },
@@ -149,18 +149,18 @@
     {
       title: '运行时间',
       dataIndex: 'runtime',
-      width: '10%',
+      width: '15%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'runtime' },
     },
     {
       title: '位置',
-      dataIndex: 'cPosition',
+      dataIndex: 'cLocation',
       width: '10%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'cPosition' },
+      scopedSlots: { customRender: 'cLocation' },
     },
     {
       title: '操作',
@@ -347,73 +347,73 @@
         let displayData = [
           {
             title: '车间',
-            key: 'workshop',
-            content: value.workshop
+            key: 'eWorkshop',
+            content: value.eWorkshop
           },
           {
             title: '机台',
-            key: 'machine',
-            content: value.machine
+            key: 'eMachine',
+            content: value.eMachine
           },
           {
             title: '设备名称',
-            key: 'equitment',
-            content: value.equitment
+            key: 'eName',
+            content: value.eName
           },
           {
             title: '设备编码',
-            key: 'equitmentCode',
-            content: value.equitmentCode
+            key: 'eCode',
+            content: value.eCode
           },
           {
             title: '设备型号',
-            key: 'model',
-            content: value.model
+            key: 'eType',
+            content: value.eType
           },
           {
             title: '设备厂家',
-            key: 'factory',
-            content: value.factory
+            key: 'eWorkshop',
+            content: value.eWorkshop
           },
           {
             title: '零件名称',
-            key: 'partName',
-            content: value.partName
+            key: 'cName',
+            content: value.cName
           },
           {
             title: '零件编码',
-            key: 'partNameCode',
-            content: value.partNameCode
+            key: 'cCode',
+            content: value.cCode
           },
           {
             title: '零件型号',
-            key: 'partModel',
-            content: value.partModel
+            key: 'cType',
+            content: value.cType
           },
           {
             title: '零件厂家',
-            key: 'partFactory',
-            content: value.partFactory
+            key: 'cfName',
+            content: value.cfName
           },
           {
             title: '使用寿命',
-            key: 'serviceLife',
-            content: value.serviceLife
+            key: 'lifespan',
+            content: value.lifespan
           },
           {
             title: '开始使用时间',
-            key: 'startTime',
-            content: value.startTime
+            key: 'starttime',
+            content: value.starttime
           },
           {
             title: '运行时间',
-            key: 'operationTime',
-            content: value.operationTime
+            key: 'runtime',
+            content: value.runtime
           },
           {
             title: '位置',
-            key: 'position',
-            content: value.position
+            key: 'cLocation',
+            content: value.cLocation
           }
         ]
         this.isShowModal = true
@@ -444,7 +444,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .contain{
     color: #ffffff;
     background-color: #040014;
@@ -455,7 +455,7 @@
     border: 1px solid #d9d9d9;
     border-radius: 6px;
   }
-  .form .ant-form-item {
+  .ant-form-item {
     display: flex;
   }
   .table{
@@ -481,5 +481,15 @@
   }
   .margin-bottom{
     margin-bottom: 20px;
+  }
+
+  /*覆盖ant默认样式*/
+  .table{
+    :global(.ant-table-thead > tr > th){
+      padding: 15px 6px;
+    }
+    :global(.ant-table-tbody > tr > td){
+      padding: 13px 6px;
+    }
   }
 </style>
