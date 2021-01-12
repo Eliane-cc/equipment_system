@@ -107,7 +107,7 @@
                   <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name"/>
                 </template>
                 <template v-else-if="item.title == '维护时间' || item.title == '维修时间' || item.title == '更换时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :ref="item.name" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :ref="item.name" v-model="timeFormat" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
                 </template>
                 <template v-else-if="item.title == '维护内容' || item.title == '维修内容' || item.title == '更换内容'">
                   <a-textarea :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :name="item.name" :ref="item.name" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
@@ -163,7 +163,10 @@
     updateDev,
     updateEquipment,
     updateMaintain,
-    getequitmentList, getmaintainList
+    updateRepair,
+    updateChange,
+    getequitmentList,
+    getmaintainList, getrepairList, getchangeList,
   } from "../../api";
   export default {
     name: "ActionModal.vue",
@@ -242,7 +245,8 @@
         },
         confirmCreateLoading: false,
         lifespan: '',
-        starttime: this.moment()
+        starttime: this.moment(),
+        timeFormat: this.moment()
       }
     },
     methods: {
@@ -362,8 +366,6 @@
                 }
                 //编辑维护
                 else if (text == '编辑维护'){
-                  console.log("data编辑",data)
-                  data.eId = this.data.value.eId
                   data.mId = this.data.value.mId
                   updateMaintain(data)
                     .then((res) => {
@@ -373,7 +375,46 @@
                         this.$emit("update:modalVisible",false);
                         this.form.resetFields();
                         //重新刷新用户列表
-                        this.equitmentList();
+                        this.maintainList();
+                      }else{
+                        this.$message.error(res.msg);
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                      }
+                    })
+                  this.confirmCreateLoading = false
+                }
+                //编辑维修
+                else if (text == '编辑维修'){
+                  data.rId = this.data.value.rId
+                  updateRepair(data)
+                    .then((res) => {
+                      if (res.msg == "SUCCESS"){
+                        this.$message.success("修改维修信息成功！");
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                        //重新刷新用户列表
+                        this.repairList();
+                      }else{
+                        this.$message.error(res.msg);
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                      }
+                    })
+                  this.confirmCreateLoading = false
+                }
+                //编辑更换
+                else if (text == '编辑更换'){
+                  data.eId = this.data.value.eId
+                  data.mId = this.data.value.mId
+                  updateChange(data)
+                    .then((res) => {
+                      if (res.msg == "SUCCESS"){
+                        this.$message.success("修改更换信息成功！");
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                        //重新刷新更换列表
+                        this.changeList();
                       }else{
                         this.$message.error(res.msg);
                         this.$emit("update:modalVisible",false);
@@ -509,7 +550,32 @@
             if (res.msg == "SUCCESS"){
               this.$emit("update:dataList",res.data.list);
             }
-            console.log("维护数据管理列表", res);
+          })
+      },
+      //维修列表显示
+      repairList(){
+        let params = {
+          pageNum: this.data.pageNum,
+          pageSize: 10
+        }
+        getrepairList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$emit("update:dataList",res.data.list);
+            }
+          })
+      },
+      //更换列表显示
+      changeList(){
+        let params = {
+          pageNum: this.data.pageNum,
+          pageSize: 10
+        }
+        getchangeList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$emit("update:dataList",res.data.list);
+            }
           })
       },
       //编辑内容
@@ -537,6 +603,10 @@
         this.operTime = moment().diff(value, 'day') + '天' + moment().diff(value, 'hour')%24 + '小时' + moment().diff(value, 'minute')%60 + '分钟';
         this.starttime = this.$moment(value).format('yyyy-MM-DD HH:mm:ss');
       },
+      //时间格式转换
+      selectActionTime(value){
+        this.timeFormat = this.$moment(value).format('yyyy-MM-DD HH:mm:ss');
+      }
     }
   }
 </script>

@@ -4,67 +4,115 @@
       <a-form class="form" :form="form" @submit="handleSearch">
         <a-row>
           <a-col
-            v-for="(item,index) in label"
-            :key="index"
             :span="8"
             class="margin-bottom"
           >
-            <div class="flex-center">
-              <template v-if="item.title == '更换人员'">
-                <a-col :span="7">
-                  {{item.title}}：
-                </a-col>
-                <a-col :span="17">
-                  <a-input :placeholder="item.placeholder" :name="item.name"/>
-                </a-col>
-              </template>
-              <template v-else>
-                <a-col :span="7">
-                  {{item.title}}：
-                </a-col>
-                <a-col :span="17">
-                  <a-tree-select
-                    v-model="value"
-                    show-search
-                    style="width: 100%"
-                    :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
-                    placeholder="请选择"
-                    allow-clear
-                    tree-default-expand-all
-                  >
-                    <a-tree-select-node key="random1" value="车间0">
-                      <div slot="title">车间0</div>
-                    </a-tree-select-node>
-                    <a-tree-select-node key="random2" value="sss">
-                      <div slot="title">车间1</div>
-                    </a-tree-select-node>
-                    <a-tree-select-node key="random3" value="sss">
-                      <div slot="title">车间2</div>
-                    </a-tree-select-node>
-                    <a-tree-select-node key="random3" value="sss">
-                      <div slot="title">车间4</div>
-                    </a-tree-select-node>
-                    <a-tree-select-node key="random3" value="sss">
-                      <div slot="title">车间0</div>
-                    </a-tree-select-node>
-                    <a-tree-select-node key="random3" value="sss">
-                      <div slot="title">车间0</div>
-                    </a-tree-select-node>
-                    <a-tree-select-node key="random3" value="sss">
-                      <div slot="title">车间0</div>
-                    </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>  <a-tree-select-node key="random3" value="车间0">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>  <a-tree-select-node key="random3" value="车间8">
-                    <div slot="title">车间8</div>
+            <a-col :span="7">
+              车间：
+            </a-col>
+            <a-col :span="17">
+              <a-tree-select
+                v-model="workshopValue"
+                show-search
+                style="width: 100%"
+                :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                placeholder="请选择"
+                allow-clear
+                tree-default-expand-all
+              >
+                <template v-for="(item,index) in dropList.eWorkshops">
+                  <a-tree-select-node :key="'eWorkshops'+index" :value="item">
+                    <div slot="title">{{item}}</div>
                   </a-tree-select-node>
-                  </a-tree-select>
-                </a-col>
-              </template>
-            </div>
+                </template>
+              </a-tree-select>
+            </a-col>
+          </a-col>
+          <a-col
+            :span="8"
+            class="margin-bottom"
+          >
+            <a-col :span="7">
+              机台：
+            </a-col>
+            <a-col :span="17">
+              <a-tree-select
+                v-model="eMachinesValue"
+                show-search
+                style="width: 100%"
+                :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                placeholder="请选择"
+                allow-clear
+                tree-default-expand-all
+              >
+                <template v-for="(item,index) in dropList.eMachines">
+                  <a-tree-select-node :key="'eMachines'+index" :value="item">
+                    <div slot="title">{{item}}</div>
+                  </a-tree-select-node>
+                </template>
+              </a-tree-select>
+            </a-col>
+          </a-col>
+          <a-col
+            :span="8"
+            class="margin-bottom"
+          >
+            <a-col :span="7">
+              设备名称：
+            </a-col>
+            <a-col :span="17">
+              <a-tree-select
+                v-model="eNamesValue"
+                show-search
+                style="width: 100%"
+                :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                placeholder="请选择"
+                allow-clear
+                tree-default-expand-all
+              >
+                <template v-for="(item,index) in dropList.eNames">
+                  <a-tree-select-node :key="'eNames'+index" :value="item">
+                    <div slot="title">{{item}}</div>
+                  </a-tree-select-node>
+                </template>
+              </a-tree-select>
+            </a-col>
+          </a-col>
+          <a-col
+            :span="8"
+            class="margin-bottom"
+          >
+            <a-col :span="7">
+              新零件名称：
+            </a-col>
+            <a-col :span="17">
+              <a-tree-select
+                v-model="cNamesValue"
+                show-search
+                style="width: 100%"
+                :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                placeholder="请选择"
+                allow-clear
+                tree-default-expand-all
+              >
+                <template v-for="(item,index) in dropList.cNames">
+                  <a-tree-select-node :key="'cNames'+index" :value="item">
+                    <div slot="title">{{item}}</div>
+                  </a-tree-select-node>
+                </template>
+              </a-tree-select>
+            </a-col>
+          </a-col>
+          <a-col
+            :span="8"
+            class="margin-bottom"
+          >
+            <a-col :span="7">
+              更换人员：
+            </a-col>
+            <a-col :span="17">
+              <a-input placeholder="请输入维护人员" name="uName" v-model="uName"/>
+            </a-col>
           </a-col>
         </a-row>
         <a-row>
@@ -108,7 +156,7 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
-  import {deleteChange, generateCode, getchangeList, getDropDownList} from "../api";
+  import {deleteChange, generateCode, getchangeList, getDropDownList, getDropChangeList} from "../api";
   const columns = [
     {
       title: '车间',
@@ -144,27 +192,27 @@
     },
     {
       title: '新零件名称',
-      dataIndex: 'newCname',
+      dataIndex: 'cName',
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'newCname' },
+      scopedSlots: { customRender: 'cName' },
     },
     {
       title: '更换人员',
-      dataIndex: 'changePeople',
+      dataIndex: 'changePeopleName',
       width: '10%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'changePeople' },
+      scopedSlots: { customRender: 'changePeopleName' },
     },
     {
       title: '更换时间',
-      dataIndex: 'cTime',
+      dataIndex: 'changeTime',
       width: '13%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'cTime' },
+      scopedSlots: { customRender: 'changeTime' },
     },
     {
       title: '位置',
@@ -228,19 +276,24 @@
         isShowModal: false,
         modalTitle: '',
         modalData: [],
+        dropList: [],   //下拉列表
         form: this.$form.createForm(this, { name: 'advanced_search' }),
         isLoading: true, //表格分页加载
         pageNum: 1,   //记录当前页码
         pagination: {
           total: 0,
           defaultPageSize: 10,
-          onChange:(page,pageSize)=>this.devList(page,pageSize),//点击页码事件
+          onChange:(page,pageSize)=>this.changeList(page,pageSize),//点击页码事件
         },
         data,
         columns,
         editingKey: '',
         treeExpandedKeys: [],
-        value: undefined,
+        workshopValue: undefined,   //车间下拉
+        eMachinesValue: undefined,   //机台下拉
+        eNamesValue: undefined,      //设备名称下拉
+        cNamesValue: undefined,       //新零件名称下拉
+        uName: undefined,           //维护人员
       }
     },
     methods: {
@@ -250,7 +303,12 @@
         this.pageNum = pageNum
         let params = {
           pageNum: pageNum,
-          pageSize: pageSize
+          pageSize: pageSize,
+          eWorkshop: this.workshopValue,
+          eMachine: this.eMachinesValue,
+          eName: this.eNamesValue,
+          cName: this.cNamesValue,
+          uName: this.uName,
         }
         getchangeList(params)
           .then((res) => {
@@ -262,111 +320,115 @@
             console.log("更换列表", res);
           })
       },
-      //下拉列表数据
+      //下拉列表信息显示
       dropDownList(){
-        getDropDownList()
+        getDropChangeList()
           .then((res) => {
             if (res.msg == "SUCCESS"){
-              console.log("更换列表数据", res)
+              this.dropList = res.data
             }
           })
       },
       //表单查询
-      handleSearch(e) {
-        this.form.validateFields((error, values) => {
-          console.log('error', error);
-          console.log('Received values of form: ', values);
-        });
+      handleSearch() {
+        this.changeList()
       },
       //编辑
       editDev(value,text) {
         let displayData = [
           {
             title: '车间',
-            key: 'workshop',
-            content: value.workshop
+            key: 'eWorkshop',
+            content: value.eWorkshop
           },
           {
             title: '机台',
-            key: 'machine',
-            content: value.machine
+            key: 'eMachine',
+            content: value.eMachine
           },
           {
             title: '设备名称',
-            key: 'equitment',
-            content: value.equitment
+            key: 'eName',
+            content: value.eName
           },
           {
             title: '设备型号',
-            key: 'model',
-            content: value.model
+            key: 'eType',
+            content: value.eType
           },
           {
             title: '设备厂家',
-            key: 'factory',
-            content: value.factory
+            key: 'eFname',
+            content: value.eFname
           },
           {
             title: '设备编码',
-            key: 'equitmentCode',
-            content: value.equitmentCode
+            key: 'eCode',
+            content: value.eCode
           },
           {
             title: '零件名称',
-            key: 'partName',
-            content: value.partName
+            key: 'ocName',
+            content: value.ocName
           },
           {
             title: '零件型号',
-            key: 'partModel',
-            content: value.partModel
+            key: 'ocType',
+            content: value.ocType
           },
           {
             title: '零件厂家',
-            key: 'partFactory',
-            content: value.partFactory
+            key: 'ocFactory',
+            content: value.ocFactory
           },
           {
             title: '零件编码',
-            key: 'partNameCode',
-            content: value.partNameCode
+            key: 'ocCode',
+            content: value.ocCode
           },
         ]
         let editData = [
           {
             title: '新零件名称',
-            key: 'newPartName',
-            content: value.newPartName
+            key: 'cName',
+            content: value.cName,
+            name: 'cName'
           },
           {
             title: '新零件型号',
-            key: 'newPartModel',
-            content: value.newPartModel
+            key: 'cType',
+            content: value.cType,
+            name: 'cType'
           },
           {
             title: '新零件厂家',
-            key: 'newPartFactory',
-            content: value.newPartFactory
+            key: 'cFname',
+            content: value.cFname,
+            name: 'cFname'
           },
           {
             title: '新零件编码',
-            key: 'newPartNameCode',
-            content: value.newPartNameCode
+            key: 'cCode',
+            content: value.cCode,
+            name: 'cCode'
           },
           {
             title: '位置',
             key: 'position',
-            content: value.position
+            content: value.position,
+            name: 'position'
           },
           {
             title: '更换人员',
-            key: 'changePersonnel',
-            content: value.changePersonnel
+            key: 'changePeopleName',
+            content: value.changePeopleName,
+            name: 'changePeopleName'
           },
           {
             title: '更换时间',
             key: 'changeTime',
-            content: value.changeTime
+            content: value.changeTime,
+            name: 'changeTime'
           }
         ]
         this.isShowModal = true
@@ -467,8 +529,8 @@
           },
           {
             title: '图片',
-            key: 'picture',
-            content: value.picture
+            key: 'pName',
+            content: value.pName
           }
         ]
         this.isShowModal = true

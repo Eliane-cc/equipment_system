@@ -248,7 +248,7 @@
         pagination: {
           total: 0,
           defaultPageSize: 10,
-          onChange:(page,pageSize)=>this.devList(page,pageSize),//点击页码事件
+          onChange:(page,pageSize)=>this.repairList(page,pageSize),//点击页码事件
         },
         data,
         columns,
@@ -303,70 +303,73 @@
         let displayData = [
           {
             title: '车间',
-            key: 'workshop',
-            content: value.workshop
+            key: 'eWorkshop',
+            content: value.eWorkshop
           },
           {
             title: '机台',
-            key: 'machine',
-            content: value.machine
+            key: 'eMachine',
+            content: value.eMachine
           },
           {
             title: '设备名称',
-            key: 'equitment',
-            content: value.equitment
+            key: 'eName',
+            content: value.eName
           },
           {
             title: '设备型号',
-            key: 'model',
-            content: value.model
+            key: 'eType',
+            content: value.eType
           },
           {
             title: '设备厂家',
-            key: 'factory',
-            content: value.factory
+            key: 'eFname',
+            content: value.eFname
           },
           {
             title: '设备编码',
-            key: 'equitmentCode',
-            content: value.equitmentCode
+            key: 'eCode',
+            content: value.eCode
           },
           {
             title: '零件名称',
-            key: 'partName',
-            content: value.partName
+            key: 'cName',
+            content: value.cName
           },
           {
             title: '零件型号',
-            key: 'partModel',
-            content: value.partModel
+            key: 'cType',
+            content: value.cType
           },
           {
             title: '零件厂家',
-            key: 'partFactory',
-            content: value.partFactory
+            key: 'cFname',
+            content: value.cFname
           },
           {
             title: '零件编码',
-            key: 'partNameCode',
-            content: value.partNameCode
+            key: 'cCode',
+            content: value.cCode
           },
         ]
         let editData = [
           {
             title: '维修人员',
-            key: 'repairPersonnel',
-            content: value.repairPersonnel
+            key: 'rPeopleName',
+            content: value.rPeopleName,
+            name: 'rPeopleName'
           },
           {
             title: '维修时间',
-            key: 'repairTime',
-            content: value.repairTime
+            key: 'rTime',
+            content: value.rTime,
+            name: 'rTime'
           },
           {
             title: '维修内容',
-            key: 'repairContent',
-            content: value.repairContent
+            key: 'rContent',
+            content: value.rContent,
+            name: 'rContent'
           },
         ]
         this.isShowModal = true

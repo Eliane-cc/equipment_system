@@ -102,7 +102,7 @@ export const getDropChangeList =() => get(`change/searchList`);
 export const getchangeList =(params) => post(`change/allChangeList`,params);
 
 //更换编辑
-export const updateChange =(params) => post(`change/updateChange`,params);
+export const updateChange =(params) => post(`change/update`,params);
 
 //更换删除
 export const deleteChange =(params) => post(`change/deleteChange`,params);

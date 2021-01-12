@@ -273,7 +273,7 @@
         pagination: {
           total: 0,
           defaultPageSize: 10,
-          onChange:(page,pageSize)=>this.devList(page,pageSize),//点击页码事件
+          onChange:(page,pageSize)=>this.equitmentList(page,pageSize),//点击页码事件
         },
         data,
         columns,
