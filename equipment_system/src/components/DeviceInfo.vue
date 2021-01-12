@@ -359,6 +359,7 @@
         this.modalData.createData = data
         this.modalData.editData = ""
         this.modalData.displayData = ""
+        this.modalData.value = ""
         this.modalData.pageNum = this.pageNum
       },
       //新增零件

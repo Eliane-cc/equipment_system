@@ -47,6 +47,9 @@ export const deleteDev =(params) => post(`equipment/deleteEquipment`,params);
 /*
 零件接口
  */
+//下拉列表获取
+export const getDropEquipList =() => get(`component/searchList`);
+
 //零件列表分页查询
 export const getequitmentList =(params) => post(`component/allComponentList`,params);
 
@@ -54,7 +57,7 @@ export const getequitmentList =(params) => post(`component/allComponentList`,par
 export const addEquipment =(params) => post(`component/addComponent`,params);
 
 //修改零件
-export const updateEquipment =(params) => post(`component/updateComponent`,params);
+export const updateEquipment =(params) => post(`component/update`,params);
 
 //删除零件
 export const deleteEquipment =(params) => post(`component/deleteComponent`,params);

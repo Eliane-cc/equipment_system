@@ -4,18 +4,43 @@
       <a-form class="form" :form="form" @submit="handleSearch">
         <a-row>
           <a-col
-            v-for="(item,index) in label"
-            :key="index"
+          :span="8"
+          class="margin-bottom"
+        >
+          <div class="flex-center">
+            <a-col :span="7">
+              车间：
+            </a-col>
+            <a-col :span="17">
+              <a-tree-select
+                v-model="workshopValue"
+                show-search
+                style="width: 100%"
+                :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                placeholder="请选择"
+                allow-clear
+                tree-default-expand-all
+              >
+                <template v-for="(item,index) in dropList.eWorkshops">
+                  <a-tree-select-node :key="'eWorkshops'+index" :value="item">
+                    <div slot="title">{{item}}</div>
+                  </a-tree-select-node>
+                </template>
+              </a-tree-select>
+            </a-col>
+          </div>
+        </a-col>
+          <a-col
             :span="8"
             class="margin-bottom"
           >
             <div class="flex-center">
               <a-col :span="7">
-                {{item.title}}：
+                机台：
               </a-col>
               <a-col :span="17">
                 <a-tree-select
-                  v-model="value"
+                  v-model="eMachinesValue"
                   show-search
                   style="width: 100%"
                   :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
@@ -23,35 +48,65 @@
                   allow-clear
                   tree-default-expand-all
                 >
-                  <a-tree-select-node key="random1" value="车间0">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random2" value="sss">
-                    <div slot="title">车间1</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间2</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间4</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
-                  <div slot="title">车间0</div>
-                </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
-                  <div slot="title">车间0</div>
-                </a-tree-select-node>  <a-tree-select-node key="random3" value="车间0">
-                  <div slot="title">车间0</div>
-                </a-tree-select-node>  <a-tree-select-node key="random3" value="车间8">
-                  <div slot="title">车间8</div>
-                </a-tree-select-node>
+                  <template v-for="(item,index) in dropList.eMachines">
+                    <a-tree-select-node :key="'eMachines'+index" :value="item">
+                      <div slot="title">{{item}}</div>
+                    </a-tree-select-node>
+                  </template>
+                </a-tree-select>
+              </a-col>
+            </div>
+          </a-col>
+          <a-col
+            :span="8"
+            class="margin-bottom"
+          >
+            <div class="flex-center">
+              <a-col :span="7">
+                设备名称：
+              </a-col>
+              <a-col :span="17">
+                <a-tree-select
+                  v-model="eNamesValue"
+                  show-search
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                  placeholder="请选择"
+                  allow-clear
+                  tree-default-expand-all
+                >
+                  <template v-for="(item,index) in dropList.eNames">
+                    <a-tree-select-node :key="'eNames'+index" :value="item">
+                      <div slot="title">{{item}}</div>
+                    </a-tree-select-node>
+                  </template>
+                </a-tree-select>
+              </a-col>
+            </div>
+          </a-col>
+          <a-col
+            :span="8"
+            class="margin-bottom"
+          >
+            <div class="flex-center">
+              <a-col :span="7">
+                零件名称：
+              </a-col>
+              <a-col :span="17">
+                <a-tree-select
+                  v-model="cNamesValue"
+                  show-search
+                  style="width: 100%"
+                  :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
+                  placeholder="请选择"
+                  allow-clear
+                  tree-default-expand-all
+                >
+                  <template v-for="(item,index) in dropList.cNames">
+                    <a-tree-select-node :key="'cNames'+index" :value="item">
+                      <div slot="title">{{item}}</div>
+                    </a-tree-select-node>
+                  </template>
                 </a-tree-select>
               </a-col>
             </div>
@@ -96,7 +151,7 @@
 
 <script>
   import ActionModal from "./Modal/ActionModal";
-  import {deleteEquipment, getequitmentList} from "../api";
+  import {deleteEquipment, getDropDevList, getequitmentList, getDropEquipList} from "../api";
   const columns = [
     {
       title: '车间',
@@ -180,6 +235,8 @@
     created() {
       //零件分页查询
       this.equitmentList()
+      //下拉列表信息获取
+      this.getDropList()
     },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
@@ -209,6 +266,7 @@
         isShowModal: false,
         modalTitle: '',
         modalData: [],
+        dropList: [],   //下拉列表
         form: this.$form.createForm(this, { name: 'advanced_search' }),
         isLoading: true, //表格分页加载
         pageNum: 1,   //记录当前页码
@@ -221,7 +279,10 @@
         columns,
         editingKey: '',
         treeExpandedKeys: [],
-        value: undefined,
+        workshopValue: undefined,   //车间下拉
+        eMachinesValue: undefined,   //机台下拉
+        eNamesValue: undefined,      //设备名称下拉
+        cNamesValue: undefined       //零件名称下拉
       }
     },
     methods: {
@@ -231,7 +292,11 @@
         this.pageNum = pageNum
         let params = {
           pageNum: pageNum,
-          pageSize: pageSize
+          pageSize: pageSize,
+          eWorkshop: this.workshopValue,
+          eMachine: this.eMachinesValue,
+          eName: this.eNamesValue,
+          cName: this.cNamesValue,
         }
         getequitmentList(params)
           .then((res) => {
@@ -243,12 +308,18 @@
             console.log("零件管理列表", res);
           })
       },
+      //下拉列表信息显示
+      getDropList(){
+        getDropEquipList()
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.dropList = res.data
+            }
+          })
+      },
       //表单查询
       handleSearch(e) {
-        this.form.validateFields((error, values) => {
-          console.log('error', error);
-          console.log('Received values of form: ', values);
-        });
+        this.equitmentList()
       },
       //编辑
       editDev(value,text) {

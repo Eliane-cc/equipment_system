@@ -52,7 +52,7 @@
                 <a-input :placeholder="`请输入${item.label}`" :rows="3"  allowClear :ref="item.name" v-decorator="[item.name, validatorRules.devCode]"/>
               </template>
               <template v-else>
-                <a-input :placeholder="`请输入${item.label}`" :rows="3" allowClear :ref="item.name" v-decorator="[item.name, validatorRules.common]"/>
+                <a-input :placeholder="`请输入${item.label}`" :rows="3" allowClear :ref="item.name" v-decorator="[item.name, validatorRules.common]" />
               </template>
             </a-form-item>
           </a-form>
