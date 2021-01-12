@@ -72,7 +72,7 @@ export const getDropMaintainList =() => get(`maintain/searchList`);
 export const getmaintainList =(params) => post(`maintain/allMaintainList`,params);
 
 //维护编辑
-export const updateMaintain =(params) => post(`maintain/updateMaintain`,params);
+export const updateMaintain =(params) => post(`maintain/update`,params);
 
 //维护删除
 export const deleteMaintain =(params) => post(`maintain/deleteMaintain`,params);

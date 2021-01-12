@@ -375,8 +375,8 @@
           },
           {
             title: '设备厂家',
-            key: 'fName',
-            content: value.fName
+            key: 'eFname',
+            content: value.eFname
           },
           {
             title: '设备编码',
@@ -385,40 +385,43 @@
           },
           {
             title: '零件名称',
-            key: 'partName',
-            content: value.partName
+            key: 'cName',
+            content: value.cName
           },
           {
             title: '零件型号',
-            key: 'partModel',
-            content: value.partModel
+            key: 'cType',
+            content: value.cType
           },
           {
             title: '零件厂家',
-            key: 'partFactory',
-            content: value.partFactory
+            key: 'cFname',
+            content: value.cFname
           },
           {
             title: '零件编码',
-            key: 'partNameCode',
-            content: value.partNameCode
+            key: 'cCode',
+            content: value.cCode
           },
         ]
         let editData = [
           {
             title: '维护人员',
-            key: 'maintenancePersonnel',
-            content: value.maintenancePersonnel
+            key: 'mPeopleName',
+            content: value.mPeopleName,
+            name: 'mPeopleName'
           },
           {
             title: '维护时间',
-            key: 'maintenanceTime',
-            content: value.maintenanceTime
+            key: 'mTime',
+            content: value.mTime,
+            name: 'mTime'
           },
           {
             title: '维护内容',
-            key: 'maintenanceContent',
-            content: value.maintenanceContent
+            key: 'mContent',
+            content: value.mContent,
+            name: 'mContent'
           }
         ]
         this.isShowModal = true

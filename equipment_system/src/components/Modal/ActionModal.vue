@@ -110,7 +110,10 @@
                   <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :ref="item.name" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
                 </template>
                 <template v-else-if="item.title == '维护内容' || item.title == '维修内容' || item.title == '更换内容'">
-                  <a-textarea :placeholder="`请输入${item.title}`" :rows="3" v-model="item.content" @change="editContent(item,index)" :name="item.name" :ref="item.name" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
+                  <a-textarea :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :name="item.name" :ref="item.name" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
+                </template>
+                <template v-else-if="item.title == '维护人员' || item.title == '维修人员' || item.title == '更换人员'">
+                  <a-input :placeholder="`请输入${item.title}`" :rows="3" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
                 </template>
                 <template v-else-if="item.title == '重置密码'">
                   <a-input-password :placeholder="`请输入${item.title}`" allowClear v-model="pwd" v-decorator="[item.name, validatorRules.resetPwd]"/>
@@ -159,7 +162,8 @@
     updateUser,
     updateDev,
     updateEquipment,
-    getequitmentList
+    updateMaintain,
+    getequitmentList, getmaintainList
   } from "../../api";
   export default {
     name: "ActionModal.vue",
@@ -356,6 +360,28 @@
                     })
                   this.confirmCreateLoading = false
                 }
+                //编辑维护
+                else if (text == '编辑维护'){
+                  console.log("data编辑",data)
+                  data.eId = this.data.value.eId
+                  data.mId = this.data.value.mId
+                  updateMaintain(data)
+                    .then((res) => {
+                      console.log("res",res)
+                      if (res.msg == "SUCCESS"){
+                        this.$message.success("修改维护信息成功！");
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                        //重新刷新用户列表
+                        this.equitmentList();
+                      }else{
+                        this.$message.error(res.msg);
+                        this.$emit("update:modalVisible",false);
+                        this.form.resetFields();
+                      }
+                    })
+                  this.confirmCreateLoading = false
+                }
               }
             }
           })
@@ -470,6 +496,20 @@
               this.$emit("update:dataList",res.data.list);
             }
             console.log("零件管理列表", res);
+          })
+      },
+      //维护列表显示
+      maintainList(){
+        let params = {
+          pageNum: this.data.pageNum,
+          pageSize: 10
+        }
+        getmaintainList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$emit("update:dataList",res.data.list);
+            }
+            console.log("维护数据管理列表", res);
           })
       },
       //编辑内容
