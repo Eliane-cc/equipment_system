@@ -100,8 +100,8 @@
           <a-row class="margin-top" v-for="(item,index) in data.editData" :key="index">
             <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
               <a-form-item :label="item.title">
-                <template v-if="item.title == '使用寿命'">-->
-                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :ref="item.name"  v-model="lifespan" defaultValue="item.content"/> 天
+                <template v-if="item.title == '使用寿命'">
+                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :ref="item.name"  v-model="item.content"/> 天
                 </template>
                 <template v-else-if="item.title == '开始使用时间'">
                   <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name"/>
@@ -338,7 +338,7 @@
                 //编辑零件
                 else if (text == '编辑零件'){
                   console.log("data编辑",data)
-                  data.eId = this.data.value.eId
+                  data.cId = this.data.value.cId
                   updateEquipment(data)
                     .then((res) => {
                       console.log("res",res)

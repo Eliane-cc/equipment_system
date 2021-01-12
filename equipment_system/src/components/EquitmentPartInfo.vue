@@ -252,6 +252,7 @@
       },
       //编辑
       editDev(value,text) {
+        console.log("编辑", value)
         let displayData = [
           {
             title: '车间',
@@ -270,8 +271,8 @@
           },
           {
             title: '设备厂家',
-            key: 'e_fName',
-            content: value.e_fName
+            key: 'fName',
+            content: value.efName
           },
           {
             title: '设备名称',
@@ -287,51 +288,51 @@
         let editData = [
           {
             title: '零件名称',
-            key: 'partName',
-            content: value.partName,
-            name: 'c_name'
+            key: 'cName',
+            content: value.cName,
+            name: 'cName'
           },
           {
             title: '零件编码',
-            key: 'partNameCode',
-            content: value.partNameCode,
-            name: 'c_nameCode'
+            key: 'cCode',
+            content: value.cCode,
+            name: 'cCode'
           },
           {
             title: '零件型号',
-            key: 'partModel',
-            content: value.partModel,
-            name: 'c_id'
+            key: 'cType',
+            content: value.cType,
+            name: 'cType'
           },
           {
             title: '零件厂家',
-            key: 'partFactory',
-            content: value.partFactory,
-            name: 'f_id'
+            key: 'fName',
+            content: value.efName,
+            name: 'fName'
           },
           {
             title: '位置',
-            key: 'position',
-            content: value.position,
-            name: 'component_location'
+            key: 'cLocation',
+            content: value.cLocation,
+            name: 'cLocation'
           },
           {
             title: '使用寿命',
-            key: 'serviceLife',
-            content: value.serviceLife,
-            name: 'working_life'
+            key: 'lifespan',
+            content: value.lifespan,
+            name: 'lifespan'
           },
           {
             title: '开始使用时间',
-            key: 'startTime',
-            content: value.startTime,
-            name: 'start_time'
+            key: 'starttime',
+            content: value.starttime,
+            name: 'starttime'
           },
           {
             title: '运行时间',
-            key: 'operationTime',
-            content: value.operationTime,
-            name: 'run_time'
+            key: 'runtime',
+            content: value.runtime,
+            name: 'runtime'
           }
         ]
         this.isShowModal = true
@@ -423,9 +424,9 @@
       //删除当前行
       deleteDev(record) {
         this.isLoading = true
-
+        console.log("record",record)
         let params = {
-          eId: record.eId
+          cCode: record.cCode
         }
         deleteEquipment(params)
           .then((res) => {

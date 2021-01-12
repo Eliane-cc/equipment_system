@@ -1,4 +1,5 @@
 import {get,post} from './http';
+import {getParams} from "ant-design-vue/lib/vc-form/src/utils";
 
 /*
 登录接口
@@ -28,6 +29,9 @@ export const deleteUser =(params) => post(`user/deleteUser`,params);
 /*
 设备接口
  */
+//下拉列表获取
+export const getDropDevList =() => get(`equipment/searchList`);
+
 //设备列表分页查询
 export const getDevList =(params) => post(`equipment/allEquipmentList`,params);
 
@@ -50,10 +54,10 @@ export const getequitmentList =(params) => post(`component/allComponentList`,par
 export const addEquipment =(params) => post(`component/addComponent`,params);
 
 //修改零件
-export const updateEquipment =(params) => post(`equipment/updateComponent`,params);
+export const updateEquipment =(params) => post(`component/updateComponent`,params);
 
 //删除零件
-export const deleteEquipment =(params) => post(`equipment/deleteComponent`,params);
+export const deleteEquipment =(params) => post(`component/deleteComponent`,params);
 
 /*
 维护接口
