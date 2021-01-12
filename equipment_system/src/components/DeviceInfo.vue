@@ -22,7 +22,7 @@
                   tree-default-expand-all
                 >
                   <template v-for="(item,index) in dropList.eWorkshops">
-                    <a-tree-select-node :key="index" :value="item">
+                    <a-tree-select-node :key="'eworkshop'+index" :value="item">
                       <div slot="title">{{item}}</div>
                     </a-tree-select-node>
                   </template>
@@ -49,7 +49,7 @@
                   tree-default-expand-all
                 >
                   <template v-for="(item,index) in dropList.eMachines">
-                    <a-tree-select-node :key="index" :value="item">
+                    <a-tree-select-node :key="'eMachines'+index" :value="item">
                       <div slot="title">{{item}}</div>
                     </a-tree-select-node>
                   </template>
@@ -76,7 +76,7 @@
                   tree-default-expand-all
                 >
                   <template v-for="(item,index) in dropList.eNames">
-                    <a-tree-select-node :key="index" :value="item">
+                    <a-tree-select-node :key="'eNames'+ index" :value="item">
                       <div slot="title">{{item}}</div>
                     </a-tree-select-node>
                   </template>
@@ -201,23 +201,6 @@
     data(){
       this.cacheData = data.map(item => ({ ...item }));
       return{
-        label: [
-          {
-            title: '车间',
-            placeholder: '请输入车间',
-            name: 'e_workshop_id'
-          },
-          {
-            title: '机台',
-            placeholder: '请输入机台',
-            name: 'e_machine_id'
-          },
-          {
-            title: '设备名称',
-            placeholder: '请输入设备名称',
-            name: 'e_name'
-          }
-        ],
         isShowModal: false,
         modalTitle: '',
         modalData: [],
@@ -234,9 +217,9 @@
         columns,
         editingKey: '',
         treeExpandedKeys: [],
-        workshopValue: undefined,
-        eMachinesValue: undefined,
-        eNamesValue: undefined
+        workshopValue: undefined,   //车间下拉
+        eMachinesValue: undefined,   //机台下拉
+        eNamesValue: undefined        //设备名称下拉
       }
     },
     methods: {
@@ -266,11 +249,7 @@
         getDropDevList()
           .then((res) => {
             if (res.msg == "SUCCESS"){
-              this.label[0].data = res.data.eWorkshops
-              this.label[1].data = res.data.eMachines
-              this.label[2].data = res.data.eNames
               this.dropList = res.data
-              console.log("res下拉列表信息", res.data.eMachines);
             }
           })
       },
@@ -453,6 +432,7 @@
         this.modalData.createData = data
         this.modalData.pageNum = this.pageNum
         this.modalData.displayData = displayData
+        this.modalData.editData = ""
       }
     },
   }
