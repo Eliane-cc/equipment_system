@@ -65,6 +65,9 @@ export const deleteEquipment =(params) => post(`component/deleteComponent`,param
 /*
 维护接口
  */
+//下拉列表获取
+export const getDropMaintainList =() => get(`maintain/searchList`);
+
 //维护列表分页查询
 export const getmaintainList =(params) => post(`maintain/allMaintainList`,params);
 
@@ -77,6 +80,9 @@ export const deleteMaintain =(params) => post(`maintain/deleteMaintain`,params);
 /*
 维修接口
  */
+//下拉列表获取
+export const getDropRepairList =() => get(`repair/searchList`);
+
 //维修列表分页查询
 export const getrepairList =(params) => post(`repair/allRepairList`,params);
 
@@ -89,6 +95,9 @@ export const deleteRepair =(params) => post(`repair/deleteRepair`,params);
 /*
 更换接口
  */
+//下拉列表获取
+export const getDropChangeList =() => get(`change/searchList`);
+
 //更换列表分页查询
 export const getchangeList =(params) => post(`change/allChangeList`,params);
 
