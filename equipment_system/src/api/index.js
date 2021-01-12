@@ -15,7 +15,7 @@ export const login = (params) => post(`user/login`,params);
  */
 //获取用户列表
 //export const getUserList =(params) => post(`admin/user/list`,params);
-export const getUserList =(params) => post(`user/list`,params);
+export const getUserList =(params) => post(`user/listUser`,params);
 
 //添加用户
 export const addUser =(params) => post(`user/addUser`,params);

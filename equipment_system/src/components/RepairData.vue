@@ -295,11 +295,8 @@
           })
       },
       //表单查询
-      handleSearch(e) {
-        this.form.validateFields((error, values) => {
-          console.log('error', error);
-          console.log('Received values of form: ', values);
-        });
+      handleSearch() {
+        this.repairList()
       },
       //编辑
       editDev(value,text) {
@@ -477,7 +474,9 @@
       },
 
       //查询设备
-      searchDev(){},
+      searchDev(){
+
+      },
     },
   }
 </script>
