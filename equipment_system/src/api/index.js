@@ -87,7 +87,7 @@ export const getDropRepairList =() => get(`repair/searchList`);
 export const getrepairList =(params) => post(`repair/allRepairList`,params);
 
 //维修编辑
-export const updateRepair =(params) => post(`repair/updateRepair`,params);
+export const updateRepair =(params) => post(`repair/update`,params);
 
 //维修删除
 export const deleteRepair =(params) => post(`repair/deleteRepair`,params);
