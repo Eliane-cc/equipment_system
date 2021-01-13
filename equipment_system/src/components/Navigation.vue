@@ -11,7 +11,7 @@
         <a-dropdown placement="bottomCenter">
           <a class="nav-title-user" @click="e => e.preventDefault()">
             <a-icon type="poweroff" />
-            <div class="username">Elaine</div>
+            <div class="username">{{username}}</div>
           </a>
           <a-menu slot="overlay">
             <a-menu-item key="0">
@@ -88,7 +88,8 @@
         mainSpan: '19',
         navSpan: '4',
         offset: '1',
-        defaultNav: []
+        defaultNav: [],
+        username: '',
       };
     },
     created() {
@@ -121,6 +122,7 @@
         else if(this.$route.path == '/userManagement'){
           this.defaultNav[1] = '8'
         }
+        this.username = window.localStorage.getItem('userInfo.uName')
       },
       //左侧导航栏收缩
       toggleCollapsed() {

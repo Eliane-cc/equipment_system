@@ -137,7 +137,11 @@
     methods: {
       //获取当前用户基本信息
       getUserInfo(){
-        this.userInfo = window.localStorage.getItem('userInfo')
+        this.userInfo.uName = window.localStorage.getItem('userInfo.uName')
+        this.userInfo.isadmin = window.localStorage.getItem('userInfo.isadmin')
+        this.userInfo.uId = window.localStorage.getItem('userInfo.uId')
+        this.userInfo.uPhone = window.localStorage.getItem('userInfo.uPhone')
+        this.userInfo.uWorknumber = window.localStorage.getItem('userInfo.uWorknumber')
       },
       //修改密码用户表单提交
       submitForm(formName) {

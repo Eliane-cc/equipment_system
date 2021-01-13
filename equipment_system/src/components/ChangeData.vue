@@ -524,8 +524,8 @@
           },
           {
             title: '位置',
-            key: 'position',
-            content: value.position
+            key: 'cLocation',
+            content: value.cLocation
           },
           {
             title: '图片',

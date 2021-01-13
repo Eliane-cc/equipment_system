@@ -106,7 +106,12 @@
 
                     }
                     //本地保存当前信用户信息
-                    window.localStorage.setItem('userInfo', res.data)
+                    window.localStorage.setItem('userInfo.uName', res.data.uName)
+                    window.localStorage.setItem('userInfo.isadmin', res.data.isadmin)
+                    window.localStorage.setItem('userInfo.uId', res.data.uId)
+                    window.localStorage.setItem('userInfo.uPhone', res.data.uPhone)
+                    window.localStorage.setItem('userInfo.uWorknumber', res.data.uWorknumber)
+
                     this.$message.success("登录成功！");
                     this.$router.replace('/index')
                   }else{
