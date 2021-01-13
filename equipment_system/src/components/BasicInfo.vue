@@ -6,18 +6,16 @@
       <a-form class="form" :form="form" @submit="handleSearch">
         <a-row :gutter="24">
           <a-col
-            v-for="(item,index) in label"
-            :key="index"
             :span="10"
             class="margin-bottom"
           >
             <div class="flex-center">
               <a-col :span="8">
-                {{item.title}}：
+                零件名：
               </a-col>
               <a-col :span="17">
                 <a-tree-select
-                  v-model="value"
+                  v-model="cNamesValue"
                   show-search
                   style="width: 100%"
                   :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
@@ -25,35 +23,11 @@
                   allow-clear
                   tree-default-expand-all
                 >
-                  <a-tree-select-node key="random1" value="车间0">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random2" value="sss">
-                    <div slot="title">车间1</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间2</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间4</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>
-                  <a-tree-select-node key="random3" value="sss">
-                    <div slot="title">车间0</div>
-                  </a-tree-select-node>
-                 <a-tree-select-node key="random3" value="sss">
-                  <div slot="title">车间0</div>
-                </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
-                  <div slot="title">车间0</div>
-                </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
-                  <div slot="title">车间0</div>
-                </a-tree-select-node>  <a-tree-select-node key="random3" value="车间0">
-                  <div slot="title">车间0</div>
-                </a-tree-select-node>  <a-tree-select-node key="random3" value="车间8">
-                  <div slot="title">车间8</div>
-                </a-tree-select-node>
+                  <template v-for="(item,index) in dropList.cNames">
+                    <a-tree-select-node :key="'cNames'+index" :value="item">
+                      <div slot="title">{{item}}</div>
+                    </a-tree-select-node>
+                  </template>
                 </a-tree-select>
               </a-col>
 
@@ -76,7 +50,7 @@
       </a-form>
       <!--  表格列表信息    -->
       <div class="table">
-        <a-table :columns="columns" :data-source="data" bordered class="column">
+        <a-table :columns="columns" :data-source="data" bordered class="column" :pagination="pagination" :loading="isLoading">
           <template
             v-for="col in ['workshop', 'machine', 'equitment','equitmentCode','part','partCode','operation']"
             :slot="col"
@@ -103,31 +77,32 @@
 
 <script>
   import DevModal from "./Modal/DevModal";
+  import {getIndexList, getDropIndexList} from "../api";
   //表格格式
   const columns = [
     {
       title: '设备名称',
-      dataIndex: 'equitment',
+      dataIndex: 'eName',
       width: '26%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'equitment' },
+      scopedSlots: { customRender: 'eName' },
     },
     {
       title: '零件名称',
-      dataIndex: 'part',
+      dataIndex: 'cName',
       width: '26%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'part' },
+      scopedSlots: { customRender: 'cName' },
     },
     {
       title: '零件编码',
-      dataIndex: 'partCode',
+      dataIndex: 'cCode',
       width: '26%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'partCode' },
+      scopedSlots: { customRender: 'cCode' },
     },
     {
       title: '操作',
@@ -138,19 +113,6 @@
   ];
 
   const data = [];
-  //表格数据
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i.toString(),
-      workshop: `车间 ${i}`,
-      machine: `卫卷${i}#`,
-      equitment: `双面对齿橡胶齿形带4326-14M-${i}`,
-      equitmentCode: `${i}01430022`,
-      part: `滚珠丝杆轴承${i}20A1D-A`,
-      partCode: `${i}41430022`,
-      partModel: "零件型号"
-    });
-  }
   export default {
     name: "BasicInfo.vue",
     components: {
@@ -159,26 +121,62 @@
     data(){
       this.cacheData = data.map(item => ({ ...item }));
       return{
-        label: [
-          {
-            title: '零件名',
-            placeholder: '请输入零件名称',
-            name: 'c_name'
-          }
-        ],
         isShowModal: false,
         modalTitle: '',
         modalData: [],
+        dropList: [],   //下拉列表
         index: '0',
         form: this.$form.createForm(this, { name: 'advanced_search' }),
+        isLoading: true, //表格分页加载
+        pageNum: 1,   //记录当前页码
+        pagination: {
+          total: 0,
+          defaultPageSize: 10,
+          onChange:(page,pageSize)=>this.indexList(page,pageSize),//点击页码事件
+        },
         data,
         columns,
         editingKey: '',
         treeExpandedKeys: [],
-        value: undefined,
+        cNamesValue: undefined,   //下拉列表
       }
     },
+    created() {
+      //首页分页查询
+      this.indexList()
+      //下拉列表信息获取
+      this.getDropList()
+    },
     methods: {
+      //首页分页查询
+      indexList(pageNum=1, pageSize=10){
+        this.isLoading = true
+        this.pageNum = pageNum
+        let params = {
+          pageNum: pageNum,
+          pageSize: pageSize,
+          cNames: this.cNamesValue,
+        }
+        getIndexList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.data = res.data.list
+              this.pagination.total = res.data.total
+              this.isLoading = false
+            }
+          })
+      },
+      //下拉列表信息显示
+      getDropList(){
+        getDropIndexList()
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.dropList = res.data
+            }
+          })
+      },
+
+
       //设备二维码
       QRCode(){
 
@@ -200,7 +198,7 @@
           {
             label: '维护内容',
             placeholder: '请输入维护内容',
-            name: 'maintenance_text'
+            name: 'mContent '
           }
         ]
         this.isShowModal = true
@@ -215,7 +213,7 @@
             label: '维修内容',
             placeholder: '请输入维修内容',
             defaultContent: '',
-            name: 'servicing_text'
+            name: 'content'
           },
           {
             label: '零件更换',
@@ -227,30 +225,30 @@
             label: '新零件名称',
             placeholder: '请输入新零件名称',
             defaultContent: value.part,
-            name: 'c_name'
+            name: 'newCname'
           },
           {
             label: '新零件编码',
             placeholder: '请输入新零件编码',
             defaultContent: value.partCode,
-            name: 'c_code'
+            name: 'newCcode'
           },
           {
             label: '新零件型号',
             placeholder: '请输入新零件型号',
             defaultContent: value.partModel,
-            name: 'c_id'
+            name: 'newCtype'
           },
           {
             label: '新零件厂家',
             placeholder: '请输入新零件厂家',
-            defaultContent: '新零件厂家',
-            name: 'f_id'
+            defaultContent: '',
+            name: 'newFactory'
           },
           {
             label: '使用寿命',
             placeholder: '请输入数字',
-            name: 'f_used'
+            name: 'lifespan'
           },
         ]
         this.isShowModal = true
@@ -258,40 +256,6 @@
         this.modalData.data = value
         this.modalData.inputCon = inputCon
       },
-      //更换设备
-      replaceDev(value){
-        let inputCon = [
-          {
-            label: '新零件名称',
-            placeholder: '请输入新零件名称',
-            name: 'c_name'
-          },
-          {
-            label: '新零件编码',
-            placeholder: '请输入新零件编码',
-            name: 'c_code'
-          },
-          {
-            label: '新零件型号',
-            placeholder: '请输入新零件型号',
-            name: 'c_id'
-          },
-          {
-            label: '新零件厂家',
-            placeholder: '请输入新零件厂家',
-            name: 'f_id'
-          },
-          {
-            label: '使用寿命',
-            placeholder: '请输入数字',
-            name: 'f_used'
-          },
-        ]
-        this.isShowModal = true
-        this.modalTitle = '设备更换'
-        this.modalData.data = value
-        this.modalData.inputCon = inputCon
-      }
     },
   }
 </script>

@@ -4,19 +4,26 @@
       <a-form class="form" :form="form" @submit="handleSearch">
         <a-row>
           <a-col
-            v-for="(item,index) in label"
-            :key="index"
             :span="8"
             class="margin-bottom"
           >
-            <div class="flex-center">
-              <a-col :span="7">
-                {{item.title}}：
-              </a-col>
-              <a-col :span="17">
-                <a-input :placeholder="item.placeholder" :name="item.name"/>
-              </a-col>
-            </div>
+            <a-col :span="7">
+              姓名：
+            </a-col>
+            <a-col :span="17">
+              <a-input placeholder="请输入姓名" name="uName" v-model="uName"/>
+            </a-col>
+          </a-col>
+          <a-col
+            :span="8"
+            class="margin-bottom"
+          >
+            <a-col :span="7">
+              工号：
+            </a-col>
+            <a-col :span="17">
+              <a-input placeholder="请输入工号" name="uWorknumber" v-model="uWorknumber"/>
+            </a-col>
           </a-col>
         </a-row>
         <a-row>
@@ -159,17 +166,36 @@
         columns,
         editingKey: '',
         treeExpandedKeys: [],
-        value: undefined,
-
+        uWorknumber: undefined,   //工号
+        uName: undefined          //姓名
       }
     },
     methods: {
+      //用户列表显示
+      userList(pageNum=1, pageSize=10){
+        this.isLoading = true
+        this.pageNum = pageNum
+
+        let params = {
+          pageNum: pageNum,
+          pageSize: pageSize,
+          uName: this.uName,
+          uWorknumber: this.uWorknumber
+        }
+        getUserList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.data = res.data.list
+              this.pagination.total = res.data.total
+              this.isLoading = false
+            }
+            console.log("用户管理列表", res);
+          })
+      },
+
       //表单查询
-      handleSearch(e) {
-        this.form.validateFields((error, values) => {
-          console.log('error', error);
-          console.log('Received values of form: ', values);
-        });
+      handleSearch() {
+        this.userList()
       },
       //编辑
       editDev(value,text) {
@@ -298,27 +324,6 @@
         this.modalData.pageNum = this.pageNum
       },
 
-      //用户列表显示
-      userList(pageNum=1, pageSize=10){
-        this.isLoading = true
-        this.pageNum = pageNum
-        //let params = new URLSearchParams();
-        //params.append("pageNum", pageNum);
-        //params.append("pageSize", pageSize);
-        let params = {
-          pageNum: pageNum,
-          pageSize: pageSize
-        }
-        getUserList(params)
-          .then((res) => {
-            if (res.msg == "SUCCESS"){
-              this.data = res.data.list
-              this.pagination.total = res.data.total
-              this.isLoading = false
-            }
-            console.log("用户管理列表", res);
-          })
-      }
     },
   }
 </script>

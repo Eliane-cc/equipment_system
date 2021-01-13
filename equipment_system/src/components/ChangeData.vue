@@ -414,9 +414,9 @@
           },
           {
             title: '位置',
-            key: 'position',
-            content: value.position,
-            name: 'position'
+            key: 'cLocation',
+            content: value.cLocation,
+            name: 'cLocation'
           },
           {
             title: '更换人员',

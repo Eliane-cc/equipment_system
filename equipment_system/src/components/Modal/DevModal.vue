@@ -9,7 +9,7 @@
               车间：
             </a-col>
             <a-col :span="16" class="text_center">
-              {{data.data.workshop}}
+              {{data.data.eWorkshop}}
             </a-col>
           </a-col>
           <a-col :span="12">
@@ -17,7 +17,7 @@
               机台：
             </a-col>
             <a-col :span="16" class="text_center">
-              {{data.data.machine}}
+              {{data.data.eMachine}}
             </a-col>
           </a-col>
         </a-row>
@@ -27,7 +27,7 @@
               设备名称：
             </a-col>
             <a-col :span="16" class="text_center">
-              {{data.data.equitment}}
+              {{data.data.eName}}
             </a-col>
           </a-col>
           <a-col :span="12">
@@ -35,7 +35,7 @@
               设备编码：
             </a-col>
             <a-col :span="16" class="text_center">
-              {{data.data.equitmentCode}}
+              {{data.data.eCode}}
             </a-col>
           </a-col>
         </a-row>
@@ -45,7 +45,7 @@
               零件名称：
             </a-col>
             <a-col :span="16" class="text_center">
-              {{data.data.part}}
+              {{data.data.cName}}
             </a-col>
           </a-col>
           <a-col :span="12">
@@ -53,7 +53,7 @@
               零件编码：
             </a-col>
             <a-col :span="16" class="text_center">
-              {{data.data.partCode}}
+              {{data.data.cCode}}
             </a-col>
           </a-col>
         </a-row>
@@ -63,7 +63,7 @@
               零件型号：
             </a-col>
             <a-col :span="16" class="text_center">
-              {{data.data.partModel}}
+              {{data.data.cType}}
             </a-col>
           </a-col>
           <a-col :span="12">

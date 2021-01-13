@@ -10,6 +10,16 @@ export const generateCode = () => get(`user/cpa`);
 //判断用户是否登录成功
 //export const login = (params) => post(`login`,params);
 export const login = (params) => post(`user/login`,params);
+
+/*
+首页接口
+ */
+//首页下拉列表
+export const getDropIndexList =() => get(`index/allCName`);
+
+//获取用户列表
+export const getIndexList =(params) => post(`index/allBaseList`,params);
+
 /*
 用户接口
  */
