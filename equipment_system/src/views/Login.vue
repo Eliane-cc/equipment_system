@@ -68,6 +68,8 @@
 
 <script>
   import {login,generateCode} from '../api/index';
+  import Cookies from 'js-cookie';
+
   export default {
     name: "Login.vue",
     data(){
@@ -89,9 +91,7 @@
         if (this.code){
           if(this.code == this.verificationCode){
             if(this.username && this.password){
-              //let params = new URLSearchParams();
-              //params.append("uWorknumber", this.username);
-              //params.append("uPassword", this.password);
+
               let params = {
                 uWorknumber: this.username,
                 uPassword: this.password
@@ -111,6 +111,8 @@
                     window.localStorage.setItem('userInfo.uId', res.data.uId)
                     window.localStorage.setItem('userInfo.uPhone', res.data.uPhone)
                     window.localStorage.setItem('userInfo.uWorknumber', res.data.uWorknumber)
+                    //本地保存token
+                    Cookies.set('accessToken', document.cookie.substring(6));
 
                     this.$message.success("登录成功！");
                     this.$router.replace('/index')

@@ -9,7 +9,7 @@ import IconSvg from './components/IconSvg';
 import moment from 'moment';
 
 Vue.prototype.$moment = moment;
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.use(IconSvg);
 Vue.use(Antd);
