@@ -42,7 +42,7 @@
             <a-button :style="{ marginLeft: '8px' }" @click="devNFC" size="large">
               设备NFC
             </a-button>
-            <a-button :style="{ marginLeft: '8px' }" type="primary" html-type="submit" size="large">
+            <a-button :style="{ marginLeft: '8px' }" type="primary" html-type="submit" size="large" @click="handleSearch">
               筛选
             </a-button>
           </a-col>
@@ -176,17 +176,13 @@
           })
       },
 
-
       //设备二维码
       QRCode(){
 
       },
       //表单查询
-      handleSearch(e) {
-        this.form.validateFields((error, values) => {
-          console.log('error', error);
-          console.log('Received values of form: ', values);
-        });
+      handleSearch() {
+        this.indexList()
       },
       //设备NFC
       devNFC(){

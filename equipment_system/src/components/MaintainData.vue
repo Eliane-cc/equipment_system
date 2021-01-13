@@ -1,7 +1,7 @@
 <template>
   <div class="contain">
     <div>
-      <a-form class="form" :form="form" @submit="handleSearch">
+      <a-form class="form" :form="form">
         <a-row>
           <a-col
             :span="8"
@@ -128,7 +128,7 @@
         </a-row>
         <a-row>
           <a-col :span="24" :style="{ textAlign: 'right' }">
-            <a-button type="primary" html-type="submit" @click="searchDev">
+            <a-button type="primary" html-type="submit" @click="handleSearch">
               查询
             </a-button>
           </a-col>
@@ -526,9 +526,6 @@
             this.isLoading = false
           })
       },
-
-      //查询设备
-      searchDev(){},
     },
   }
 </script>
