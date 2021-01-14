@@ -250,7 +250,7 @@
       },
       printClick(){
         let _self = this;
-        let head_str ='<html><head><title>小区二维码打印</title></head><body>';//先生成头部
+        let head_str ='<html><head><title>设备生命周期管理系统二维码打印</title></head><body>';//先生成头部
         let foot_str ="</body></html>";//生成尾部
         let printBeforeStr = "<em style='padding: 10px;text-align: center'><table style='border-collapse:collapse;width: auto;><tr style='padding:10px;'>";
         let printContent = "";
