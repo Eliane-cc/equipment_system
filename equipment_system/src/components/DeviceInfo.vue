@@ -87,7 +87,10 @@
         </a-row>
         <a-row>
           <a-col :span="24" :style="{ textAlign: 'right' }">
-            <a-button type="primary" html-type="submit" @click="handleSearch">
+            <a-button type="primary" @click="printClick" icon="printer">
+              打印二维码
+            </a-button>
+            <a-button type="primary" :style="{ marginLeft: '8px' }" @click="handleSearch">
               查询
             </a-button>
             <a-button type="primary" :style="{ marginLeft: '8px' }" @click="createDev">
@@ -97,7 +100,8 @@
         </a-row>
       </a-form>
       <div class="table">
-        <a-table :columns="columns" :data-source.sync="data" bordered class="column" :pagination="pagination" :loading="isLoading">
+        <a-table :columns="columns" :data-source.sync="data" bordered class="column" :pagination="pagination" :loading="isLoading"
+                 :row-selection="{ onSelect: onSelect,onSelectAll: onSelectAll}" >
           <template
             v-for="col in ['workshop', 'machine', 'equitment','equitmentCode','model','factory','operation']"
             :slot="col"
@@ -121,6 +125,7 @@
         </a-table>
       </div>
     </div>
+    <div style="margin:0 auto;display:none;" id="qrcode2" v-html="printHtml"></div>
     <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle" :dataList.sync="data"></action-modal>
   </div>
 </template>
@@ -128,11 +133,12 @@
 <script>
   import ActionModal from "./Modal/ActionModal";
   import {deleteDev, getDevList, getDropDevList} from "../api/index";
+  import QRCode from 'qrcodejs2';     //引入二维码
   const columns = [
     {
       title: '车间',
       dataIndex: 'eWorkshop',
-      width: '11%',
+      width: '10%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'eWorkshop' },
@@ -140,7 +146,7 @@
     {
       title: '机台',
       dataIndex: 'eMachine',
-      width: '11%',
+      width: '10%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'eMachine' },
@@ -148,7 +154,7 @@
     {
       title: '设备名称',
       dataIndex: 'eName',
-      width: '16%',
+      width: '15%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'eName' },
@@ -172,7 +178,7 @@
     {
       title: '厂家',
       dataIndex: 'e_fName',
-      width: '16%',
+      width: '15%',
       ellipsis: true,
       align: 'center',
       scopedSlots: { customRender: 'e_fName' },
@@ -219,10 +225,85 @@
         treeExpandedKeys: [],
         workshopValue: undefined,   //车间下拉
         eMachinesValue: undefined,   //机台下拉
-        eNamesValue: undefined        //设备名称下拉
+        eNamesValue: undefined,        //设备名称下拉
+        selectCode: [],
       }
     },
+    mounted() {
+      this.creatQrCode();
+    },
     methods: {
+      //选择
+      onSelect(record, selected, selectedRows){
+        this.selectCode = selectedRows
+        console.log("select选中",record, selected, selectedRows);
+        console.log("this.selectedRow", this.selectCode)
+      },
+      //选择全部
+      onSelectAll(selected, selectedRows, changeRows){
+        this.selectCode = selectedRows
+        console.log("全选",selected, selectedRows, changeRows);
+      },
+      //打印二维码
+      printCode(){
+        console.log("打印二维码",this.selectCode)
+      },
+      printClick(){
+        let _self = this;
+        let head_str ='<html><head><title>小区二维码打印</title></head><body>';//先生成头部
+        let foot_str ="</body></html>";//生成尾部
+        let printBeforeStr = "<em style='padding: 10px;text-align: center'><table style='border-collapse:collapse;width: auto;><tr style='padding:10px;'>";
+        let printContent = "";
+        let pLength = _self.selectCode.length; //pLength为所要打印的数组对象的长度
+        for(let i=0;i<pLength;i++){
+          if(i!=0 && i%3==0 && i!=pLength){
+            printContent +="</tr><tr style='padding:10px;'>"
+          }
+          printContent += "<td width='30%' height='250' style='padding-left: 30px;padding-top: 30px'><div id='XQ"+i+"'></div><div style='text-align: center'><strong>"+_self.selectCode[i].eCode+"</strong></div></td>";
+        }
+        let printAfter = "</tr></table></em>";
+        _self.printHtml = printBeforeStr+printContent+printAfter;
+        document.getElementById("qrcode2").innerHTML = _self.printHtml;
+
+        let new_str =document.getElementById("qrcode2").innerHTML;//获取指定打印区域
+        //构建新网页(关键步骤,必须先构建新网页,在生成二维码,否则不能显示二维码)
+        document.body.innerHTML =head_str + new_str +foot_str;
+        for(let j=0;j<_self.selectCode.length;j++){
+          document.getElementById('XQ'+j).innerHTML='';//置空
+          let contentStr=_self.selectCode[j].eCode;//二维码内容
+          let qrcode =new QRCode(document.getElementById("XQ"+j), {
+            text: contentStr,
+            width: 250,
+            height: 250,
+            colorDark: "#000000",
+            colorLight: "#ffffff"
+          });
+        }
+        window.print();//打印刚才新建的网页
+        window.location.reload();
+        return false;
+      },
+      //生成二维码
+      creatQrCode() {
+        //二维码生成
+        var qrcode = new QRCode(this.$refs.qrCodeUrl, {
+          text: '5667', // 需要转换为二维码的内容
+          width: 100,
+          height: 100,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        })
+        //二维码生成
+        var qrcode = new QRCode(this.$refs.qrCodeUrl, {
+          text: '57', // 需要转换为二维码的内容
+          width: 100,
+          height: 100,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        })
+      },
       //设备列表显示
       devList(pageNum=1, pageSize=10){
         this.isLoading = true
@@ -439,7 +520,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
   .contain{
     color: #ffffff;
     background-color: #040014;
@@ -476,5 +557,30 @@
   }
   .margin-bottom{
     margin-bottom: 20px;
+  }
+  .printCode{
+    background-color: #2f54eb;
+  }
+  .title{
+    font-size: 16px;
+    font-weight: 600;
+
+  }
+  .qrcode{
+    background-color: red;
+    margin-top: 10px;
+    img {
+      display: inline-block;
+      width: 132px;
+      height: 132px;
+      background-color: #fff; //设置白色背景色
+      padding: 6px; // 利用padding的特性，挤出白边
+      box-sizing: border-box;
+      border: 1px solid yellow;
+      margin-right: 10px;
+    }
+  }
+  .imgGen{
+    background-color: #13c2c2;
   }
 </style>
