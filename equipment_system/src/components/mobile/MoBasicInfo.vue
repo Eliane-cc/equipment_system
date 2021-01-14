@@ -6,7 +6,7 @@
       </a-col>
       <a-col :span="15">
         <a-tree-select
-          v-model="value"
+          v-model="cNamesValue"
           show-search
           style="width: 100%"
           :dropdown-style="{ maxHeight: '260px', overflow: 'auto' }"
@@ -14,35 +14,11 @@
           allow-clear
           tree-default-expand-all
         >
-          <a-tree-select-node key="random1" value="车间0">
-            <div slot="title">车间0</div>
-          </a-tree-select-node>
-          <a-tree-select-node key="random2" value="sss">
-            <div slot="title">车间1</div>
-          </a-tree-select-node>
-          <a-tree-select-node key="random3" value="sss">
-            <div slot="title">车间2</div>
-          </a-tree-select-node>
-          <a-tree-select-node key="random3" value="sss">
-            <div slot="title">车间4</div>
-          </a-tree-select-node>
-          <a-tree-select-node key="random3" value="sss">
-            <div slot="title">车间0</div>
-          </a-tree-select-node>
-          <a-tree-select-node key="random3" value="sss">
-            <div slot="title">车间0</div>
-          </a-tree-select-node>
-          <a-tree-select-node key="random3" value="sss">
-            <div slot="title">车间0</div>
-          </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
-          <div slot="title">车间0</div>
-        </a-tree-select-node>  <a-tree-select-node key="random3" value="sss">
-          <div slot="title">车间0</div>
-        </a-tree-select-node>  <a-tree-select-node key="random3" value="车间0">
-          <div slot="title">车间0</div>
-        </a-tree-select-node>  <a-tree-select-node key="random3" value="车间8">
-          <div slot="title">车间8</div>
-        </a-tree-select-node>
+          <template v-for="(item,index) in dropList.cNames">
+            <a-tree-select-node :key="'cNames'+index" :value="item">
+              <div slot="title">{{item}}</div>
+            </a-tree-select-node>
+          </template>
         </a-tree-select>
       </a-col>
       <a-col :span="4">
@@ -52,7 +28,7 @@
       </a-col>
     </div>
     <div class="flex btn">
-      <a-button @click="QRCode" type="primary">
+      <a-button @click="QRCode" type="primary" icon="scan">
         设备二维码
       </a-button>
       <a-button :style="{ marginLeft: '26px' }" @click="devNFC" type="primary">
@@ -64,118 +40,36 @@
         双面对齿橡胶齿形带4326-14M
       </div>
       <div class="result-content">
-        <a-card hoverable style="width: 100%" class="margin-top">
-          <div>
-            <a-row>
-              <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
-                零件名称:
-              </a-col>
-              <a-col :span="18" :style="{ textAlign: 'left' }">
-                滚珠丝干轴承020A1D-A
-              </a-col>
-            </a-row>
-            <a-row>
-              <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
-                零件编码：
-              </a-col>
-              <a-col :span="18" :style="{ textAlign: 'left' }">
-                04143479977
-              </a-col>
-            </a-row>
-          </div>
-          <template slot="actions" class="ant-card-actions">
-            <div @click="maintainDev()">
-              <a-icon key="setting" type="setting" />维护
+        <template v-for="(item,index) in comInfo">
+          <a-card hoverable style="width: 100%" class="margin-top">
+            <div>
+              <a-row>
+                <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
+                  零件名称:
+                </a-col>
+                <a-col :span="18" :style="{ textAlign: 'left' }">
+                  {{item.name}}
+                </a-col>
+              </a-row>
+              <a-row>
+                <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
+                  零件编码：
+                </a-col>
+                <a-col :span="18" :style="{ textAlign: 'left' }">
+                  {{item.code}}
+                </a-col>
+              </a-row>
             </div>
-            <div @click="serviceDev()">
-              <a-icon key="edit" type="tool" />维修
-            </div>
-          </template>
-        </a-card>
-        <a-card hoverable style="width: 100%"  class="margin-top">
-          <div>
-            <a-row>
-              <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
-                零件名称:
-              </a-col>
-              <a-col :span="18" :style="{ textAlign: 'left' }">
-                滚珠丝干轴承020A1D-A
-              </a-col>
-            </a-row>
-            <a-row>
-              <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
-                零件编码：
-              </a-col>
-              <a-col :span="18" :style="{ textAlign: 'left' }">
-                04143479977
-              </a-col>
-            </a-row>
-          </div>
-          <template slot="actions" class="ant-card-actions">
-            <div @click="maintainDev()">
-              <a-icon key="setting" type="setting" />维护
-            </div>
-            <div @click="serviceDev()">
-              <a-icon key="edit" type="tool" />维修
-            </div>
-          </template>
-        </a-card>
-        <a-card hoverable style="width: 100%"  class="margin-top">
-          <div>
-            <a-row>
-              <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
-                零件名称:
-              </a-col>
-              <a-col :span="18" :style="{ textAlign: 'left' }">
-                滚珠丝干轴承020A1D-A
-              </a-col>
-            </a-row>
-            <a-row>
-              <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
-                零件编码：
-              </a-col>
-              <a-col :span="18" :style="{ textAlign: 'left' }">
-                04143479977
-              </a-col>
-            </a-row>
-          </div>
-          <template slot="actions" class="ant-card-actions">
-            <div @click="maintainDev()">
-              <a-icon key="setting" type="setting" />维护
-            </div>
-            <div @click="serviceDev()">
-              <a-icon key="edit" type="tool" />维修
-            </div>
-          </template>
-        </a-card>
-        <a-card hoverable style="width: 100%"  class="margin-top">
-          <div>
-            <a-row>
-              <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
-                零件名称:
-              </a-col>
-              <a-col :span="18" :style="{ textAlign: 'left' }">
-                滚珠丝干轴承020A1D-A
-              </a-col>
-            </a-row>
-            <a-row>
-              <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
-                零件编码：
-              </a-col>
-              <a-col :span="18" :style="{ textAlign: 'left' }">
-                04143479977
-              </a-col>
-            </a-row>
-          </div>
-          <template slot="actions" class="ant-card-actions">
-            <div @click="maintainDev()">
-              <a-icon key="setting" type="setting" />维护
-            </div>
-            <div @click="serviceDev()">
-              <a-icon key="edit" type="tool" />维修
-            </div>
-          </template>
-        </a-card>
+            <template slot="actions" class="ant-card-actions">
+              <div @click="maintainDev()">
+                <a-icon key="setting" type="setting" />维护
+              </div>
+              <div @click="serviceDev()">
+                <a-icon key="edit" type="tool" />维修
+              </div>
+            </template>
+          </a-card>
+        </template>
       </div>
 
     </div>
@@ -186,6 +80,8 @@
 
 <script>
   import DevModal from "../Modal/DevModal";
+  import {getDropIndexList, getIndexList} from "../../api";
+
   export default {
     name: "MoBasicInfo.vue",
     components: {
@@ -196,51 +92,86 @@
         isShowModal: false,
         modalTitle: '',
         modalData: [],
+        dropList: [],
+        cNamesValue: undefined,   //下拉列表
+        comInfo: [
+          {
+            name: '零件一',
+            code: '2343543',
+          },
+          {
+            name: '零件一',
+            code: '2343543',
+          },
+          {
+            name: '零件一',
+            code: '2343543',
+          },
+          {
+            name: '零件一',
+            code: '2343543',
+          },
+        ]
       }
     },
+    created() {
+      //首页分页查询
+      this.indexList()
+      //下拉列表信息获取
+      this.getDropList()
+    },
     methods: {
+      //首页分页查询
+      indexList(pageNum=1, pageSize=10){
+        this.pageNum = pageNum
+        let params = {
+          pageNum: pageNum,
+          pageSize: pageSize,
+          cNames: this.cNamesValue,
+        }
+        getIndexList(params)
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.data = res.data.list
+            }
+          })
+      },
+      //下拉列表信息显示
+      getDropList(){
+        getDropIndexList()
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.dropList = res.data
+            }
+          })
+      },
       //维护设备
-      maintainDev(){
+      maintainDev(value){
         let inputCon = [
           {
             label: '维护内容',
             placeholder: '请输入维护内容',
-            name: 'maintenance_text'
+            name: 'mContent '
+          },
+          {
+            label: '图片上传',
+            placeholder: '请输入维护内容',
+            name: 'file '
           }
         ]
-        let value = {
-          equitment: "双面对齿橡胶齿形带4326-14M-0",
-          equitmentCode: "001430022",
-          key: "0",
-          machine: "卫卷0#",
-          part: "滚珠丝杆轴承020A1D-A",
-          partCode: "041430022",
-          workshop: "车间 0",
-          partModel: "零件型号"
-        }
         this.isShowModal = true
         this.modalTitle = '设备维护'
         this.modalData.data = value
         this.modalData.inputCon = inputCon
       },
       //维修设备
-      serviceDev(){
-        let value = {
-          equitment: "双面对齿橡胶齿形带4326-14M-0",
-          equitmentCode: "001430022",
-          key: "0",
-          machine: "卫卷0#",
-          part: "滚珠丝杆轴承020A1D-A",
-          partCode: "041430022",
-          workshop: "车间 0",
-          partModel: "零件型号"
-        }
+      serviceDev(value){
         let inputCon = [
           {
             label: '维修内容',
             placeholder: '请输入维修内容',
             defaultContent: '',
-            name: 'servicing_text'
+            name: 'content'
           },
           {
             label: '零件更换',
@@ -252,30 +183,35 @@
             label: '新零件名称',
             placeholder: '请输入新零件名称',
             defaultContent: value.part,
-            name: 'c_name'
+            name: 'newCname'
           },
           {
             label: '新零件编码',
             placeholder: '请输入新零件编码',
             defaultContent: value.partCode,
-            name: 'c_code'
+            name: 'newCcode'
           },
           {
             label: '新零件型号',
             placeholder: '请输入新零件型号',
             defaultContent: value.partModel,
-            name: 'c_id'
+            name: 'newCtype'
           },
           {
             label: '新零件厂家',
             placeholder: '请输入新零件厂家',
-            defaultContent: '新零件厂家',
-            name: 'f_id'
+            defaultContent: '',
+            name: 'newFactory'
           },
           {
             label: '使用寿命',
             placeholder: '请输入数字',
-            name: 'f_used'
+            name: 'lifespan'
+          },
+          {
+            label: '图片上传',
+            placeholder: '请输入',
+            name: 'file'
           },
         ]
         this.isShowModal = true
@@ -283,6 +219,10 @@
         this.modalData.data = value
         this.modalData.inputCon = inputCon
       },
+      //扫描设备二维码
+      QRCode(){
+
+      }
     }
   }
 </script>
