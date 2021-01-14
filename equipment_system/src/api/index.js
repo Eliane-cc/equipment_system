@@ -1,4 +1,4 @@
-import {get,post} from './http';
+import {get,post,postform} from './http';
 import {getParams} from "ant-design-vue/lib/vc-form/src/utils";
 
 /*
@@ -11,6 +11,7 @@ export const generateCode = () => get(`user/cpa`);
 //export const login = (params) => post(`login`,params);
 export const login = (params) => post(`user/login`,params);
 
+
 /*
 首页接口
  */
@@ -19,6 +20,9 @@ export const getDropIndexList =() => get(`index/allCName`);
 
 //获取用户列表
 export const getIndexList =(params) => post(`index/allBaseList`,params);
+
+//维护
+export const maintainInfo =(params) => postform(`index/maintain`,params);
 
 /*
 用户接口

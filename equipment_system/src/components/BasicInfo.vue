@@ -195,6 +195,11 @@
             label: '维护内容',
             placeholder: '请输入维护内容',
             name: 'mContent '
+          },
+          {
+            label: '图片上传',
+            placeholder: '请输入维护内容',
+            name: 'file '
           }
         ]
         this.isShowModal = true
@@ -245,6 +250,11 @@
             label: '使用寿命',
             placeholder: '请输入数字',
             name: 'lifespan'
+          },
+          {
+            label: '图片上传',
+            placeholder: '请输入',
+            name: 'file'
           },
         ]
         this.isShowModal = true
