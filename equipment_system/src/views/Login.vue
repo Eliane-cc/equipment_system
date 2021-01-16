@@ -82,10 +82,49 @@
       }
     },
     created() {
+      //自动登录
+      this.autoLogin();
       //生成验证码
       this.generateVerifyCode();
     },
     methods: {
+      //自动登录
+      autoLogin(){
+        let username = window.localStorage.getItem('username')
+        let password = window.localStorage.getItem('password')
+        //let aaccessToken =  Cookies.get('accessToken')
+        if (username && password){
+          let params = {
+            uWorknumber: username,
+            uPassword: password
+          }
+          this.loginUser(params)
+        }
+      },
+      //自动登录
+      loginUser(params){
+        login(params)
+          .then((res) => {
+            console.log("res",res)
+            if (res.msg == "SUCCESS"){
+              //自动登录
+             console.log("自动登录成功")
+              //本地保存当前信用户信息
+              window.localStorage.setItem('userInfo.uName', res.data.uName)
+              window.localStorage.setItem('userInfo.isadmin', res.data.isadmin)
+              window.localStorage.setItem('userInfo.uId', res.data.uId)
+              window.localStorage.setItem('userInfo.uPhone', res.data.uPhone)
+              window.localStorage.setItem('userInfo.uWorknumber', res.data.uWorknumber)
+              //本地保存token
+              Cookies.set('accessToken', document.cookie.substring(6));
+
+              this.$message.success("登录成功！");
+              this.$router.replace('/index')
+            }else{
+              this.$message.error(res.msg);
+            }
+          })
+      },
       //登录
       login(){
         if (this.code){
@@ -103,7 +142,8 @@
                   if (res.msg == "SUCCESS"){
                     //自动登录
                     if (this.isAutoLogin){
-
+                      window.localStorage.setItem('username', this.username)
+                      window.localStorage.setItem('password', this.password)
                     }
                     //本地保存当前信用户信息
                     window.localStorage.setItem('userInfo.uName', res.data.uName)
