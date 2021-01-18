@@ -63,9 +63,11 @@
             <a-menu-item key="7" @click="navPage('/personalInfo')">
               个人信息
             </a-menu-item>
-            <a-menu-item key="8" @click="navPage('/userManagement')">
-              用户管理
-            </a-menu-item>
+            <template v-if="isAdmin == '3'">
+              <a-menu-item key="8" @click="navPage('/userManagement')">
+                用户管理
+              </a-menu-item>
+            </template>
           </a-sub-menu>
         </a-menu>
       </a-col>
@@ -90,6 +92,7 @@
         offset: '1',
         defaultNav: [],
         username: '',
+        isAdmin: '',
       };
     },
     created() {
@@ -98,6 +101,7 @@
     methods: {
       //初始化导航栏跳转显示
       initNav(){
+        this.isAdmin = window.localStorage.getItem('userInfo.isadmin');
         if (this.$route.path == '/index'){
           this.defaultNav[0] = '1'
         }
@@ -119,7 +123,7 @@
         else if(this.$route.path == '/personalInfo'){
           this.defaultNav[1] = '7'
         }
-        else if(this.$route.path == '/userManagement'){
+        else if(this.$route.path == '/userManagement' && this.isAdmin == '3'){
           this.defaultNav[1] = '8'
         }
         this.username = window.localStorage.getItem('userInfo.uName')
