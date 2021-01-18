@@ -73,6 +73,8 @@
       </div>
 
     </div>
+
+    <scan-code></scan-code>
     <!--  维修、维护、更换弹窗  -->
     <dev-modal :show.sync="isShowModal" :data="modalData" :title="modalTitle"></dev-modal>
   </div>
@@ -80,12 +82,14 @@
 
 <script>
   import DevModal from "../Modal/DevModal";
+  import ScanCode from "../ScanCode";
   import {getDropIndexList, getIndexList} from "../../api";
 
   export default {
     name: "MoBasicInfo.vue",
     components: {
-      DevModal
+      DevModal,
+      ScanCode
     },
     data(){
       return{
