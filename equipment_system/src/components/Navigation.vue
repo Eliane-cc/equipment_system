@@ -148,6 +148,13 @@
       //注销登录
       logout(){
         console.log("注销登录，清除缓存")
+        // window.localStorage.setItem('username', '')
+        // window.localStorage.setItem('password', '')
+        window.localStorage.removeItem('username')
+        window.localStorage.removeItem('password')
+        window.localStorage.removeItem('token')
+        // window.localStorage.setItem('token', '')
+        document.cookie = `accessToken=; expires=${new Date(0).toGMTString()}`
         this.$router.replace({path: '/',replace:true})
       }
     },

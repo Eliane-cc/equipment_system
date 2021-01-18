@@ -117,6 +117,7 @@
               window.localStorage.setItem('userInfo.uWorknumber', res.data.uWorknumber)
               //本地保存token
               Cookies.set('accessToken', document.cookie.substring(6));
+             window.localStorage.setItem('token',document.cookie.substring(6))
 
               this.$message.success("登录成功！");
               this.$router.replace('/index')
@@ -153,6 +154,7 @@
                     window.localStorage.setItem('userInfo.uWorknumber', res.data.uWorknumber)
                     //本地保存token
                     Cookies.set('accessToken', document.cookie.substring(6));
+                    window.localStorage.setItem('token',document.cookie.substring(6))
 
                     this.$message.success("登录成功！");
                     this.$router.replace('/index')
