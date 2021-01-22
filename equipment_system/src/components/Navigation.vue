@@ -37,38 +37,40 @@
             <a-icon type="home" />
             <span>首页</span>
           </a-menu-item>
-          <a-sub-menu key="sub1">
-            <span slot="title"><a-icon type="database"/><span>基本数据</span></span>
-            <a-menu-item key="2" @click="navPage('/devInfo')">
-              设备信息
-            </a-menu-item>
-            <a-menu-item key="3" @click="navPage('/equitmentPartInfo')">
-              设备零件信息
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub2">
-            <span slot="title"><a-icon type="setting" /><span>查询管理</span></span>
-            <a-menu-item key="4" @click="navPage('/maintainData')">
-              维护数据
-            </a-menu-item>
-            <a-menu-item key="5" @click="navPage('/repairData')">
-              维修数据
-            </a-menu-item>
-            <a-menu-item key="6" @click="navPage('/changeData')">
-              更换数据
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub3">
-            <span slot="title"><a-icon type="user" /><span>账户信息</span></span>
-            <a-menu-item key="7" @click="navPage('/personalInfo')">
-              个人信息
-            </a-menu-item>
-            <template v-if="isAdmin == '3'">
-              <a-menu-item key="8" @click="navPage('/userManagement')">
-                用户管理
+          <template v-if="isAdmin == '2'">
+            <a-sub-menu key="sub1">
+              <span slot="title"><a-icon type="database"/><span>基本数据</span></span>
+              <a-menu-item key="2" @click="navPage('/devInfo')">
+                设备信息
               </a-menu-item>
-            </template>
-          </a-sub-menu>
+              <a-menu-item key="3" @click="navPage('/equitmentPartInfo')">
+                设备零件信息
+              </a-menu-item>
+            </a-sub-menu>
+            <a-sub-menu key="sub2">
+              <span slot="title"><a-icon type="setting" /><span>查询管理</span></span>
+              <a-menu-item key="4" @click="navPage('/maintainData')">
+                维护数据
+              </a-menu-item>
+              <a-menu-item key="5" @click="navPage('/repairData')">
+                维修数据
+              </a-menu-item>
+              <a-menu-item key="6" @click="navPage('/changeData')">
+                更换数据
+              </a-menu-item>
+            </a-sub-menu>
+            <a-sub-menu key="sub3">
+              <span slot="title"><a-icon type="user" /><span>账户信息</span></span>
+              <a-menu-item key="7" @click="navPage('/personalInfo')">
+                个人信息
+              </a-menu-item>
+              <template v-if="isAdmin == '3'">
+                <a-menu-item key="8" @click="navPage('/userManagement')">
+                  用户管理
+                </a-menu-item>
+              </template>
+            </a-sub-menu>
+          </template>
         </a-menu>
       </a-col>
       <!--  主体内容  -->
