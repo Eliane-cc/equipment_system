@@ -70,6 +70,9 @@
       </div>
     </div>
 
+    <template v-if="isShowScan">
+      <scan-code :show.sync="isShowScan" @code-data="scanCodeData"></scan-code>
+    </template>
     <!--  维修、维护、更换弹窗  -->
     <dev-modal :show.sync="isShowModal" :data="modalData" :title="modalTitle"></dev-modal>
   </div>
@@ -78,6 +81,7 @@
 <script>
   import DevModal from "./Modal/DevModal";
   import {getIndexList, getDropIndexList} from "../api";
+  import ScanCode from "./Modal/ScanCode";
   //表格格式
   const columns = [
     {
@@ -116,12 +120,14 @@
   export default {
     name: "BasicInfo.vue",
     components: {
-      DevModal
+      DevModal,
+      ScanCode
     },
     data(){
       this.cacheData = data.map(item => ({ ...item }));
       return{
         isShowModal: false,
+        isShowScan: false,    //设备扫描弹窗显示
         modalTitle: '',
         modalData: [],
         dropList: [],   //下拉列表
@@ -129,6 +135,7 @@
         form: this.$form.createForm(this, { name: 'advanced_search' }),
         isLoading: true, //表格分页加载
         pageNum: 1,   //记录当前页码
+        deviceName: '',     //设备名称
         pagination: {
           total: 0,
           defaultPageSize: 10,
@@ -178,11 +185,16 @@
 
       //设备二维码
       QRCode(){
-
+        this.isShowScan = true
       },
       //表单查询
       handleSearch() {
         this.indexList()
+      },
+      //扫描到的设备数据
+      scanCodeData(data){
+        console.log("我是传回父组件的数据", data)
+
       },
       //设备NFC
       devNFC(){

@@ -119,7 +119,6 @@
           },
         ],
         deviceName: '',     //设备名称
-
       }
     },
     created() {

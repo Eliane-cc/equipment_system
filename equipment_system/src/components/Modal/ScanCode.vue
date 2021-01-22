@@ -1,7 +1,7 @@
 <template>
   <div v-if='show'>
     <a-modal v-model="show" title="二维码扫描" :footer="null" @cancel="cancelScan">
-      <div>
+      <div class="flex">
         <video id="video" width="300px" height="300px" autoplay="autoplay"></video>
       </div>
       <template>
