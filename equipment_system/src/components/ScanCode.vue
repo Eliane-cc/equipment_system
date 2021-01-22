@@ -1,116 +1,108 @@
 <template>
-  <div class="scan">
-    <div id="bcid">
-      <div style="height:40%"></div>
-      <p class="tip">...载入中...</p>
-    </div>
-    <footer>
-      <button @click="startRecognize">1.创建控件</button>
-      <button @click="startScan">2.开始扫描</button>
-      <button @click="cancelScan">3.结束扫描</button>
-
-      <button @click="closeScan">4.关闭控件</button>
-    </footer>
+  <div>
+    <input type="button" title="开启摄像头" value="开启摄像头" @click="getMedia()" />
+    <video id="video" width="500px" height="500px" autoplay="autoplay"></video>
+    <canvas id="canvas" width="500px" height="500px"></canvas>
+    <button id="snap" @click="takePhoto()">拍照</button>
+    <button id="close" @click="closeMedia()">关闭</button>
+    <button id="upload" @click="uploadImage()">上传</button>
   </div>
 </template>
 
-<script type='text/ecmascript-6'>
-  let scan = null
+<script>
+  //获得video摄像头区域
+  //let video = document.getElementById("video");
+  //var canvas = document.getElementById('canvas');
+  //var context = canvas.getContext('2d');
 
   export default {
     name: "ScanCode.vue",
     data(){
       return{
-        codeUrl: '',
+        context: '',
+        vedio: '',
+        canvas: ''
       }
     },
-    // mounted() {
-    //   const self = this
-    //   if (window.plus) {
-    //     self.plusReady()
-    //   } else {
-    //     document.addEventListener('plusready', self.plusReady, false);
-    //   }
-    //   document.addEventListener('DOMContentLoaded', function() {
-    //     alert('DOMLoaded')
-    //     self.domready = true;
-    //     self.plusReady()
-    //   }, false)
-    // },
+    created() {
+      this.vedio = document.getElementById('video');
+      this.canvas = document.getElementById('canvas');
+      this.context = this.canvas.getContext('2d');
+    },
     methods: {
-      // 创建扫描控件
-      startRecognize() {
-        let that = this
-        console.log("创建开始扫描")
-        if (!window.plus) return
-        scan = new plus.barcode.Barcode('bcid')
-        scan.onmarked = onmarked
+      closeMedia() {
+        var video = document.getElementById('video');
+        if (!video.srcObject) return
+        let stream = video.srcObject
+        let tracks = stream.getTracks();
+        tracks.forEach(track => {
+          track.stop()
+        })
+      },
+      getMedia() {
+        let constraints = {
+          video: {width: 500, height: 500},
+          audio: true
+        };
+        /*
+        这里介绍新的方法:H5新媒体接口 navigator.mediaDevices.getUserMedia()
+        这个方法会提示用户是否允许媒体输入,(媒体输入主要包括相机,视频采集设备,屏幕共享服务,麦克风,A/D转换器等)
+        返回的是一个Promise对象。
+        如果用户同意使用权限,则会将 MediaStream对象作为resolve()的参数传给then()
+        如果用户拒绝使用权限,或者请求的媒体资源不可用,则会将 PermissionDeniedError作为reject()的参数传给catch()
+        */
+        let promise = navigator.mediaDevices.getUserMedia(constraints);
+        promise.then(function (MediaStream) {
+          video.srcObject = MediaStream;
+          video.play();
+        }).catch(function (PermissionDeniedError) {
+          console.log(PermissionDeniedError);
+        })
+      },
+      takePhoto() {
+        //获得Canvas对象
+        let canvas = document.getElementById("canvas");
+        let ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, 500, 500);
+      },
+      uploadImage(){
+        canvas.width = 300;
+        canvas.height = 300;
+        context.drawImage(video, 0, 0, 300, 300);
+        var imgData = canvas.toDataURL("image/jpg");
+        imgData = imgData.replace(/^data:image\/(png|jpg);base64,/,"")
+        //上传到后台。
+        // var uploadAjax = $.ajax({
+        //   type: "post",
+        //   //后端需要调用的地址
+        //   url:"/receiveImage/",
+        //   data: JSON.stringify({"imgData": imgData}),
+        //   contentType:"json/application",
+        //   //设置超时
+        //   timeout:10000,
+        //   async: true,
+        //   success: function (htmlVal) {
+        //     //成功后回调
+        //   },
+        //   error: function(data) {
+        //   },
+        //   //调用执行后调用的函数
+        //   complete: function (XMLHttpRequest, textStatus) {
+        //     if(textStatus == 'timeout'){
+        //       uploadAjax.abort(); //取消请求
+        //       //超时提示：请求超时，请重试
+        //       alert("请求超时，请重试")
+        //       //请求超时返回首页
+        //       closeCard();
+        //     }
+        //   }
+        // });
+      }
 
-        function onmarked(type, result, file) {
-          console.log("type, result",type, result)
-          switch (type) {
-            case plus.barcode.QR:
-              type = 'QR'
-              break
-            case plus.barcode.EAN13:
-              type = 'EAN13'
-              break
-            case plus.barcode.EAN8:
-              type = 'EAN8'
-              break
-            default:
-              type = '其它' + type
-              break
-          }
-          result = result.replace(/\n/g, '')
-          that.codeUrl = result
-          alert(result)
-          that.closeScan()
-        }
-      },
-
-      // 开始扫描
-      startScan() {
-        if (!window.plus) return
-        scan.start()
-      },
-      // 关闭扫描
-      cancelScan() {
-        if (!window.plus) return
-        scan.cancel()
-      },
-      // 关闭条码识别控件
-      closeScan() {
-        if (!window.plus) return
-        scan.close()
-      },
     }
   }
 </script>
 
-<style lang="less" scoped>
-  .scan {
-    height: 100%;
+<style scoped>
 
-    #bcid {
-      width: 100%;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 0;
-      bottom: 3rem;
-      text-align: center;
-      color: #fff;
-      background: #ccc;
-    }
-
-    footer {
-      position: absolute;
-      left: 0;
-      bottom: 1rem;
-      height: 2rem;
-      line-height: 2rem;
-      z-index: 2;
-    }
-  }
 </style>

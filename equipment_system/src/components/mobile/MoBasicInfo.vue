@@ -119,6 +119,7 @@
       }
     },
     created() {
+      this.QRCode()
       //首页分页查询
       this.indexList()
       //下拉列表信息获取
@@ -225,6 +226,28 @@
       },
       //扫描设备二维码
       QRCode(){
+        // QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+        //
+        // const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
+        //   camQrResult.textContent = error;
+        //   camQrResult.style.color = 'inherit';
+        // });
+        // scanner.start().then(() => {
+        //   scanner.hasFlash().then(hasFlash => {
+        //     camHasFlash.textContent = hasFlash;
+        //     if (hasFlash) {
+        //       flashToggle.style.display = 'inline-block';
+        //       flashToggle.addEventListener('click', () => {
+        //         scanner.toggleFlash().then(() => flashState.textContent = scanner.isFlashOn() ? 'on' : 'off');
+        //       });
+        //     }
+        //   });
+        // });
+        //
+        // // for debugging
+        // window.scanner = scanner;
+      },
+      devNFC(){
 
       }
     }
