@@ -118,14 +118,18 @@
         //this.picPath = this.base64ImgtoFile('data:image/jpg;base64,'+imgData)
         this.picPath = 'data:image/jpg;base64,'+imgData
         console.log("图片地址", this.picPath)
-        // const code = QRCode(imgData, 300, 300, {
-        //   inversionAttempts: "dontInvert",
-        // });
-        // if(code){
-        //   console.log("我是码",code.data)
-        // }else{
-        //   alert("识别错误")
-        // }
+
+        var imageData = context.getImageData(0, 0, 300, 300);
+
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: "dontInvert",
+        });
+
+        if(code){
+          console.log("我是码",code.data)
+        }else{
+          alert("识别错误")
+        }
         //上传到后台。
         // var uploadAjax = $.ajax({
         //   type: "post",
