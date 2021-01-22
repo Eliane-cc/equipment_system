@@ -74,7 +74,9 @@
 
     </div>
 
-    <scan-code></scan-code>
+    <template v-if="isShowScan">
+      <scan-code :show.sync="isShowScan"></scan-code>
+    </template>
     <!--  维修、维护、更换弹窗  -->
     <dev-modal :show.sync="isShowModal" :data="modalData" :title="modalTitle"></dev-modal>
   </div>
@@ -82,7 +84,7 @@
 
 <script>
   import DevModal from "../Modal/DevModal";
-  import ScanCode from "../ScanCode";
+  import ScanCode from "../Modal/ScanCode";
   import {getDropIndexList, getIndexList} from "../../api";
 
   export default {
@@ -94,6 +96,7 @@
     data(){
       return{
         isShowModal: false,
+        isShowScan: false,    //设备扫描弹窗显示
         modalTitle: '',
         modalData: [],
         dropList: [],
@@ -119,7 +122,7 @@
       }
     },
     created() {
-      this.QRCode()
+      //this.QRCode()
       //首页分页查询
       this.indexList()
       //下拉列表信息获取
@@ -226,6 +229,7 @@
       },
       //扫描设备二维码
       QRCode(){
+        this.isShowScan = true
         // QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
         //
         // const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
