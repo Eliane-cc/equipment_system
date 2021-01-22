@@ -1,15 +1,19 @@
 <template>
   <div>
     <input type="button" title="开启摄像头" value="开启摄像头" @click="getMedia()" />
-    <video id="video" width="500px" height="500px" autoplay="autoplay"></video>
-    <canvas id="canvas" width="500px" height="500px"></canvas>
+    <video id="video" width="300px" height="300px" autoplay="autoplay"></video>
+    <img :src="imgSrc" alt="" style="width: 200px;height: 200px;">
+    <canvas id="canvas" width="300px" height="300px"></canvas>
+    <div>数值</div>
     <button id="snap" @click="takePhoto()">拍照</button>
     <button id="close" @click="closeMedia()">关闭</button>
     <button id="upload" @click="uploadImage()">上传</button>
+    <img :src="picPath" alt="">
   </div>
 </template>
 
 <script>
+  import QRCode from 'qrcode-decoder';     //引入二维码
   //获得video摄像头区域
   //let video = document.getElementById("video");
   //var canvas = document.getElementById('canvas');
@@ -20,20 +24,34 @@
     data(){
       return{
         context: '',
-        vedio: '',
-        canvas: ''
+        video: '',
+        canvas: '',
+        picPath: '',
+        imgSrc: require('../assets/bg.jpeg')
       }
     },
-    created() {
-      this.vedio = document.getElementById('video');
-      this.canvas = document.getElementById('canvas');
-      this.context = this.canvas.getContext('2d');
+    mounted() {
+      this.initCanvas()
+      this.getMedia()
+      this.takePhoto()
     },
+    // created() {
+    //   this.vedio = document.getElementById('video');
+    //   this.canvas = document.getElementById('canvas');
+    //   if (this.canvas.getContext()){
+    //     this.context = this.canvas.getContext('2d');
+    //   }
+    // },
     methods: {
+      //初始化画布
+      initCanvas(){
+        this.video = document.getElementById('video');
+        this.canvas = document.getElementById('canvas');
+        this.context = this.canvas.getContext('2d');
+      },
       closeMedia() {
-        var video = document.getElementById('video');
-        if (!video.srcObject) return
-        let stream = video.srcObject
+        if (!this.video.srcObject) return
+        let stream = this.video.srcObject
         let tracks = stream.getTracks();
         tracks.forEach(track => {
           track.stop()
@@ -41,7 +59,7 @@
       },
       getMedia() {
         let constraints = {
-          video: {width: 500, height: 500},
+          video: {width: 300, height: 300},
           audio: true
         };
         /*
@@ -60,17 +78,54 @@
         })
       },
       takePhoto() {
-        //获得Canvas对象
-        let canvas = document.getElementById("canvas");
-        let ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, 500, 500);
+        let video = document.getElementById('video')
+
+        //const imgUpload = new Image()
+        //console.log("this.video",this.video,video)
+        //imgUpload.src = video
+      //  imgUpload.src = this.imgSrc
+        // imgUpload.onload = function(){
+        //   this.context.drawImage(imgUpload, 0, 0, 300, 300);
+        // }
+        setTimeout(() => {
+          this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+          this.context.save() // 保存
+          // 绘制视窗
+          this.context.beginPath()
+          // 绘制图片
+          this.context.drawImage(video, 0, 0,300,300)
+          this.context.restore() // 状态恢复
+        }, 10)
+        console.log("拍照",this.context)
+        //ctx.drawImage(this.video, 0, 0, 500, 500);
       },
       uploadImage(){
-        canvas.width = 300;
-        canvas.height = 300;
-        context.drawImage(video, 0, 0, 300, 300);
+        let canvas = document.getElementById('canvas')
+        let context = canvas.getContext('2d');
+       // this.canvas.width = 300;
+        //this.canvas.height = 300;
+        //this.context.drawImage(this.video, 0, 0, 300, 300);
+        const imgUpload = new Image()
+        imgUpload.src = this.video
+        imgUpload.onload = function(){
+          context.drawImage(imgUpload, 0, 0, 300, 300);
+        }
         var imgData = canvas.toDataURL("image/jpg");
         imgData = imgData.replace(/^data:image\/(png|jpg);base64,/,"")
+        console.log("上传图片", imgData)
+        //转码base64
+          //这里的 picPath 'data:image/png;base64,'+ base64为编码字符串拼接形成图片的
+        //this.picPath = this.base64ImgtoFile('data:image/jpg;base64,'+imgData)
+        this.picPath = 'data:image/jpg;base64,'+imgData
+        console.log("图片地址", this.picPath)
+        // const code = QRCode(imgData, 300, 300, {
+        //   inversionAttempts: "dontInvert",
+        // });
+        // if(code){
+        //   console.log("我是码",code.data)
+        // }else{
+        //   alert("识别错误")
+        // }
         //上传到后台。
         // var uploadAjax = $.ajax({
         //   type: "post",
@@ -97,8 +152,22 @@
         //     }
         //   }
         // });
-      }
-
+      },
+      //base64转图片
+      base64ImgtoFile(dataurl, filename = 'file') {
+        let arr = dataurl.split(',')
+        let mime = arr[0].match(/:(.*?);/)[1]
+        let suffix = mime.split('/')[1]
+        let bstr = atob(arr[1])
+        let n = bstr.length
+        let u8arr = new Uint8Array(n)
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n)
+        }
+        return new File([u8arr], `${filename}.${suffix}`, {
+          type: mime
+        })
+      },
     }
   }
 </script>
