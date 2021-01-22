@@ -18,6 +18,9 @@ export const login = (params) => post(`user/login`,params);
 //首页下拉列表
 export const getDropIndexList =() => get(`index/allCName`);
 
+//首页扫描二维码接口
+export const scannCode =() => post(`index/getInfoByEName`);
+
 //获取用户列表
 export const getIndexList =(params) => post(`index/allBaseList`,params);
 

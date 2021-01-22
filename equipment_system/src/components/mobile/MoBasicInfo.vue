@@ -35,9 +35,9 @@
         设备NFC
       </a-button>
     </div>
-    <div class="result">
+    <div class="result" v-if="deviceName">
       <div class="result-title con">
-        双面对齿橡胶齿形带4326-14M
+        {{deviceName}}
       </div>
       <div class="result-content">
         <template v-for="(item,index) in comInfo">
@@ -71,11 +71,10 @@
           </a-card>
         </template>
       </div>
-
     </div>
 
     <template v-if="isShowScan">
-      <scan-code :show.sync="isShowScan"></scan-code>
+      <scan-code :show.sync="isShowScan" @code-data="scanCodeData"></scan-code>
     </template>
     <!--  维修、维护、更换弹窗  -->
     <dev-modal :show.sync="isShowModal" :data="modalData" :title="modalTitle"></dev-modal>
@@ -118,7 +117,9 @@
             name: '零件一',
             code: '2343543',
           },
-        ]
+        ],
+        deviceName: '',     //设备名称
+
       }
     },
     created() {
@@ -250,6 +251,11 @@
         //
         // // for debugging
         // window.scanner = scanner;
+      },
+      //扫描到的设备数据
+      scanCodeData(data){
+        console.log("我是传回父组件的数据", data)
+
       },
       devNFC(){
 

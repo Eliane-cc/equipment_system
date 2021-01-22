@@ -16,7 +16,8 @@
 </template>
 
 <script>
-  import QRCode from 'qrcode-decoder';     //引入二维码
+  import QRCode from 'qrcode-decoder';
+  import {scannCode} from "../../api";
 
   export default {
     name: "ScanCode.vue",
@@ -108,9 +109,24 @@
           this.$emit("update:show",false)
           this.closeMedia()
           console.log("我是码", code.data)
+
+          //请求设备信息
+          let params = {
+            eCode: code.data
+          }
+          console.log("params",params)
+          scannCode(params)
+            .then((res) => {
+              console.log("scan res",res)
+              if (res.msg == "SUCCESS"){
+                this.$emit('code-data', res.data)
+              }else{
+                this.$message.error(res.msg);
+              }
+            })
         } else {
           //扫描失败
-          console.log("对不起，无法识别到二维码")
+          //console.log("对不起，无法识别到二维码")
         }
       },
       //关闭扫描弹窗
