@@ -79,7 +79,7 @@
               <a-form-item :label="item.label"   v-if="!(item.label == '新零件名称' ||item.label == '新零件编码' || item.label == '新零件型号' || item.label == '新零件厂家' || item.label == '使用寿命')">
                 <template v-if="title == '设备维修'">
                   <template v-if="item.label == '维修内容'">
-                    <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                    <a-textarea :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/>
                   </template>
                   <template v-else-if="item.label == '零件更换'">
                     <a-switch checked-children="是" un-checked-children="否" @change="switchChange" v-model="isShow" @click="switchClick"/>
@@ -92,7 +92,7 @@
                       ref="file"
                       name="file"
                       @customRequest="picRequest"
-                      @change="handlePicChange"
+                      :remove="handleRemove"
                       :beforeUpload="beforeUpload"
                     >
                       <a-button> <a-icon type="upload" /> upload </a-button>
@@ -100,14 +100,14 @@
                   </template>
                   <template v-else-if="item.label == '新零件名称' ||item.label == '新零件编码' || item.label == '新零件型号' || item.label == '新零件厂家' || item.label == '使用寿命'">
                     <template v-if="item.label == '使用寿命'">
-                      <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear/> 天
+                      <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear v-decorator="[item.name]"/> 天
                     </template>
                     <template v-else>
-                      <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                      <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear v-decorator="[item.name]"/>
                     </template>
                   </template>
                   <template v-else>
-                    <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                    <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear v-decorator="[item.name]"/>
                   </template>
                 </template>
                 <!--      维护内容          -->
@@ -204,16 +204,12 @@
               fileList.forEach(file => {
                 formData.append('file', file);
               });
-              formData.append("eId", this.data.data.eId);
-              formData.append("mContent", this.mContent);
-              // let form = new FormData();
-              // form.append("eId", this.data.data.eId);
-              // form.append("file", this.fileList);
-              // form.append("mContent", this.mContent);
 
               console.log("表单数据",formData)
               this.confirmCreateLoading = true
               if (formData && this.mContent){
+                formData.append("eId", this.data.data.eId);
+                formData.append("mContent", this.mContent);
                 //设备维护
                 if (text == "设备维护"){
                   console.log("我是设备维护")
@@ -223,51 +219,45 @@
                     processData: false,
                     data: formData,
                     success: () => {
-                      this.$message.success('upload successfully.');
+                      this.$message.success('保存成功');
                       this.mContent = ''
                       this.fileList = []
                       this.$emit("update:modalVisible",false);
                     },
-                    error: () => {
-                      this.$message.error('upload failed.');
+                    error: (err) => {
+                      this.$message.error('保存失败');
                       this.mContent = ''
                       this.fileList = []
                       this.$emit("update:modalVisible",false);
                     },
                   });
-                  // maintainInfo(form)
-                  //   .then((res) => {
-                  //     if (res.msg == "SUCCESS"){
-                  //       this.$message.success("保存成功！");
-                  //     }else{
-                  //       this.$message.error(res.msg);
-                  //     }
-                  //     this.mContent = ''
-                  //     this.fileList = []
-                  //     this.$emit("update:modalVisible",false);
-                  //   })
                   this.confirmCreateLoading = false
                 }
                 else if (text == '设备维修'){
-                  addDev(data)
-                    .then((res) => {
-                      console.log("res",res)
-                      if (res.msg == "SUCCESS"){
-                        this.$message.success("添加设备成功！");
-                        this.form.resetFields();
-                        //重新刷新设备
-                        this.devList();
-                      }else{
-                        this.$message.error(res.msg);
-                        this.form.resetFields();
-                      }
+                  console.log("设备维修数据",this.form.getFieldsValue())
+                  reqwest({
+                    url: 'http://localhost:8085/api/index/repairORchange',
+                    method: 'post',
+                    processData: false,
+                    data: formData,
+                    success: () => {
+                      this.$message.success('保存成功');
+                      this.mContent = ''
+                      this.fileList = []
                       this.$emit("update:modalVisible",false);
-                    })
+                    },
+                    error: () => {
+                      this.$message.error('保存失败');
+                      this.mContent = ''
+                      this.fileList = []
+                      this.$emit("update:modalVisible",false);
+                    },
+                  });
                   this.confirmCreateLoading = false
                 }
               }
               else{
-                this.$message.info("维护内容不能为空！");
+                this.$message.info("内容不能为空！");
                 this.confirmCreateLoading = false
               }
             }
