@@ -120,7 +120,7 @@
                       ref="file"
                       name="file"
                       @customRequest="picRequest"
-                      @change="handlePicChange"
+                      :remove="handleRemove"
                       :beforeUpload="beforeUpload"
                     >
                       <a-button> <a-icon type="upload" /> upload </a-button>
@@ -152,6 +152,7 @@
 
 <script>
   import {maintainInfo} from "../../api";
+  import reqwest from 'reqwest';
 
   export default {
     name: "DevModal.vue",
@@ -167,8 +168,15 @@
       }
     },
     methods: {
+      handleRemove(file) {
+        const index = this.fileList.indexOf(file);
+        const newFileList = this.fileList.slice();
+        newFileList.splice(index, 1);
+        this.fileList = newFileList;
+      },
       //图片上传之前事件
       beforeUpload(file, fileList){
+        this.fileList = [...this.fileList, file];
         console.log('fileList', file,fileList)
         return false
       },
@@ -191,28 +199,53 @@
           if (!err) {
             if (text == '设备维护'){
               console.log("测试")
-              let form = new FormData();
-              form.append("eId", this.data.data.eId);
-              form.append("file", this.fileList);
-              form.append("mContent", this.mContent);
+              const { fileList } = this;
+              const formData = new FormData();
+              fileList.forEach(file => {
+                formData.append('file', file);
+              });
+              formData.append("eId", this.data.data.eId);
+              formData.append("mContent", this.mContent);
+              // let form = new FormData();
+              // form.append("eId", this.data.data.eId);
+              // form.append("file", this.fileList);
+              // form.append("mContent", this.mContent);
 
-              console.log("表单数据",form)
+              console.log("表单数据",formData)
               this.confirmCreateLoading = true
-              if (form && this.mContent){
+              if (formData && this.mContent){
                 //设备维护
                 if (text == "设备维护"){
                   console.log("我是设备维护")
-                  maintainInfo(form)
-                    .then((res) => {
-                      if (res.msg == "SUCCESS"){
-                        this.$message.success("保存成功！");
-                      }else{
-                        this.$message.error(res.msg);
-                      }
+                  reqwest({
+                    url: 'http://localhost:8085/api/index/maintain',
+                    method: 'post',
+                    processData: false,
+                    data: formData,
+                    success: () => {
+                      this.$message.success('upload successfully.');
                       this.mContent = ''
                       this.fileList = []
                       this.$emit("update:modalVisible",false);
-                    })
+                    },
+                    error: () => {
+                      this.$message.error('upload failed.');
+                      this.mContent = ''
+                      this.fileList = []
+                      this.$emit("update:modalVisible",false);
+                    },
+                  });
+                  // maintainInfo(form)
+                  //   .then((res) => {
+                  //     if (res.msg == "SUCCESS"){
+                  //       this.$message.success("保存成功！");
+                  //     }else{
+                  //       this.$message.error(res.msg);
+                  //     }
+                  //     this.mContent = ''
+                  //     this.fileList = []
+                  //     this.$emit("update:modalVisible",false);
+                  //   })
                   this.confirmCreateLoading = false
                 }
                 else if (text == '设备维修'){
