@@ -179,7 +179,7 @@
             label: '维修内容',
             placeholder: '请输入维修内容',
             defaultContent: '',
-            name: 'content'
+            name: 'mContent'
           },
           {
             label: '零件更换',

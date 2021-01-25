@@ -64,26 +64,41 @@
       <div>
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
-          <a-row type="flex" justify="center">
-            <a-col :span="12" v-for="(item,index) in data.displayData" :key="index" class="margin-top" >
-              <template v-if="item.title == '图片'">
-                <a-col :span="8" class="title">
-                  {{item.title}}：
+          <a-row>
+            <template v-for="(item,index) in data.displayData" >
+              <template v-if="item.title == '维护时间'">
+                <a-col :span="15" class="margin-top" >
+                  <a-col :span="6" class="title">
+                    {{item.title}}：
+                  </a-col>
+                  <a-col :span="16" class="text_center">
+                    {{item.content}}
+                  </a-col>
                 </a-col>
-                <a-col :span="16" class="text_center">
-                  <img src="../../assets/bg.jpeg" alt="" class="imgList">
-<!--                  {{item.content}}-->
+              </template>
+              <template v-else-if="item.title == '图片'">
+                <a-col :span="24" class="margin-top" >
+                  <a-col :span="4" class="title">
+                    {{item.title}}：
+                  </a-col>
+                  <a-col :span="24">
+                    <template v-for="(itemPic,indexPic) in item.pName">
+                      <img src="../../assets/bg.jpeg" alt="" class="imgList">
+                    </template>
+                  </a-col>
                 </a-col>
               </template>
               <template v-else>
-                <a-col :span="8" class="title">
-                  {{item.title}}：
-                </a-col>
-                <a-col :span="16" class="text_center">
-                  {{item.content}}
+                <a-col :span="12" class="margin-top" >
+                  <a-col :span="8" class="title">
+                    {{item.title}}：
+                  </a-col>
+                  <a-col :span="16" class="text_center">
+                    {{item.content}}
+                  </a-col>
                 </a-col>
               </template>
-            </a-col>
+            </template>
           </a-row>
         </div>
       </div>
@@ -641,15 +656,16 @@
     margin-bottom: 10px;
   }
   .content{
-   margin-left: 10px;
+    margin-left: 10px;
   }
   .display{
     margin-bottom: 20px;
   }
   .imgList{
-    /*width: 100px;*/
-    /*height: 100px;*/
-
+    width: 140px;
+    height: 140px;
+    margin-top: 10px;
+    margin-left: 10px;
   }
 
   /* 覆盖默认的ant样式 */
