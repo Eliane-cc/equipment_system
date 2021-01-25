@@ -100,14 +100,14 @@
                   </template>
                   <template v-else-if="item.label == '新零件名称' ||item.label == '新零件编码' || item.label == '新零件型号' || item.label == '新零件厂家' || item.label == '使用寿命'">
                     <template v-if="item.label == '使用寿命'">
-                      <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear v-decorator="[item.name]"/> 天
+                      <a-input-number v-model="lifespan" :min="0" :name="item.name" @change="onlispanChange" allowClear/> 天
                     </template>
                     <template v-else>
-                      <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear v-decorator="[item.name]"/>
+                      <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear  v-decorator="[item.name,  {rules: [{required: false}]}]"/>
                     </template>
                   </template>
                   <template v-else>
-                    <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear v-decorator="[item.name]"/>
+                    <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear  v-decorator="[item.name,  {rules: [{required: false}]}]"/>
                   </template>
                 </template>
                 <!--      维护内容          -->
@@ -134,10 +134,10 @@
               <template v-else-if="isShow">
                 <a-form-item :label="item.label">
                   <template v-if="item.label == '使用寿命'">
-                    <a-input-number v-model="value" :min="0" :name="item.name" @change="onChange" allowClear/> 天
+                    <a-input-number v-model="lifespan" :min="0" :name="item.name" @change="onlispanChange" allowClear/> 天
                   </template>
                   <template v-else>
-                    <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear/>
+                    <a-input :placeholder="item.placeholder" :rows="3" :name="item.name" allowClear v-decorator="[item.name,  {rules: [{required: false}]}]"/>
                   </template>
                 </a-form-item>
               </template>
@@ -161,7 +161,7 @@
       return{
         form: this.$form.createForm(this, { name: 'coordinated' }),
         fileList: [],
-        value: '',
+        lifespan: '',
         isShow: false,
         mContent: '',
         confirmCreateLoading: false
@@ -187,129 +187,127 @@
       //图片上传事件
       handlePicChange(info){
         this.fileList = info.fileList
-        // this.fileList.push(info.file)
         console.log("图片变化事件",this.fileList,info)
       },
       //维护维修事件
       handleEdit(text){
-        console.log(text)
         let data;
+        const _this = this;
         // 拉取表单数据的方法
         this.form.validateFields((err, values) => {
           if (!err) {
-            if (text == '设备维护'){
-              console.log("测试")
-              const { fileList } = this;
-              const formData = new FormData();
-              fileList.forEach(file => {
-                formData.append('file', file);
-              });
+            const { fileList } = this;
+            const formData = new FormData();
+            fileList.forEach(file => {
+              formData.append('file', file);
+            });
 
-              console.log("表单数据",formData)
+            if (text == '设备维护'){
+              formData.append("eId", this.data.data.eId);
+              formData.append("mContent", this.mContent);
+
               this.confirmCreateLoading = true
-              if (formData && this.mContent){
-                formData.append("eId", this.data.data.eId);
-                formData.append("mContent", this.mContent);
+              if (this.mContent){
                 //设备维护
-                if (text == "设备维护"){
-                  console.log("我是设备维护")
-                  reqwest({
-                    url: 'http://localhost:8085/api/index/maintain',
-                    method: 'post',
-                    processData: false,
-                    data: formData,
-                    success: () => {
-                      this.$message.success('保存成功');
-                      this.mContent = ''
-                      this.fileList = []
-                      this.$emit("update:modalVisible",false);
-                    },
-                    error: (err) => {
-                      this.$message.error('保存失败');
-                      this.mContent = ''
-                      this.fileList = []
-                      this.$emit("update:modalVisible",false);
-                    },
-                  });
-                  this.confirmCreateLoading = false
-                }
-                else if (text == '设备维修'){
-                  console.log("设备维修数据",this.form.getFieldsValue())
-                  reqwest({
-                    url: 'http://localhost:8085/api/index/repairORchange',
-                    method: 'post',
-                    processData: false,
-                    data: formData,
-                    success: () => {
-                      this.$message.success('保存成功');
-                      this.mContent = ''
-                      this.fileList = []
-                      this.$emit("update:modalVisible",false);
-                    },
-                    error: () => {
-                      this.$message.error('保存失败');
-                      this.mContent = ''
-                      this.fileList = []
-                      this.$emit("update:modalVisible",false);
-                    },
-                  });
-                  this.confirmCreateLoading = false
-                }
+                reqwest({
+                  url: 'http://localhost:8085/api/index/maintain',
+                  method: 'post',
+                  processData: false,
+                  data: formData,
+                  success: () => {
+                    this.$message.success('保存成功');
+                  },
+                  error: (err) => {
+                    this.$message.error('保存失败');
+                  },
+                  complete: () => {
+                    this.mContent = ''
+                    this.fileList = []
+                  }
+                });
+                this.confirmCreateLoading = false
               }
               else{
                 this.$message.info("内容不能为空！");
                 this.confirmCreateLoading = false
               }
+              this.$emit("update:show",false)
             }
             else if(text == '设备维修'){
-              console.log("测试")
-              let form = new FormData();
-              form.append("eId", this.data.data.eId);
-              form.append("file", this.fileList);
-              form.append("mContent", this.mContent);
+              console.log("设备维修信息",this.lifespan)
+              //设备维修数值
+              formData.append("eId", this.data.data.eId);
+              formData.append('content',this.form.getFieldsValue().content);
 
-              console.log("表单数据",form)
-              this.confirmCreateLoading = true
-              if (form && this.mContent){
-                //设备维护
-                if (text == "设备维护"){
-                  console.log("我是设备维护")
-                  maintainInfo(form)
-                    .then((res) => {
-                      if (res.msg == "SUCCESS"){
-                        this.$message.success("保存成功！");
-                      }else{
-                        this.$message.error(res.msg);
-                      }
+              //更换
+              if (this.isShow){
+                formData.append("cId", this.data.data.cId);
+                formData.append("oldCname", this.data.data.cName);
+                formData.append("oldCcode", this.data.data.cCode);
+                formData.append("oldCtype", this.data.data.cType);
+                formData.append('newCcode',this.form.getFieldsValue().newCcode);
+                formData.append('newCname',this.form.getFieldsValue().newCname);
+                formData.append('newCtype',this.form.getFieldsValue().newCtype);
+                formData.append('newFactory',this.form.getFieldsValue().newFactory);
+                formData.append("lifespan", this.lifespan);
+
+                this.confirmCreateLoading = true
+                if (formData){
+                  //更换
+                  reqwest({
+                    url: 'http://localhost:8085/api/index/change',
+                    method: 'post',
+                    processData: false,
+                    data: formData,
+                    success: () => {
+                      this.$message.success('保存成功');
+                    },
+                    error: (err) => {
+                      this.$message.error('保存失败');
+                    },
+                    complete: () => {
                       this.mContent = ''
                       this.fileList = []
-                      this.$emit("update:modalVisible",false);
-                    })
-                  this.confirmCreateLoading = false
+                      this.lifespan = ''
+                      this.isShow = false
+                      this.form.resetFields();
+                      this.$emit("update:show",false);
+                    }
+                  });
                 }
-                else if (text == '设备维修'){
-                  addDev(data)
-                    .then((res) => {
-                      console.log("res",res)
-                      if (res.msg == "SUCCESS"){
-                        this.$message.success("添加设备成功！");
-                        this.form.resetFields();
-                        //重新刷新设备
-                        this.devList();
-                      }else{
-                        this.$message.error(res.msg);
-                        this.form.resetFields();
-                      }
-                      this.$emit("update:modalVisible",false);
-                    })
-                  this.confirmCreateLoading = false
-                }
-              }
-              else{
-                this.$message.info("维修内容不能为空！");
                 this.confirmCreateLoading = false
               }
+              //维修
+              else{
+                this.confirmCreateLoading = true
+                if (formData){
+                  //设备维修
+                  reqwest({
+                    url: 'http://localhost:8085/api/index/repair',
+                    method: 'post',
+                    processData: false,
+                    data: formData,
+                    success: () => {
+                      this.$message.success('保存成功');
+                    },
+                    error: (err) => {
+                      this.$message.error('保存失败');
+                    },
+                    complete: () => {
+                      this.mContent = ''
+                      this.fileList = []
+                      this.lifespan = ''
+                      this.isShow = false
+                      this.form.resetFields();
+                      this.$emit("update:show",false);
+                    }
+                  });
+                }
+                this.confirmCreateLoading = false
+              }
+              console.log("设备维修表单数据",formData)
             }
+
           }
         })
       },
@@ -324,8 +322,8 @@
         this.$emit("update:show",false)
       },
       //使用寿命改变事件
-      onChange(){
-
+      onlispanChange(value){
+        console.log("使用寿命",value,this.lifespan)
       },
       //是否更换零件
       switchChange(){
