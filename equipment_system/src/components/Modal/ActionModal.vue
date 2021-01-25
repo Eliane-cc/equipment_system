@@ -66,12 +66,23 @@
         <div v-if="data.displayData">
           <a-row type="flex" justify="center">
             <a-col :span="12" v-for="(item,index) in data.displayData" :key="index" class="margin-top" >
-              <a-col :span="8" class="title">
-                {{item.title}}：
-              </a-col>
-              <a-col :span="16" class="text_center">
-                {{item.content}}
-              </a-col>
+              <template v-if="item.title == '图片'">
+                <a-col :span="8" class="title">
+                  {{item.title}}：
+                </a-col>
+                <a-col :span="16" class="text_center">
+                  <img src="../../assets/bg.jpeg" alt="" class="imgList">
+<!--                  {{item.content}}-->
+                </a-col>
+              </template>
+              <template v-else>
+                <a-col :span="8" class="title">
+                  {{item.title}}：
+                </a-col>
+                <a-col :span="16" class="text_center">
+                  {{item.content}}
+                </a-col>
+              </template>
             </a-col>
           </a-row>
         </div>
@@ -634,6 +645,11 @@
   }
   .display{
     margin-bottom: 20px;
+  }
+  .imgList{
+    /*width: 100px;*/
+    /*height: 100px;*/
+
   }
 
   /* 覆盖默认的ant样式 */
