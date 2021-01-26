@@ -129,7 +129,7 @@
       //登录
       login(){
         if (this.code){
-          if(this.code == this.verificationCode){
+          if(this.code.toLowerCase() == this.verificationCode.toLowerCase()){
             if(this.username && this.password){
 
               let params = {
