@@ -82,8 +82,8 @@
                     {{item.title}}：
                   </a-col>
                   <a-col :span="24">
-                    <template v-for="(itemPic,indexPic) in item.pName">
-                      <img src="../../assets/bg.jpeg" alt="" class="imgList">
+                    <template v-for="(itemPic,indexPic) in item.content">
+                      <img :src="'data:image/png;base64,'+itemPic" alt="" class="imgList">
                     </template>
                   </a-col>
                 </a-col>
@@ -272,10 +272,19 @@
         confirmCreateLoading: false,
         lifespan: '',
         starttime: this.moment(),
-        timeFormat: this.moment()
+        timeFormat: this.moment(),
+        imgSrc: [],//图片地址
       }
     },
     methods: {
+      //图片引入
+      // typeIcon:function(src){
+      //   console.log("图片链接", src)
+      //   const context = require.context('', true, /\.png$/); // 根据路径正则读取文件
+      //  // const imgName = './1.png';
+      //   const Img = context(src);
+      //   return Img
+      // },
       //引入时间格式处理moment
       moment,
       //手机号码校验
