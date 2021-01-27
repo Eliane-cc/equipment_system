@@ -163,7 +163,7 @@
                   <div>{{operTime}}</div>
                 </template>
                 <template v-else-if="item.title == '设备编码'">
-                  <a-input :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}, {validator: devCodeCheck.bind(this)}],initialValue: item.content} ]"/>
+                  <a-input :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content} ]"/>
                 </template>
                 <template v-else>
                   <a-input :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
@@ -257,17 +257,17 @@
               }
             ]
           },
-          devCode: {
-            rules: [
-              {
-                required: true,
-                message: '该字段不能为空，请重新输入'
-              },
-              {
-                validator: this.devCodeCheck.bind(this)
-              }
-            ]
-          },
+          // devCode: {
+          //   rules: [
+          //     {
+          //       required: true,
+          //       message: '该字段不能为空，请重新输入'
+          //     },
+          //     {
+          //       validator: this.devCodeCheck.bind(this)
+          //     }
+          //   ]
+          // },
         },
         confirmCreateLoading: false,
         lifespan: '',
@@ -315,14 +315,14 @@
         callbackFn()
       },
       //设备编码校验
-      devCodeCheck(rule, value, callbackFn){
-        const reg = /^[0-9]{11,11}$/
-        if (!reg.test(value) && value) {
-          callbackFn('设备编码需由11位数字组成')
-          return
-        }
-        callbackFn()
-      },
+      // devCodeCheck(rule, value, callbackFn){
+      //   const reg = /^[0-9]{11,11}$/
+      //   if (!reg.test(value) && value) {
+      //     callbackFn('设备编码需由11位数字组成')
+      //     return
+      //   }
+      //   callbackFn()
+      // },
       //编辑确定事件
       handleEdit(text) {
         let data;
