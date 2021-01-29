@@ -277,14 +277,6 @@
       }
     },
     methods: {
-      //图片引入
-      // typeIcon:function(src){
-      //   console.log("图片链接", src)
-      //   const context = require.context('', true, /\.png$/); // 根据路径正则读取文件
-      //  // const imgName = './1.png';
-      //   const Img = context(src);
-      //   return Img
-      // },
       //引入时间格式处理moment
       moment,
       //手机号码校验
