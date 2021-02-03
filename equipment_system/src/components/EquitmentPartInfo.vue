@@ -133,13 +133,20 @@
           </template>
           <template slot="operation" slot-scope="text, record, index">
             <div class="editable-row-operations">
-               <span class="oper">
-                  <a @click="() => detailDev(record,text)">详情</a>
-                  <a @click="() => editDev(record,text)">编辑</a>
+              <template v-if="record.children">
+                <span class="oper oper-center">
+                  <a @click="() => createRepair(record,text,index)"><a-icon type="plus-circle" />  新增零件</a>
+                </span>
+              </template>
+              <template v-else>
+                <span class="oper">
+                  <a @click="() => detailDev(record,text,index)">详情</a>
+                  <a @click="() => editDev(record,text,index)">编辑</a>
                   <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record)">
                     <a>删除</a>
                   </a-popconfirm>
                 </span>
+              </template>
             </div>
           </template>
         </a-table>
@@ -322,38 +329,38 @@
         this.equitmentList()
       },
       //编辑
-      editDev(value,text) {
+      editDev(value,text,index) {
         console.log("编辑", value)
         let displayData = [
           {
             title: '车间',
             key: 'eWorkshop',
-            content: value.eWorkshop
+            content: this.data[index].eWorkshop
           },
           {
             title: '机台',
             key: 'eMachine',
-            content: value.eMachine
+            content: this.data[index].eMachine
           },
           {
             title: '设备型号',
             key: 'eType',
-            content: value.eType
+            content: this.data[index].eType
           },
           {
             title: '设备厂家',
             key: 'fName',
-            content: value.efName
+            content: this.data[index].efName
           },
           {
             title: '设备名称',
             key: 'eName',
-            content: value.eName
+            content: this.data[index].eName
           },
           {
             title: '设备编码',
             key: 'eCode',
-            content: value.eCode
+            content: this.data[index].eCode
           }
         ]
         let editData = [
@@ -378,7 +385,7 @@
           {
             title: '零件厂家',
             key: 'fName',
-            content: value.efName,
+            content: value.cfName,
             name: 'fName'
           },
           {
@@ -415,37 +422,38 @@
         this.modalData.pageNum = this.pageNum
       },
       //查看详情
-      detailDev(value,text){
+      detailDev(value,text,index){
+        console.log("详情value",value,text,index,this.data[index])
         let displayData = [
           {
             title: '车间',
             key: 'eWorkshop',
-            content: value.eWorkshop
+            content: this.data[index].eWorkshop
           },
           {
             title: '机台',
             key: 'eMachine',
-            content: value.eMachine
+            content: this.data[index].eMachine
           },
           {
             title: '设备名称',
             key: 'eName',
-            content: value.eName
+            content: this.data[index].eName
           },
           {
             title: '设备编码',
             key: 'eCode',
-            content: value.eCode
+            content: this.data[index].eCode
           },
           {
             title: '设备型号',
             key: 'eType',
-            content: value.eType
+            content: this.data[index].eType
           },
           {
             title: '设备厂家',
             key: 'eWorkshop',
-            content: value.eWorkshop
+            content: this.data[index].eWorkshop
           },
           {
             title: '零件名称',
@@ -506,10 +514,86 @@
               //重新刷新用户列表
               this.equitmentList(this.pageNum, 10);
             }
+            else{
+              this.$message.info(res.msg);
+            }
             this.isLoading = false
           })
       },
 
+      //新增零件
+      createRepair(value,text,index){
+        this.isShowModal = true
+        this.modalTitle = '新增'
+        let displayData = [
+          {
+            title: '车间',
+            key: 'eWorkshop',
+            content: value.eWorkshop
+          },
+          {
+            title: '机台',
+            key: 'eMachine',
+            content: value.eMachine
+          },
+          {
+            title: '设备型号',
+            key: 'eType',
+            content: value.eType
+          },
+          {
+            title: '设备厂家',
+            key: 'fId',
+            content: value.fId
+          },
+          {
+            title: '设备名称',
+            key: 'eName',
+            content: value.eName
+          },
+          {
+            title: '设备编码',
+            key: 'eCode',
+            content: value.eCode
+          }
+        ]
+        this.modalData.actionText = '新增零件'
+        let data = [
+          {
+            label: '零件名称',
+            name: 'cName'
+          },
+          {
+            label: '零件型号',
+            name: 'cType'
+          },
+          {
+            label: '零件编码',
+            name: 'cCode'
+          },
+          {
+            label: '零件厂家',
+            name: 'fName'
+          },
+          {
+            label: '位置',
+            name: 'cLocation'
+          },
+          {
+            label: '使用寿命',
+            name: 'lifespan'
+          },
+          {
+            label: '开始使用时间',
+            name: 'starttime'
+          }
+        ]
+        this.modalData.value = this.data[index]
+        this.modalData.createData = data
+        this.modalData.pageNum = this.pageNum
+        this.modalData.displayData = displayData
+        this.modalData.editData = ""
+      },
       //查询设备
       searchDev(){},
     },
@@ -541,6 +625,9 @@
   .oper{
     display: flex;
     justify-content: space-between;
+  }
+  .oper-center{
+    justify-content: center;
   }
   .column-content{
     overflow: hidden;

@@ -114,7 +114,7 @@
           <template slot="operation" slot-scope="text, record, index">
             <div class="editable-row-operations">
                <span class="oper">
-                  <a @click="() => createRepair(record,text)">新增零件</a>
+<!--                  <a @click="() => createRepair(record,text)">新增零件</a>-->
                   <a @click="() => editDev(record,text)">编辑</a>
                   <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record)">
                     <a>删除</a>
@@ -444,78 +444,78 @@
         this.modalData.pageNum = this.pageNum
       },
       //新增零件
-      createRepair(value,text){
-        this.isShowModal = true
-        this.modalTitle = '新增'
-        let displayData = [
-          {
-            title: '车间',
-            key: 'eWorkshop',
-            content: value.eWorkshop
-          },
-          {
-            title: '机台',
-            key: 'eMachine',
-            content: value.eMachine
-          },
-          {
-            title: '设备型号',
-            key: 'eType',
-            content: value.eType
-          },
-          {
-            title: '设备厂家',
-            key: 'fId',
-            content: value.fId
-          },
-          {
-            title: '设备名称',
-            key: 'eName',
-            content: value.eName
-          },
-          {
-            title: '设备编码',
-            key: 'eCode',
-            content: value.eCode
-          }
-        ]
-        this.modalData.actionText = '新增零件'
-        let data = [
-          {
-            label: '零件名称',
-            name: 'cName'
-          },
-          {
-            label: '零件型号',
-            name: 'cType'
-          },
-          {
-            label: '零件编码',
-            name: 'cCode'
-          },
-          {
-            label: '零件厂家',
-            name: 'fName'
-          },
-          {
-            label: '位置',
-            name: 'cLocation'
-          },
-          {
-            label: '使用寿命',
-            name: 'lifespan'
-          },
-          {
-            label: '开始使用时间',
-            name: 'starttime'
-          }
-        ]
-        this.modalData.value = value
-        this.modalData.createData = data
-        this.modalData.pageNum = this.pageNum
-        this.modalData.displayData = displayData
-        this.modalData.editData = ""
-      }
+      // createRepair(value,text){
+      //   this.isShowModal = true
+      //   this.modalTitle = '新增'
+      //   let displayData = [
+      //     {
+      //       title: '车间',
+      //       key: 'eWorkshop',
+      //       content: value.eWorkshop
+      //     },
+      //     {
+      //       title: '机台',
+      //       key: 'eMachine',
+      //       content: value.eMachine
+      //     },
+      //     {
+      //       title: '设备型号',
+      //       key: 'eType',
+      //       content: value.eType
+      //     },
+      //     {
+      //       title: '设备厂家',
+      //       key: 'fId',
+      //       content: value.fId
+      //     },
+      //     {
+      //       title: '设备名称',
+      //       key: 'eName',
+      //       content: value.eName
+      //     },
+      //     {
+      //       title: '设备编码',
+      //       key: 'eCode',
+      //       content: value.eCode
+      //     }
+      //   ]
+      //   this.modalData.actionText = '新增零件'
+      //   let data = [
+      //     {
+      //       label: '零件名称',
+      //       name: 'cName'
+      //     },
+      //     {
+      //       label: '零件型号',
+      //       name: 'cType'
+      //     },
+      //     {
+      //       label: '零件编码',
+      //       name: 'cCode'
+      //     },
+      //     {
+      //       label: '零件厂家',
+      //       name: 'fName'
+      //     },
+      //     {
+      //       label: '位置',
+      //       name: 'cLocation'
+      //     },
+      //     {
+      //       label: '使用寿命',
+      //       name: 'lifespan'
+      //     },
+      //     {
+      //       label: '开始使用时间',
+      //       name: 'starttime'
+      //     }
+      //   ]
+      //   this.modalData.value = value
+      //   this.modalData.createData = data
+      //   this.modalData.pageNum = this.pageNum
+      //   this.modalData.displayData = displayData
+      //   this.modalData.editData = ""
+      // }
     },
   }
 </script>

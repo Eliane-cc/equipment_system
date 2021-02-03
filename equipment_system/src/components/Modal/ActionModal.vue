@@ -617,6 +617,8 @@
       //取消按钮事件
       handleCancel(e) {
         this.form.resetFields();
+        this.operTime = '0天0小时0分'
+        this.lifespan = ''
         this.$emit("update:modalVisible",false)
       },
       //使用寿命改变事件
