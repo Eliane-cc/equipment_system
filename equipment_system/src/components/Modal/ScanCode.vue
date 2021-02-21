@@ -146,10 +146,8 @@
         //扫描编码成功
         if (code) {
           this.code = code.data
-         this.$emit("update:show",false)
-         this.closeMedia()
+          this.closeMedia()
           console.log("我是码", code.data)
-
           //请求设备信息
           let params = {
             eCode: code.data
@@ -160,6 +158,7 @@
               console.log("scan res",res)
               if (res.msg == "SUCCESS"){
                 this.$emit('code-data', res.data)
+                this.$emit("update:show",false)
               }else{
                 this.$message.error(res.msg);
               }

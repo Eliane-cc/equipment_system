@@ -194,6 +194,9 @@
       //扫描到的设备数据
       scanCodeData(data){
         console.log("我是传回父组件的数据", data)
+        this.data = res.data.list
+        this.pagination.total = res.data.total
+        this.isLoading = false
       },
       //设备NFC
       devNFC(){

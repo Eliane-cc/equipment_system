@@ -48,23 +48,23 @@
                   零件名称:
                 </a-col>
                 <a-col :span="18" :style="{ textAlign: 'left' }">
-                  {{item.name}}
-                </a-col>
+                  {{item.cName}}
+               </a-col>
               </a-row>
               <a-row>
                 <a-col :span="6" :style="{ textAlign: 'left' }" class="result-title">
                   零件编码：
                 </a-col>
                 <a-col :span="18" :style="{ textAlign: 'left' }">
-                  {{item.code}}
+                  {{item.cCode}}
                 </a-col>
               </a-row>
             </div>
             <template slot="actions" class="ant-card-actions">
-              <div @click="maintainDev()">
+              <div @click="maintainDev(codeData,index)">
                 <a-icon key="setting" type="setting" />维护
               </div>
-              <div @click="serviceDev()">
+              <div @click="serviceDev(codeData,index)">
                 <a-icon key="edit" type="tool" />维修
               </div>
             </template>
@@ -119,6 +119,7 @@
           },
         ],
         deviceName: '',     //设备名称
+        codeData: ''//测试
       }
     },
     created() {
@@ -154,7 +155,7 @@
           })
       },
       //维护设备
-      maintainDev(value){
+      maintainDev(value,index){
         let inputCon = [
           {
             label: '维护内容',
@@ -170,10 +171,13 @@
         this.isShowModal = true
         this.modalTitle = '设备维护'
         this.modalData.data = value
+        this.modalData.data.cName = value.components[index].cName
+        this.modalData.data.cCode = value.components[index].cCode
+        this.modalData.data.cType = value.components[index].cType
         this.modalData.inputCon = inputCon
       },
       //维修设备
-      serviceDev(value){
+      serviceDev(value,index){
         let inputCon = [
           {
             label: '维修内容',
@@ -225,6 +229,9 @@
         this.isShowModal = true
         this.modalTitle = '设备维修'
         this.modalData.data = value
+        this.modalData.data.cName = value.components[index].cName
+        this.modalData.data.cCode = value.components[index].cCode
+        this.modalData.data.cType = value.components[index].cType
         this.modalData.inputCon = inputCon
       },
       //扫描设备二维码
@@ -254,6 +261,9 @@
       //扫描到的设备数据
       scanCodeData(data){
         console.log("我是传回父组件的数据", data)
+        this.codeData = data
+        this.deviceName = data.eName
+        this.comInfo = data.components
       },
       devNFC(){
 
