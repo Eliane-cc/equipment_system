@@ -81,10 +81,10 @@
         //   video: {width: 300, height: 300}
         // };
         //兼容
-        if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia){
+        if (navigator.mediaDevices.getUserMedia || navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia){
           //调用用户媒体设备，访问摄像头
           this.getUserMedia({
-            video:{width:480,height:320}
+            video:{width:480,height:320, facingMode: { exact: "environment" }}
           },this.success,this.error);
         } else {
           alert("你的浏览器不支持访问用户媒体设备");

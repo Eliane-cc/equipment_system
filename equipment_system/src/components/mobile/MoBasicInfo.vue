@@ -254,7 +254,6 @@
       //扫描到的设备数据
       scanCodeData(data){
         console.log("我是传回父组件的数据", data)
-
       },
       devNFC(){
 
