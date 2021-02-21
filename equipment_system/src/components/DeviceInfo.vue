@@ -400,6 +400,9 @@
               //重新刷新用户列表
               this.devList(this.pageNum, 10);
             }
+            else{
+              this.$message.info(res.msg)
+            }
             this.isLoading = false
           })
       },

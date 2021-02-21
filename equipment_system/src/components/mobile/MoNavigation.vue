@@ -60,7 +60,7 @@
             <a-dropdown placement="bottomCenter">
               <a class="nav-title-user" @click="e => e.preventDefault()">
                 <a-icon type="poweroff" />
-                <div class="username">Elaine</div>
+                <div class="username">{{username}}</div>
               </a>
               <a-menu slot="overlay">
                 <a-menu-item key="0">
@@ -84,7 +84,20 @@
 <script>
   export default {
     name: "MoNavigation.vue",
+    data() {
+      return{
+        username: '',
+      }
+    },
+    created() {
+      this.initNav()
+    },
     methods: {
+      //初始化导航栏跳转显示
+      initNav(){
+        //this.isAdmin = window.localStorage.getItem('userInfo.isadmin');
+        this.username = window.localStorage.getItem('userInfo.uName')
+      },
       onCollapse(collapsed, type) {
         console.log(collapsed, type);
       },
@@ -98,6 +111,13 @@
       //注销登录
       logout(){
         console.log("注销登录，清除缓存")
+        // window.localStorage.setItem('username', '')
+        // window.localStorage.setItem('password', '')
+        window.localStorage.removeItem('username')
+        window.localStorage.removeItem('password')
+        window.localStorage.removeItem('token')
+        // window.localStorage.setItem('token', '')
+        document.cookie = `accessToken=; expires=${new Date(0).toGMTString()}`
         this.$router.replace({path: '/',replace:true})
       }
     }

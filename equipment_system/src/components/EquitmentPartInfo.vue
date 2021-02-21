@@ -312,6 +312,9 @@
               this.pagination.total = res.data.total
               this.isLoading = false
             }
+            else{
+              this.$message.info(res.msg)
+            }
             console.log("零件管理列表", res);
           })
       },
