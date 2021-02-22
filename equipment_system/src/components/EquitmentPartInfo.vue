@@ -334,36 +334,39 @@
       //编辑
       editDev(value,text,index) {
         console.log("编辑", value)
+        let data = this.data.filter(item => item.eId === value.eId)
+        let cData = data[0]
+
         let displayData = [
           {
             title: '车间',
             key: 'eWorkshop',
-            content: this.data[index].eWorkshop
+            content: cData.eWorkshop
           },
           {
             title: '机台',
             key: 'eMachine',
-            content: this.data[index].eMachine
+            content: cData.eMachine
           },
           {
             title: '设备型号',
             key: 'eType',
-            content: this.data[index].eType
+            content: cData.eType
           },
           {
             title: '设备厂家',
             key: 'fName',
-            content: this.data[index].efName
+            content: cData.efName
           },
           {
             title: '设备名称',
             key: 'eName',
-            content: this.data[index].eName
+            content: cData.eName
           },
           {
             title: '设备编码',
             key: 'eCode',
-            content: this.data[index].eCode
+            content: cData.eCode
           }
         ]
         let editData = [
@@ -426,37 +429,39 @@
       },
       //查看详情
       detailDev(value,text,index){
-        console.log("详情value",value,text,index,this.data[index])
+        let data = this.data.filter(item => item.eId === value.eId)
+        let cData = data[0]
+        console.log("详情测试value",value,cData)
         let displayData = [
           {
             title: '车间',
             key: 'eWorkshop',
-            content: this.data[index].eWorkshop
+            content: cData.eWorkshop
           },
           {
             title: '机台',
             key: 'eMachine',
-            content: this.data[index].eMachine
+            content: cData.eMachine
           },
           {
             title: '设备名称',
             key: 'eName',
-            content: this.data[index].eName
+            content: cData.eName
           },
           {
             title: '设备编码',
             key: 'eCode',
-            content: this.data[index].eCode
+            content: cData.eCode
           },
           {
             title: '设备型号',
             key: 'eType',
-            content: this.data[index].eType
+            content: cData.eType
           },
           {
             title: '设备厂家',
-            key: 'eWorkshop',
-            content: this.data[index].eWorkshop
+            key: 'efName',
+            content: cData.efName
           },
           {
             title: '零件名称',
