@@ -141,7 +141,7 @@
                <span class="oper">
                  <a @click="() => detailDev(record,text)">详情</a>
                   <a @click="() => editDev(record,text)">编辑</a>
-                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record.key)">
+                  <a-popconfirm title="是否确定删除?" cancelText="取消" okText="确定" @confirm="() => deleteDev(record)">
                     <a>删除</a>
                   </a-popconfirm>
                 </span>
@@ -539,6 +539,7 @@
       },
       //删除当前行
       deleteDev(record) {
+        console.log("陕柴更换",record)
         this.isLoading = true
 
         let params = {
