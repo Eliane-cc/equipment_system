@@ -390,27 +390,27 @@
         let editData = [
           {
             title: '新零件名称',
-            key: 'cName',
+            key: 'newCname',
             content: value.cName,
-            name: 'cName'
+            name: 'newCname'
           },
           {
             title: '新零件型号',
-            key: 'cType',
+            key: 'newCtype',
             content: value.cType,
-            name: 'cType'
+            name: 'newCtype'
           },
           {
             title: '新零件厂家',
-            key: 'cFname',
+            key: 'newCfactory',
             content: value.cFname,
-            name: 'cFname'
+            name: 'newCfactory'
           },
           {
             title: '新零件编码',
-            key: 'cCode',
+            key: 'newCcode',
             content: value.cCode,
-            name: 'cCode'
+            name: 'newCcode'
           },
           {
             title: '位置',
@@ -420,15 +420,15 @@
           },
           {
             title: '更换人员',
-            key: 'changePeopleName',
+            key: 'changePeople',
             content: value.changePeopleName,
-            name: 'changePeopleName'
+            name: 'changePeople'
           },
           {
             title: '更换时间',
-            key: 'changeTime',
-            content: value.changeTime,
-            name: 'changeTime'
+            key: 'startTime',
+            content: value.cTime,
+            name: 'startTime'
           }
         ]
         this.isShowModal = true

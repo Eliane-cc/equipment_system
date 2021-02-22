@@ -127,13 +127,13 @@
             <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
               <a-form-item :label="item.title">
                 <template v-if="item.title == '使用寿命'">
-                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :ref="item.name" :value="lifespan" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/> 天
+                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :ref="item.name" :value="lifespan" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/> 天
                 </template>
                 <template v-else-if="item.title == '开始使用时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name" :value="createValue"/>
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name" :value="createValue" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/>
                 </template>
                 <template v-else-if="item.title == '维护时间' || item.title == '维修时间' || item.title == '更换时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :value="actionTime" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :value="actionTime" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/>
                 </template>
                 <template v-else-if="item.title == '维护内容' || item.title == '维修内容' || item.title == '更换内容'">
                   <a-textarea :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :name="item.name" :ref="item.name" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
@@ -439,8 +439,11 @@
                 }
                 //编辑更换
                 else if (text == '编辑更换'){
-                  data.eId = this.data.value.eId
-                  data.mId = this.data.value.mId
+                 // data.eId = this.data.value.eId
+                  data.cid = this.data.value.cId
+                  data.startTime = this.actionTime
+                 // data.cId = this.data.value.cId
+                  console.log("更换",data)
                   updateChange(data)
                     .then((res) => {
                       if (res.msg == "SUCCESS"){
