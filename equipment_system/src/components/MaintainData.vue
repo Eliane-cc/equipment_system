@@ -514,7 +514,8 @@
       deleteDev(record) {
         this.isLoading = true
         let params = {
-          mId : record.mId
+          mId : record.mId,
+          cName: record.cName
         }
         deleteMaintain(params)
           .then((res) => {
