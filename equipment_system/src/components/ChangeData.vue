@@ -551,8 +551,8 @@
               //重新刷新用户列表
               this.changeList(this.pageNum, 10);
             }
-            this.isLoading = false
           })
+        this.isLoading = false
       },
 
       //查询设备

@@ -127,13 +127,13 @@
             <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
               <a-form-item :label="item.title">
                 <template v-if="item.title == '使用寿命'">
-                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :ref="item.name"  v-model="item.content"/> 天
+                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :ref="item.name" :value="lifespan" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/> 天
                 </template>
                 <template v-else-if="item.title == '开始使用时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name"/>
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name" :value="createValue"/>
                 </template>
                 <template v-else-if="item.title == '维护时间' || item.title == '维修时间' || item.title == '更换时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :ref="item.name" v-model="timeFormat" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :value="actionTime" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
                 </template>
                 <template v-else-if="item.title == '维护内容' || item.title == '维修内容' || item.title == '更换内容'">
                   <a-textarea :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :name="item.name" :ref="item.name" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
@@ -274,6 +274,8 @@
         starttime: this.moment(),
         timeFormat: this.moment(),
         imgSrc: [],//图片地址
+        createValue: [],
+        actionTime: []
       }
     },
     methods: {
@@ -374,6 +376,9 @@
                 else if (text == '编辑零件'){
                   console.log("data编辑",data)
                   data.cId = this.data.value.cId
+                  data.lifespan = this.lifespan
+                  data.starttime = this.createValue
+                  console.log("零件请求参数",data)
                   updateEquipment(data)
                     .then((res) => {
                       console.log("res",res)
@@ -394,6 +399,7 @@
                 //编辑维护
                 else if (text == '编辑维护'){
                   data.mId = this.data.value.mId
+                  data.mTime = this.actionTime
                   updateMaintain(data)
                     .then((res) => {
                       console.log("res",res)
@@ -414,6 +420,7 @@
                 //编辑维修
                 else if (text == '编辑维修'){
                   data.rId = this.data.value.rId
+                  data.rTime = this.actionTime
                   updateRepair(data)
                     .then((res) => {
                       if (res.msg == "SUCCESS"){
@@ -619,6 +626,7 @@
         this.form.resetFields();
         this.operTime = '0天0小时0分'
         this.lifespan = ''
+        this.createValue = []
         this.$emit("update:modalVisible",false)
       },
       //使用寿命改变事件
@@ -631,10 +639,13 @@
         console.log("value",value)
         this.operTime = moment().diff(value, 'day') + '天' + moment().diff(value, 'hour')%24 + '小时' + moment().diff(value, 'minute')%60 + '分钟';
         this.starttime = this.$moment(value).format('yyyy-MM-DD HH:mm:ss');
+        this.createValue = this.$moment(value).format('yyyy-MM-DD HH:mm:ss');
       },
       //时间格式转换
       selectActionTime(value){
         this.timeFormat = this.$moment(value).format('yyyy-MM-DD HH:mm:ss');
+        this.actionTime = this.$moment(value).format('yyyy-MM-DD HH:mm:ss');
+        console.log("转化后的维护维修时间",this.actionTime,this.timeFormat)
       }
     }
   }
