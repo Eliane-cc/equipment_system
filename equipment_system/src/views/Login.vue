@@ -1,68 +1,73 @@
 <template>
   <div class="contain">
-    <div>
-      <div class="login-form">
-        <div class="title">设备生命周期管理系统</div>
-        <a-row class="row">
-          <div class="border"></div>
-        </a-row>
-        <a-row class="row">
-          <a-col :span="5">
-            <div class="login-title">
-<!--              <a-icon type="user" :style="{ fontSize: '17px'}"/>-->
-              <div class="row-title">用户名：</div>
+    <div class="contain-login">
+      <div>
+        <div class="login-form">
+          <div class="title">设备生命周期管理系统</div>
+          <a-row class="row">
+            <div class="border"></div>
+          </a-row>
+          <a-row class="row">
+            <a-col :span="5">
+              <div class="login-title">
+                <!--              <a-icon type="user" :style="{ fontSize: '17px'}"/>-->
+                <div class="row-title">用户名：</div>
+              </div>
+            </a-col>
+            <a-col :span="1"></a-col>
+            <a-col :span="14">
+              <a-input placeholder="请输入用户名" allowClear v-model="username"/>
+            </a-col>
+          </a-row>
+          <a-row class="row">
+            <a-col :span="5">
+              <div class="login-title">
+                <!--              <a-icon type="lock" :style="{ fontSize: '17px'}"/>-->
+                <div class="row-title">密码：</div>
+              </div>
+            </a-col>
+            <a-col :span="1"></a-col>
+            <a-col :span="14">
+              <a-input-password placeholder="请输入密码" allowClear v-model="password"/>
+            </a-col>
+          </a-row>
+          <a-row class="row">
+            <a-col :span="5">
+              <div class="login-title">
+                <!--              <a-icon type="lock" :style="{ fontSize: '17px'}"/>-->
+                <div class="row-title">验证码：</div>
+              </div>
+            </a-col>
+            <a-col :span="1"></a-col>
+            <a-col :span="6">
+              <a-input allowClear v-model="code"/>
+            </a-col>
+            <a-col :span="2"></a-col>
+            <a-col :span="6">
+              <div class="vertify" @click="refreshCode">{{verificationCode}}</div>
+            </a-col>
+          </a-row>
+          <a-row>
+            <a-col :span="22">
+              <a-checkbox @change="onChange">
+                自动登录
+              </a-checkbox>
+            </a-col>
+          </a-row>
+          <a-row class="row btn-margin">
+            <div>
+              <a-button type="primary" @click="login">登录</a-button>
+              <a-button class="btn-space" @click="reset">重置</a-button>
             </div>
-          </a-col>
-          <a-col :span="1"></a-col>
-          <a-col :span="14">
-            <a-input placeholder="请输入用户名" allowClear v-model="username"/>
-          </a-col>
-        </a-row>
-        <a-row class="row">
-          <a-col :span="5">
-            <div class="login-title">
-<!--              <a-icon type="lock" :style="{ fontSize: '17px'}"/>-->
-              <div class="row-title">密码：</div>
-            </div>
-          </a-col>
-          <a-col :span="1"></a-col>
-          <a-col :span="14">
-            <a-input-password placeholder="请输入密码" allowClear v-model="password"/>
-          </a-col>
-        </a-row>
-        <a-row class="row">
-          <a-col :span="5">
-            <div class="login-title">
-              <!--              <a-icon type="lock" :style="{ fontSize: '17px'}"/>-->
-              <div class="row-title">验证码：</div>
-            </div>
-          </a-col>
-          <a-col :span="1"></a-col>
-          <a-col :span="6">
-            <a-input allowClear v-model="code"/>
-          </a-col>
-          <a-col :span="2"></a-col>
-          <a-col :span="6">
-            <div class="vertify" @click="refreshCode">{{verificationCode}}</div>
-          </a-col>
-        </a-row>
-        <a-row>
-          <a-col :span="22">
-            <a-checkbox @change="onChange">
-              自动登录
-            </a-checkbox>
-          </a-col>
-        </a-row>
-        <a-row class="row btn-margin">
-          <div>
-            <a-button type="primary" @click="login">登录</a-button>
-            <a-button class="btn-space" @click="reset">重置</a-button>
-          </div>
-        </a-row>
+          </a-row>
+        </div>
       </div>
     </div>
-
+    <div class="footer">
+      <a href="https://beian.miit.gov.cn/" target="_blank" class="beian">粤ICP备2021019241号-1</a>
+    </div>
   </div>
+
 
 </template>
 
@@ -212,6 +217,10 @@
     /*background-position: center center;*/
     /*background-size:cover;*/
     background: #001529;
+  }
+  .contain-login{
+    width: 100%;
+    height: 95%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -272,5 +281,15 @@
   }
   .btn-margin{
     margin-top: 30px;
+  }
+  .beian{
+    text-decoration: none;
+    cursor: pointer;
+    color: #efefef;
+    width: 100%;
+    height: 5%;
+  }
+  .beian:hover{
+    color: #ffffff;
   }
 </style>

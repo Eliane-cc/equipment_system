@@ -7,6 +7,9 @@
       <!--  页面内容  -->
       <router-view v-else/>
     </a-config-provider>
+    <div class="footer">
+      <a href="https://beian.miit.gov.cn/" target="_blank" class="beian">粤ICP备2021019241号-1</a>
+    </div>
   </div>
 </template>
 
@@ -70,4 +73,19 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
+  .footer{
+    background-color: #040014;
+    padding-top: 30px;
+    padding-bottom: 10px;
+  }
+  .beian{
+    text-decoration: none;
+    cursor: pointer;
+    color: #efefef;
+    width: 100%;
+    height: 5%;
+  }
+  .beian:hover{
+    color: #ffffff;
+  }
 </style>
