@@ -523,7 +523,7 @@
                       this.$message.success("添加零件成功！");
                       this.form.resetFields();
                       //重新刷新零件列表
-                      this.devList();
+                      this.equitmentList();
                     }else{
                       this.$message.error(res.msg);
                       this.form.resetFields();
