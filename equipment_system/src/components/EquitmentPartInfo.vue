@@ -152,7 +152,7 @@
         </a-table>
       </div>
     </div>
-    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle" :dataList.sync="data"></action-modal>
+    <action-modal :modalVisible.sync="isShowModal" :data.sync="modalData" :title="modalTitle" :dataList.sync="data" :dataDrop.sync="dropList"></action-modal>
   </div>
 </template>
 

@@ -192,7 +192,7 @@
     updateRepair,
     updateChange,
     getequitmentList,
-    getmaintainList, getrepairList, getchangeList, getDropDevList,
+    getmaintainList, getrepairList, getchangeList, getDropDevList, getDropEquipList,
   } from "../../api";
   export default {
     name: "ActionModal.vue",
@@ -526,6 +526,8 @@
                       this.form.resetFields();
                       //重新刷新零件列表
                       this.equitmentList();
+                      //重新刷新零件下拉列表
+                      this.getEquitDropList();
                     }else{
                       this.$message.error(res.msg);
                       this.form.resetFields();
@@ -620,6 +622,15 @@
       //设备下拉列表信息更新
       getDropList(){
         getDropDevList()
+          .then((res) => {
+            if (res.msg == "SUCCESS"){
+              this.$emit("update:dataDrop",res.data);
+            }
+          })
+      },
+      //零件下拉列表信息更新
+      getEquitDropList(){
+        getDropEquipList()
           .then((res) => {
             if (res.msg == "SUCCESS"){
               this.$emit("update:dataDrop",res.data);
