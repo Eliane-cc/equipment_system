@@ -80,6 +80,9 @@
         </div>
       </a-col>
     </a-row>
+    <div class="footer">
+      <a href="https://beian.miit.gov.cn/" target="_blank" class="beian">粤ICP备2021019241号-1</a>
+    </div>
   </div>
 </template>
 
@@ -215,5 +218,20 @@
   .username{
     padding-left: 15px;
     padding-right: 16px;
+  }
+  .footer{
+    background-color: #040014;
+    padding-top: 30px;
+    padding-bottom: 10px;
+  }
+  .beian{
+    text-decoration: none;
+    cursor: pointer;
+    color: #efefef;
+    width: 100%;
+    height: 5%;
+  }
+  .beian:hover{
+    color: #ffffff;
   }
 </style>
