@@ -37,7 +37,7 @@
             <a-icon type="home" />
             <span>首页</span>
           </a-menu-item>
-          <template v-if="isAdmin == '2'">
+          <template v-if="isAdmin == '2' || isAdmin == 2 || isAdmin == '3' || isAdmin == 3">
             <a-sub-menu key="sub1">
               <span slot="title"><a-icon type="database"/><span>基本数据</span></span>
               <a-menu-item key="2" @click="navPage('/devInfo')">
@@ -64,7 +64,7 @@
               <a-menu-item key="7" @click="navPage('/personalInfo')">
                 个人信息
               </a-menu-item>
-              <template v-if="isAdmin == '3'">
+              <template v-if="isAdmin == '3' || isAdmin == 3">
                 <a-menu-item key="8" @click="navPage('/userManagement')">
                   用户管理
                 </a-menu-item>
