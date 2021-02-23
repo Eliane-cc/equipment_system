@@ -455,7 +455,8 @@
           }
         ]
         this.isShowModal = true
-        this.modalTitle = '详情'
+        this.modalTitle = '维修详情'
+        this.modalData.id = value.rId
         this.modalData.displayData = displayData
       },
       //删除当前行

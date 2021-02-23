@@ -60,7 +60,7 @@
       </div>
     </a-modal>
     <!--  详情  -->
-    <a-modal :visible="modalVisible" :title="title" @ok="handleOk" @cancel="handleCancel" cancelText="取消" okText="确定" v-else-if="title == '详情'">
+    <a-modal :visible="modalVisible" :title="title" @ok="handleOk" @cancel="handleCancel" cancelText="取消" okText="确定" v-else-if="title == '详情' || title == '维护详情' || title == '维修详情' || title == '更换详情'"  :confirm-loading="confirmDetailLoading">
       <div>
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
@@ -82,7 +82,7 @@
                     {{item.title}}：
                   </a-col>
                   <a-col :span="24">
-                    <template v-for="(itemPic,indexPic) in item.content">
+                    <template v-for="(itemPic,indexPic) in picList">
                       <img :src="'data:image/png;base64,'+itemPic" alt="" class="imgList">
                     </template>
                   </a-col>
@@ -193,10 +193,31 @@
     updateChange,
     getequitmentList,
     getmaintainList, getrepairList, getchangeList, getDropDevList, getDropEquipList,
+    getPicMaintain,getPicRepair,getPicChange
   } from "../../api";
   export default {
     name: "ActionModal.vue",
     props: ['data','modalVisible','title','dataList'],
+    watch:{
+      modalVisible: {
+        handler(newValue, oldValue) {
+          console.log(newValue);
+          if (newValue){
+            if (this.title == '详情'){
+              this.confirmDetailLoading = false
+            }else{
+              this.onLoadPic()
+            }
+          }
+        }
+      }
+    },
+    // mounted(){
+    //   console.log("value", this.data.id)
+    //   if (this.data.modalVisible){
+    //     this.onLoadPic()
+    //   }
+    // },
     data(){
       return{
         form: this.$form.createForm(this, { name: 'coordinated' }),
@@ -275,10 +296,55 @@
         timeFormat: this.moment(),
         imgSrc: [],//图片地址
         createValue: [],
-        actionTime: []
+        actionTime: [],
+        picList: [],    //图片列表
+        confirmDetailLoading: true,   //详情页信息加载
       }
     },
     methods: {
+      //创建即加载
+      onLoadPic(){
+        console.log("详情加载图片")
+        if (this.data.id){
+          if (this.title == '维护详情'){
+            let params = {
+              mId: this.data.id
+            }
+            console.log("我是维护详情",params)
+            getPicMaintain(params)
+              .then((res) => {
+                if (res.msg == "SUCCESS"){
+                  this.picList = res.data
+                }
+                this.confirmDetailLoading = false
+              })
+          }
+          else if (this.title == '维修详情'){
+            let params = {
+              rId: this.data.id
+            }
+            getPicRepair(params)
+              .then((res) => {
+                if (res.msg == "SUCCESS"){
+                  this.picList = res.data
+                }
+                this.confirmDetailLoading = false
+              })
+          }
+          else if (this.title == '更换详情'){
+            let params = {
+              cId: this.data.id
+            }
+            getPicChange(params)
+              .then((res) => {
+                if (res.msg == "SUCCESS"){
+                  this.picList = res.data
+                }
+                this.confirmDetailLoading = false
+              })
+          }
+        }
+      },
       //引入时间格式处理moment
       moment,
       //手机号码校验

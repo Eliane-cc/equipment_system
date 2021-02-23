@@ -434,6 +434,7 @@
       },
       //查看详情
       detailDev(value,text){
+        console.log("详情",value)
         let displayData = [
           {
             title: '车间',
@@ -507,7 +508,8 @@
           }
         ]
         this.isShowModal = true
-        this.modalTitle = '详情'
+        this.modalTitle = '维护详情'
+        this.modalData.id = value.mId
         this.modalData.displayData = displayData
       },
       //删除当前行

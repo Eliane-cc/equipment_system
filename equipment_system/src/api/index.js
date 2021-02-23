@@ -94,6 +94,9 @@ export const updateMaintain =(params) => post(`maintain/update`,params);
 //维护删除
 export const deleteMaintain =(params) => post(`maintain/deleteMaintain`,params);
 
+//维护详情获取维护图片
+export const getPicMaintain =(params) => post(`maintain/getPNameByMid`,params);
+
 /*
 维修接口
  */
@@ -108,6 +111,9 @@ export const updateRepair =(params) => post(`repair/update`,params);
 
 //维修删除
 export const deleteRepair =(params) => post(`repair/deleteRepair`,params);
+
+//维修详情获取维护图片
+export const getPicRepair =(params) => post(`repair/getPNameByRid`,params);
 
 /*
 更换接口
@@ -126,3 +132,6 @@ export const deleteChange =(params) => post(`change/deleteChange`,params);
 
 //更换下拉列表数据
 export const getDropDownList =() => get(`change/searchList`);
+
+//维修详情获取维护图片
+export const getPicChange =(params) => post(`change/getPNameByCid`,params);

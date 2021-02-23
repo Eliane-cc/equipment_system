@@ -534,7 +534,8 @@
           }
         ]
         this.isShowModal = true
-        this.modalTitle = '详情'
+        this.modalTitle = '更换详情'
+        this.modalData.id = value.cId
         this.modalData.displayData = displayData
       },
       //删除当前行
