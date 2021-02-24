@@ -241,7 +241,7 @@
 
               //更换
               if (this.isShow){
-                formData.append("cId", this.data.data.cId);
+                formData.append("cId", this.data.data.changeId);
                 formData.append("oldCname", this.data.data.cName);
                 formData.append("oldCcode", this.data.data.cCode);
                 formData.append("oldCtype", this.data.data.cType);
