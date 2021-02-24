@@ -544,7 +544,7 @@
         this.isLoading = true
 
         let params = {
-          cId: record.cId
+          cId: record.changeId
         }
         deleteChange(params)
           .then((res) => {
