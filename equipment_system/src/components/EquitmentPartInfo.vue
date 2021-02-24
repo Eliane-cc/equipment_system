@@ -133,7 +133,7 @@
           </template>
           <template slot="operation" slot-scope="text, record, index">
             <div class="editable-row-operations">
-              <template v-if="record.children">
+              <template v-if="record.children || record.dev">
                 <span class="oper oper-center">
                   <a @click="() => createRepair(record,text,index)"><a-icon type="plus-circle" />  新增零件</a>
                 </span>
