@@ -461,7 +461,7 @@
           {
             title: '设备厂家',
             key: 'efName',
-            content: cData.efName
+            content: cData.eFName
           },
           {
             title: '零件名称',
