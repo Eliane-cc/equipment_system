@@ -464,8 +464,8 @@
         this.isLoading = true
 
         let params = {
-          rId : record.rId,
-          cName: record.cName
+          rId : record.rId
+          // cName: record.cName
         }
         deleteRepair(params)
           .then((res) => {
