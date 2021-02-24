@@ -203,7 +203,7 @@
             });
 
             if (text == '设备维护'){
-              formData.append("cId", this.data.data.cId);
+              formData.append("cId", this.data.data.changeId);
               formData.append("mContent", this.mContent);
 
               this.confirmCreateLoading = true
@@ -236,7 +236,7 @@
             else if(text == '设备维修'){
               console.log("设备维修信息",this.lifespan)
               //设备维修数值
-              formData.append("cId", this.data.data.cId);
+              formData.append("cId", this.data.data.changeId);
               formData.append('content',this.form.getFieldsValue().content);
 
               //更换
