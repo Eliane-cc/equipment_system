@@ -595,6 +595,10 @@
                     if (res.msg == "SUCCESS"){
                       this.$message.success("添加零件成功！");
                       this.form.resetFields();
+                      this.operTime = '0天0小时0分'
+                      this.lifespan = ''
+                      this.createValue = []
+                      this.starttime = this.moment()
                       //重新刷新零件列表
                       this.equitmentList();
                       //重新刷新零件下拉列表
@@ -602,6 +606,10 @@
                     }else{
                       this.$message.error(res.msg);
                       this.form.resetFields();
+                      this.operTime = '0天0小时0分'
+                      this.lifespan = ''
+                      this.createValue = []
+                      this.starttime = this.moment()
                     }
                     this.$emit("update:modalVisible",false);
                   })
@@ -723,6 +731,7 @@
         this.operTime = '0天0小时0分'
         this.lifespan = ''
         this.createValue = []
+        this.starttime = this.moment()
         this.$emit("update:modalVisible",false)
       },
       //使用寿命改变事件
