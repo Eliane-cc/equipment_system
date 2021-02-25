@@ -205,7 +205,7 @@
             if (text == '设备维护'){
               formData.append("cId", this.data.data.cId);
               formData.append("mContent", this.mContent);
-
+              formData.append("peopleId", window.localStorage.getItem('userInfo.uId'))
               this.confirmCreateLoading = true
               if (this.mContent){
                 //设备维护
@@ -214,8 +214,12 @@
                   method: 'post',
                   processData: false,
                   data: formData,
-                  success: () => {
-                    this.$message.success('保存成功');
+                  success: (res) => {
+                    if (res.msg == "SUCCESS"){
+                      this.$message.success('保存成功');
+                    }else {
+                      this.$message.error(res.msg);
+                    }
                   },
                   error: (err) => {
                     this.$message.error('保存失败');
@@ -238,10 +242,11 @@
               //设备维修数值
               formData.append("cId", this.data.data.cId);
               formData.append('content',this.form.getFieldsValue().mContent);
+              formData.append("peopleId", window.localStorage.getItem('userInfo.uId'))
 
               //更换
               if (this.isShow){
-                formData.append("cId", this.data.data.cId);
+                // formData.append("eId", this.data.data.eId);
                 formData.append("oldCname", this.data.data.cName);
                 formData.append("oldCcode", this.data.data.cCode);
                 formData.append("oldCtype", this.data.data.cType);
@@ -259,8 +264,12 @@
                     method: 'post',
                     processData: false,
                     data: formData,
-                    success: () => {
-                      this.$message.success('保存成功');
+                    success: (res) => {
+                      if (res.msg == "SUCCESS"){
+                        this.$message.success('保存成功');
+                      }else {
+                        this.$message.error(res.msg);
+                      }
                     },
                     error: (err) => {
                       this.$message.error('保存失败');
@@ -287,8 +296,12 @@
                     method: 'post',
                     processData: false,
                     data: formData,
-                    success: () => {
-                      this.$message.success('保存成功');
+                    success: (res) => {
+                      if (res.msg == "SUCCESS"){
+                        this.$message.success('保存成功');
+                      }else {
+                        this.$message.error(res.msg);
+                      }
                     },
                     error: (err) => {
                       this.$message.error('保存失败');
