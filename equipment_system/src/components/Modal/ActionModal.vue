@@ -583,7 +583,12 @@
               else if (text == '新增零件'){
                 data.eId = this.data.value.eId
                 data.lifespan = this.lifespan
-                data.starttime = this.starttime
+                if (this.starttime._isAMomentObject){
+                  console.log("我是moment")
+                  data.starttime = this.starttime.format('yyyy-MM-DD HH:mm:ss')
+                }else{
+                  data.starttime = this.starttime
+                }
                 addEquipment(data)
                   .then((res) => {
                     console.log("res",res)
