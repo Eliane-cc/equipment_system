@@ -203,14 +203,14 @@
             });
 
             if (text == '设备维护'){
-              formData.append("cId", this.data.data.changeId);
+              formData.append("cId", this.data.data.cId);
               formData.append("mContent", this.mContent);
 
               this.confirmCreateLoading = true
               if (this.mContent){
                 //设备维护
                 reqwest({
-                  url: 'http://localhost:8085/api/index/maintain',
+                  url: 'https://sayn.com.cn/api/index/maintain',
                   method: 'post',
                   processData: false,
                   data: formData,
@@ -234,14 +234,14 @@
               this.$emit("update:show",false)
             }
             else if(text == '设备维修'){
-              console.log("设备维修信息",this.lifespan)
+              console.log("设备维修信息",this.lifespan,this.form.getFieldsValue().mContent)
               //设备维修数值
-              formData.append("cId", this.data.data.changeId);
-              formData.append('content',this.form.getFieldsValue().content);
+              formData.append("cId", this.data.data.cId);
+              formData.append('content',this.form.getFieldsValue().mContent);
 
               //更换
               if (this.isShow){
-                formData.append("cId", this.data.data.changeId);
+                formData.append("cId", this.data.data.cId);
                 formData.append("oldCname", this.data.data.cName);
                 formData.append("oldCcode", this.data.data.cCode);
                 formData.append("oldCtype", this.data.data.cType);
@@ -255,7 +255,7 @@
                 if (formData){
                   //更换
                   reqwest({
-                    url: 'http://localhost:8085/api/index/change',
+                    url: 'https://sayn.com.cn/api/index/change',
                     method: 'post',
                     processData: false,
                     data: formData,
@@ -283,7 +283,7 @@
                 if (formData){
                   //设备维修
                   reqwest({
-                    url: 'http://localhost:8085/api/index/repair',
+                    url: 'https://sayn.com.cn/api/index/repair',
                     method: 'post',
                     processData: false,
                     data: formData,
