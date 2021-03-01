@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-modal :visible="show" :title="title" @ok="handleEdit(title)" @cancel="handleCancel" cancelText="取消" okText="保存" :confirm-loading="confirmCreateLoading">
+    <a-modal :visible="show" :title="title" @ok="handleEdit(title)" @cancel="handleCancel" cancelText="取消" okText="保存" :confirmLoading="confirmCreateLoading">
       <div v-if="data.data">
         <!--  设备基本信息显示    -->
         <a-row type="flex" justify="center">
@@ -153,6 +153,8 @@
 <script>
   import {maintainInfo} from "../../api";
   import reqwest from 'reqwest';
+  import VConsole from 'vconsole';
+  let vConsole = new VConsole();
 
   export default {
     name: "DevModal.vue",
@@ -208,6 +210,7 @@
               formData.append("peopleId", window.localStorage.getItem('userInfo.uId'))
               this.confirmCreateLoading = true
               if (this.mContent){
+                console.log("我是维护数据cId,mContent,peopleId",formData,this.data.data.cId,this.mContent,window.localStorage.getItem('userInfo.uId'))
                 //设备维护
                 reqwest({
                   url: 'https://sayn.com.cn/api/index/maintain',
@@ -227,23 +230,23 @@
                   complete: () => {
                     this.mContent = ''
                     this.fileList = []
+                    this.confirmCreateLoading = false
+                    this.$emit("update:show",false)
                   }
                 });
-                this.confirmCreateLoading = false
               }
               else{
                 this.$message.info("内容不能为空！");
                 this.confirmCreateLoading = false
+                this.$emit("update:show",false)
               }
-              this.$emit("update:show",false)
             }
             else if(text == '设备维修'){
-              console.log("设备维修信息",this.lifespan,this.form.getFieldsValue().mContent)
               //设备维修数值
               formData.append("cId", this.data.data.cId);
               formData.append('content',this.form.getFieldsValue().mContent);
               formData.append("peopleId", window.localStorage.getItem('userInfo.uId'))
-
+              this.confirmCreateLoading = true
               //更换
               if (this.isShow){
                 // formData.append("eId", this.data.data.eId);
@@ -256,8 +259,9 @@
                 formData.append('newFactory',this.form.getFieldsValue().newFactory);
                 formData.append("lifespan", this.lifespan);
 
-                this.confirmCreateLoading = true
                 if (formData){
+                  console.log("我是更换数据formData,cId,content,peopleId",formData,this.data.data.cId,this.form.getFieldsValue().mContent,window.localStorage.getItem('userInfo.uId'))
+                  console.log("更换oldCname,oldCcode,oldCtype,newCcode,newCname,newCtype,newFactory,lifespan",this.data.data.cName, this.data.data.cCode,this.data.data.cType,this.form.getFieldsValue())
                   //更换
                   reqwest({
                     url: 'https://sayn.com.cn/api/index/change',
@@ -281,15 +285,15 @@
                       this.isShow = false
                       this.form.resetFields();
                       this.$emit("update:show",false);
+                      this.confirmCreateLoading = false
                     }
                   });
                 }
-                this.confirmCreateLoading = false
               }
               //维修
               else{
-                this.confirmCreateLoading = true
                 if (formData){
+                  console.log("我是维修数据formData,cId,content,peopleId",formData,this.data.data.cId,this.form.getFieldsValue().mContent,window.localStorage.getItem('userInfo.uId'))
                   //设备维修
                   reqwest({
                     url: 'https://sayn.com.cn/api/index/repair',
@@ -313,10 +317,10 @@
                       this.isShow = false
                       this.form.resetFields();
                       this.$emit("update:show",false);
+                      this.confirmCreateLoading = false
                     }
                   });
                 }
-                this.confirmCreateLoading = false
               }
               console.log("设备维修表单数据",formData)
             }

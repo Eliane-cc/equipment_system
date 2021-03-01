@@ -18,6 +18,7 @@
 <script>
   import QRCode from 'qrcode-decoder';
   import {scannCode} from "../../api";
+  import jsQR from "jsqr";
 
   export default {
     name: "ScanCode.vue",

@@ -174,6 +174,7 @@
         this.modalData.data.cName = value.components[index].cName
         this.modalData.data.cCode = value.components[index].cCode
         this.modalData.data.cType = value.components[index].cType
+        this.modalData.data.cId = value.components[index].cId
         this.modalData.inputCon = inputCon
       },
       //维修设备
@@ -232,6 +233,7 @@
         this.modalData.data.cName = value.components[index].cName
         this.modalData.data.cCode = value.components[index].cCode
         this.modalData.data.cType = value.components[index].cType
+        this.modalData.data.cId = value.components[index].cId
         this.modalData.inputCon = inputCon
       },
       //扫描设备二维码
