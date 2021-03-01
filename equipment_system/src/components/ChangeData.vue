@@ -188,7 +188,7 @@
       width: '11%',
       ellipsis: true,
       align: 'center',
-      scopedSlots: { customRender: 'cName' },
+      scopedSlots: { customRender: 'ocName' },
     },
     {
       title: '新零件名称',
