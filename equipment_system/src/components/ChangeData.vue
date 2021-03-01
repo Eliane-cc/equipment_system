@@ -184,7 +184,7 @@
     },
     {
       title: '零件名称',
-      dataIndex: 'cName',
+      dataIndex: 'ocName',
       width: '11%',
       ellipsis: true,
       align: 'center',
