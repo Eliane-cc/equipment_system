@@ -153,8 +153,8 @@
 <script>
   import {maintainInfo} from "../../api";
   import reqwest from 'reqwest';
-  import VConsole from 'vconsole';
-  let vConsole = new VConsole();
+  // import VConsole from 'vconsole';
+  // let vConsole = new VConsole();
 
   export default {
     name: "DevModal.vue",

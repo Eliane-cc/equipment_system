@@ -60,7 +60,7 @@
       </div>
     </a-modal>
     <!--  详情  -->
-    <a-modal :visible="modalVisible" :title="title" @ok="handleOk" @cancel="handleCancel" cancelText="取消" okText="确定" v-else-if="title == '详情' || title == '维护详情' || title == '维修详情' || title == '更换详情'"  :confirm-loading="confirmDetailLoading">
+    <a-modal :visible="modalVisible" :title="title" @ok="handleOk" @cancel="handleCancel" cancelText="取消" okText="确定" v-else-if="title == '详情' || title == '维护详情' || title == '维修详情' || title == '更换详情'"  :confirmLoading="confirmDetailLoading">
       <div>
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
@@ -80,10 +80,15 @@
                 <a-col :span="24" class="margin-top" >
                   <a-col :span="4" class="title">
                     {{item.title}}：
+                    <template v-if="picList.length == 0">
+                      <span class="noneCss">无</span>
+                    </template>
                   </a-col>
                   <a-col :span="24">
-                    <template v-for="(itemPic,indexPic) in picList">
-                      <img :src="'data:image/png;base64,'+itemPic" alt="" class="imgList">
+                    <template v-if="picList.length != 0">
+                      <template v-for="(itemPic,indexPic) in picList">
+                        <img :src="'data:image/png;base64,'+itemPic" alt="" class="imgList">
+                      </template>
                     </template>
                   </a-col>
                 </a-col>
@@ -315,6 +320,8 @@
               .then((res) => {
                 if (res.msg == "SUCCESS"){
                   this.picList = res.data
+                }else {
+                  this.$message.info(res.msg)
                 }
                 this.confirmDetailLoading = false
               })
@@ -327,6 +334,8 @@
               .then((res) => {
                 if (res.msg == "SUCCESS"){
                   this.picList = res.data
+                }else {
+                  this.$message.info(res.msg)
                 }
                 this.confirmDetailLoading = false
               })
@@ -339,6 +348,8 @@
               .then((res) => {
                 if (res.msg == "SUCCESS"){
                   this.picList = res.data
+                }else {
+                  this.$message.info(res.msg)
                 }
                 this.confirmDetailLoading = false
               })
@@ -723,15 +734,20 @@
       },
       //详情确定事件
       handleOk(){
+        this.picList = []   //图片为空
+        // this.$emit("update:data",'')
         this.$emit("update:modalVisible",false)
       },
       //取消按钮事件
       handleCancel(e) {
+        console.log("弹窗时间")
         this.form.resetFields();
         this.operTime = '0天0小时0分'
         this.lifespan = ''
         this.createValue = []
         this.starttime = this.moment()
+        this.picList = []   //图片为空
+        // this.$emit("update:data",'')
         this.$emit("update:modalVisible",false)
       },
       //使用寿命改变事件
@@ -760,6 +776,9 @@
   .title{
     font-weight: 600;
     font-size: 14px;
+  }
+  .noneCss{
+    font-weight: 500;
   }
   .margin-top{
     margin-bottom: 10px;
