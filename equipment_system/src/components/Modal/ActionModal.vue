@@ -22,7 +22,7 @@
           <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
             <a-form-item :label="item.label">
               <template v-if="item.label == '使用寿命'">
-                <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" :value="lifespan"/> 天
+                <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" :value="lifespan" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/> 天
               </template>
               <template v-else-if="item.label == '开始使用时间'">
                 <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" :ref="item.name" v-model="starttime"/>
@@ -132,10 +132,13 @@
             <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
               <a-form-item :label="item.title">
                 <template v-if="item.title == '使用寿命'">
-                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :ref="item.name" :value="lifespan" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/> 天
+<!--                  <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" :value="lifespan" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/> 天-->
+                  <a-input-number :min="0" :name="item.name" @change="onChange" allowClear :ref="item.name" :value="lifespan" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/> 天
                 </template>
                 <template v-else-if="item.title == '开始使用时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name" :value="createValue" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/>
+<!--                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" :ref="item.name" v-model="starttime"/>-->
+<!--                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :defaultValue="item.content" :format="dateFormat" :ref="item.name" v-model="createValue"/>-->
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name" :value="createValue" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
                 </template>
                 <template v-else-if="item.title == '维护时间' || item.title == '维修时间' || item.title == '更换时间'">
                   <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :value="actionTime" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/>
@@ -165,7 +168,12 @@
                   </a-select>
                 </template>
                 <template v-else-if="item.title == '运行时间'">
-                  <div>{{operTime}}</div>
+                  <template v-if="operTime == '0天0小时0分'">
+                    <div>{{item.content}}</div>
+                  </template>
+                  <template v-else>
+                    <div>{{operTime}}</div>
+                  </template>
                 </template>
                 <template v-else-if="item.title == '设备编码'">
                   <a-input :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content} ]"/>
@@ -453,8 +461,18 @@
                 else if (text == '编辑零件'){
                   console.log("data编辑",data)
                   data.cId = this.data.value.cId
-                  data.lifespan = this.lifespan
-                  data.starttime = this.createValue
+                  if (this.lifespan){
+                    data.lifespan = this.lifespan
+                  }else{
+                    data.lifespan =  this.data.editData[5].content
+                  }
+                  console.log("lifespan",this.lifespan, this.data.editData[5].content)
+                  if (this.createValue.length == 0){
+                    data.starttime = this.data.editData[6].content
+                  }else{
+                    data.starttime = this.createValue
+                  }
+                  // console.log("零件编辑",this.createValue.length == 0,this.data.editData[6].content)
                   console.log("零件请求参数",data)
                   updateEquipment(data)
                     .then((res) => {
@@ -543,7 +561,11 @@
         }else{
           this.$message.info('两次密码输入不一致，请重新输入！');
         }
-
+        this.operTime = '0天0小时0分'
+        this.lifespan = ''
+        this.createValue = []
+        this.starttime = this.moment()
+        this.picList = []   //图片为空
       },
       //新增确定事件
       handleCreate(text) {
@@ -747,6 +769,9 @@
         this.createValue = []
         this.starttime = this.moment()
         this.picList = []   //图片为空
+        // this.form.setFieldsValue({
+        //   "starttime": []
+        // })
         // this.$emit("update:data",'')
         this.$emit("update:modalVisible",false)
       },

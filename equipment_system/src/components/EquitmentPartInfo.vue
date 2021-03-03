@@ -272,7 +272,7 @@
         ],
         isShowModal: false,
         modalTitle: '',
-        modalData: [],
+        modalData: {},
         dropList: [],   //下拉列表
         form: this.$form.createForm(this, { name: 'advanced_search' }),
         isLoading: true, //表格分页加载
@@ -421,6 +421,10 @@
         ]
         this.isShowModal = true
         this.modalTitle = '编辑'
+
+        if(this.modalData){
+          this.modalData = []
+        }
         this.modalData.actionText = '编辑零件'
         this.modalData.displayData = displayData
         this.modalData.editData = editData
