@@ -208,6 +208,7 @@
               formData.append("cId", this.data.data.cId);
               formData.append("mContent", this.mContent);
               formData.append("peopleId", window.localStorage.getItem('userInfo.uId'))
+              formData.append("cName", this.data.data.cName)
               this.confirmCreateLoading = true
               if (this.mContent){
                 console.log("我是维护数据cId,mContent,peopleId",formData,this.data.data.cId,this.mContent,window.localStorage.getItem('userInfo.uId'))
@@ -292,6 +293,7 @@
               }
               //维修
               else{
+                formData.append("cName", this.data.data.cName)
                 if (formData){
                   console.log("我是维修数据formData,cId,content,peopleId",formData,this.data.data.cId,this.form.getFieldsValue().mContent,window.localStorage.getItem('userInfo.uId'))
                   //设备维修
