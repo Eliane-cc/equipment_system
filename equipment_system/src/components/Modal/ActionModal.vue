@@ -22,7 +22,7 @@
           <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
             <a-form-item :label="item.label">
               <template v-if="item.label == '使用寿命'">
-                <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" :value="lifespan" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/> 天
+                <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" :value="lifespan"/> 天
               </template>
               <template v-else-if="item.label == '开始使用时间'">
                 <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" :ref="item.name" v-model="starttime"/>
