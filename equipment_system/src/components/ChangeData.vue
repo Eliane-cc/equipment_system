@@ -317,6 +317,18 @@
               this.pagination.total = res.data.total
               this.isLoading = false
             }
+            else if(res.msg == "用户未登录"){
+              this.$message.info(res.msg)
+              window.localStorage.removeItem('username')
+              window.localStorage.removeItem('password')
+              window.localStorage.removeItem('token')
+              // window.localStorage.setItem('token', '')
+              document.cookie = `accessToken=; expires=${new Date(0).toGMTString()}`
+              this.$router.replace({path: '/',replace:true})
+            }
+            else{
+              this.$message.info(res.msg)
+            }
             console.log("更换列表", res);
           })
       },
