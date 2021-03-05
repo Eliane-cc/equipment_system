@@ -356,7 +356,7 @@
           {
             title: '设备厂家',
             key: 'fName',
-            content: cData.efName
+            content: cData.eFName
           },
           {
             title: '设备名称',

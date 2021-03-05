@@ -39,9 +39,9 @@
             <a-button @click="QRCode" size="large">
               设备二维码
             </a-button>
-            <a-button :style="{ marginLeft: '8px' }" @click="devNFC" size="large">
-              设备NFC
-            </a-button>
+<!--            <a-button :style="{ marginLeft: '8px' }" @click="devNFC" size="large">-->
+<!--              设备NFC-->
+<!--            </a-button>-->
             <a-button :style="{ marginLeft: '8px' }" type="primary" html-type="submit" size="large" @click="handleSearch">
               筛选
             </a-button>
@@ -162,7 +162,7 @@
         let params = {
           pageNum: pageNum,
           pageSize: pageSize,
-          cNames: this.cNamesValue,
+          cName: this.cNamesValue,
         }
         getIndexList(params)
           .then((res) => {

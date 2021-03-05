@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  新增  -->
-    <a-modal :visible="modalVisible" :title="title" @ok="handleCreate(data.actionText)" @cancel="handleCancel" cancelText="取消" :okText="title" v-if="title=='新增'"  :confirm-loading="confirmCreateLoading">
+    <a-modal :visible="modalVisible" :title="title" @ok="handleCreate(data.actionText)" @cancel="handleCancel('新增')" cancelText="取消" :okText="title" v-if="title=='新增'"  :confirm-loading="confirmCreateLoading">
       <div v-if="data.createData">
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
@@ -19,10 +19,10 @@
         </div>
         <!--  输入    -->
         <a-row v-for="(item,index) in data.createData" :key="index" class="margin-top">
-          <a-form :form="form" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
+          <a-form :form="forms" :label-col="{ span: 4,offset: 1 }" :wrapper-col="{ span: 17,offset: 1 }">
             <a-form-item :label="item.label">
               <template v-if="item.label == '使用寿命'">
-                <a-input-number v-model="value" :min="0" @change="onChange" allowClear :ref="item.name" :value="lifespan"/> 天
+                <a-input-number :min="0" @change="onChange" allowClear :ref="item.name" v-model="lifespan"/> 天
               </template>
               <template v-else-if="item.label == '开始使用时间'">
                 <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :default-value="moment()" :format="dateFormat" :ref="item.name" v-model="starttime"/>
@@ -52,7 +52,7 @@
                 <a-input :placeholder="`请输入${item.label}`" :rows="3"  allowClear :ref="item.name" v-decorator="[item.name, validatorRules.devCode]"/>
               </template>
               <template v-else>
-                <a-input :placeholder="`请输入${item.label}`" :rows="3" allowClear :ref="item.name" v-decorator="[item.name, validatorRules.common]" />
+                <a-input :placeholder="`请输入${item.label}`" :rows="3" allowClear :ref="item.name" defaultValue="" v-decorator="[item.name, validatorRules.common,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]" />
               </template>
             </a-form-item>
           </a-form>
@@ -60,7 +60,7 @@
       </div>
     </a-modal>
     <!--  详情  -->
-    <a-modal :visible="modalVisible" :title="title" @ok="handleOk" @cancel="handleCancel" cancelText="取消" okText="确定" v-else-if="title == '详情' || title == '维护详情' || title == '维修详情' || title == '更换详情'"  :confirmLoading="confirmDetailLoading">
+    <a-modal :visible="modalVisible" :title="title" @ok="handleOk" @cancel="handleCancel('详情')" cancelText="取消" okText="确定" v-else-if="title == '详情' || title == '维护详情' || title == '维修详情' || title == '更换详情'"  :confirmLoading="confirmDetailLoading">
       <div>
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
@@ -109,7 +109,7 @@
       </div>
     </a-modal>
     <!--  编辑  -->
-    <a-modal :visible="modalVisible" :title="title" @ok="handleEdit(data.actionText)" @cancel="handleCancel" cancelText="取消" :okText="title" v-else>
+    <a-modal :visible="modalVisible" :title="title" @ok="handleEdit(data.actionText)" @cancel="handleCancel('编辑')" cancelText="取消" :okText="title" v-else>
       <div>
         <!--  设备基本信息显示    -->
         <div v-if="data.displayData">
@@ -179,7 +179,7 @@
                   <a-input :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content} ]"/>
                 </template>
                 <template v-else>
-                  <a-input :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
+                  <a-input :placeholder="`请输入${item.title}`" :rows="3" @change="editContentNew(item,index)" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
                 </template>
               </a-form-item>
             </a-form>
@@ -234,6 +234,7 @@
     data(){
       return{
         form: this.$form.createForm(this, { name: 'coordinated' }),
+        forms: this.$form.createForm(this, { name: 'create' }),
         fileList: [],
         tableData: this.data,
         value: '',
@@ -473,7 +474,10 @@
                     data.starttime = this.createValue
                   }
                   // console.log("零件编辑",this.createValue.length == 0,this.data.editData[6].content)
-                  console.log("零件请求参数",data)
+                  console.log("零件请求参数",data,this.data.value.cCode)
+                  if (data.cCode == this.data.value.cCode){
+                    data.cCode = ''
+                  }
                   updateEquipment(data)
                     .then((res) => {
                       console.log("res",res)
@@ -571,9 +575,9 @@
       handleCreate(text) {
         let data;
         // 拉取表单数据的方法
-        this.form.validateFields((err, values) => {
+        this.forms.validateFields((err, values) => {
           if (!err) {
-            data = this.form.getFieldsValue()
+            data = this.forms.getFieldsValue()
             console.log("表单数据",data)
             this.confirmCreateLoading = true
             if (data){
@@ -583,12 +587,12 @@
                   .then((res) => {
                     if (res.msg == "SUCCESS"){
                       this.$message.success("添加用户成功！");
-                      this.form.resetFields();
+                      this.forms.resetFields();
                       //重新刷新用户列表
                       this.userList();
                     }else{
                       this.$message.error(res.msg);
-                      this.form.resetFields();
+                      this.forms.resetFields();
                     }
                     this.$emit("update:modalVisible",false);
                   })
@@ -600,14 +604,14 @@
                     console.log("res",res)
                     if (res.msg == "SUCCESS"){
                       this.$message.success("添加设备成功！");
-                      this.form.resetFields();
+                      this.forms.resetFields();
                       //重新刷新设备
                       this.devList();
                       //重新刷新下拉列表数据
                       this.getDropList();
                     }else{
                       this.$message.error(res.msg);
-                      this.form.resetFields();
+                      this.forms.resetFields();
                     }
                     this.$emit("update:modalVisible",false);
                   })
@@ -627,7 +631,7 @@
                     console.log("res",res)
                     if (res.msg == "SUCCESS"){
                       this.$message.success("添加零件成功！");
-                      this.form.resetFields();
+                      this.forms.resetFields();
                       this.operTime = '0天0小时0分'
                       this.lifespan = ''
                       this.createValue = []
@@ -638,7 +642,7 @@
                       this.getEquitDropList();
                     }else{
                       this.$message.error(res.msg);
-                      this.form.resetFields();
+                      this.forms.resetFields();
                       this.operTime = '0天0小时0分'
                       this.lifespan = ''
                       this.createValue = []
@@ -751,8 +755,12 @@
       },
       //编辑内容
       editContent(newValue,index){
-        this.tableData.editData[index].content = newValue.content
-        console.log("编辑",newValue,index)
+        // this.tableData.editData[index].content = newValue.content
+        console.log("xxxx编辑",newValue,index)
+      },
+      editContentNew(newValue,index){
+        // this.tableData.edit[index].content = newValue.content
+        console.log("输入框变化了",newValue,index)
       },
       //详情确定事件
       handleOk(){
@@ -761,9 +769,10 @@
         this.$emit("update:modalVisible",false)
       },
       //取消按钮事件
-      handleCancel(e) {
+      handleCancel(title) {
         console.log("弹窗时间")
         this.form.resetFields();
+        this.forms.resetFields();
         this.operTime = '0天0小时0分'
         this.lifespan = ''
         this.createValue = []

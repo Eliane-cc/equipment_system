@@ -136,7 +136,7 @@
         let params = {
           pageNum: pageNum,
           pageSize: pageSize,
-          cNames: this.cNamesValue,
+          cName: this.cNamesValue,
         }
         getIndexList(params)
           .then((res) => {
