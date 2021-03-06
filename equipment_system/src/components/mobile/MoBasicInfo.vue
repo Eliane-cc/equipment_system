@@ -31,9 +31,9 @@
       <a-button @click="QRCode" type="primary" icon="scan">
         设备二维码
       </a-button>
-      <a-button :style="{ marginLeft: '26px' }" @click="devNFC" type="primary">
-        设备NFC
-      </a-button>
+<!--      <a-button :style="{ marginLeft: '26px' }" @click="devNFC" type="primary">-->
+<!--        设备NFC-->
+<!--      </a-button>-->
     </div>
     <div class="result" v-if="deviceName">
       <div class="result-title con">
