@@ -441,6 +441,10 @@
                 else if (text == '编辑设备'){
                   console.log("data编辑",data)
                   data.eId = this.data.value.eId
+                  if (data.eCode == this.data.value.eCode){
+                    // data.cCode = ''
+                    delete data.eCode
+                  }
                   updateDev(data)
                     .then((res) => {
                       console.log("res",res)
@@ -543,7 +547,11 @@
                   data.cid = this.data.value.cId
                   data.startTime = this.actionTime
                  // data.cId = this.data.value.cId
-                  console.log("更换",data)
+                  console.log("更换",data,this.data.value)
+                  if (data.newCcode == this.data.value.cCode){
+                    // data.cCode = ''
+                    delete data.newCcode
+                  }
                   updateChange(data)
                     .then((res) => {
                       if (res.msg == "SUCCESS"){
@@ -734,6 +742,7 @@
             if (res.msg == "SUCCESS"){
               this.$emit("update:dataList",res.data.list);
             }
+            console.log("更换列表", res);
           })
       },
       //设备下拉列表信息更新
