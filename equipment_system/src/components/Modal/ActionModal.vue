@@ -141,7 +141,7 @@
                   <a-date-picker show-time placeholder="请选择时间" @change="selectTime" :format="dateFormat" :ref="item.name" :value="createValue" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
                 </template>
                 <template v-else-if="item.title == '维护时间' || item.title == '维修时间' || item.title == '更换时间'">
-                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :value="actionTime" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}]}]"/>
+                  <a-date-picker show-time placeholder="请选择时间" @change="selectActionTime" :format="dateFormat" :value="actionTime" :ref="item.name"  v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
                 </template>
                 <template v-else-if="item.title == '维护内容' || item.title == '维修内容' || item.title == '更换内容'">
                   <a-textarea :placeholder="`请输入${item.title}`" :rows="3" @change="editContent(item,index)" :name="item.name" :ref="item.name" v-decorator="[item.name,  {rules: [{required: true,message: '该字段不能为空，请重新输入'}],initialValue: item.content}]"/>
@@ -503,7 +503,12 @@
                 //编辑维护
                 else if (text == '编辑维护'){
                   data.mId = this.data.value.mId
-                  data.mTime = this.actionTime
+                  console.log("编辑维护",this.data)
+                  if (this.actionTime.length == 0){
+                    data.mTime = this.data.editData[1].content
+                  }else{
+                    data.mTime = this.actionTime
+                  }
                   updateMaintain(data)
                     .then((res) => {
                       console.log("res",res)
@@ -524,7 +529,12 @@
                 //编辑维修
                 else if (text == '编辑维修'){
                   data.rId = this.data.value.rId
-                  data.rTime = this.actionTime
+                  // data.rTime = this.actionTime
+                  if (this.actionTime.length == 0){
+                    data.rTime = this.data.editData[1].content
+                  }else{
+                    data.rTime = this.actionTime
+                  }
                   updateRepair(data)
                     .then((res) => {
                       if (res.msg == "SUCCESS"){
@@ -545,12 +555,17 @@
                 else if (text == '编辑更换'){
                  // data.eId = this.data.value.eId
                   data.cid = this.data.value.cId
-                  data.startTime = this.actionTime
+                  // data.startTime = this.actionTime
                  // data.cId = this.data.value.cId
-                  console.log("更换",data,this.data.value)
+                  console.log("更换",data,this.data)
                   if (data.newCcode == this.data.value.cCode){
                     // data.cCode = ''
                     delete data.newCcode
+                  }
+                  if (this.actionTime.length == 0){
+                    data.startTime = this.data.editData[6].content
+                  }else{
+                    data.startTime = this.actionTime
                   }
                   updateChange(data)
                     .then((res) => {

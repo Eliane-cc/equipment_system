@@ -439,7 +439,7 @@
           {
             title: '更换时间',
             key: 'startTime',
-            content: value.cTime,
+            content: value.changeTime,
             name: 'startTime'
           }
         ]
