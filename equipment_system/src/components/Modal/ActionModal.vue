@@ -476,7 +476,8 @@
                   // console.log("零件编辑",this.createValue.length == 0,this.data.editData[6].content)
                   console.log("零件请求参数",data,this.data.value.cCode)
                   if (data.cCode == this.data.value.cCode){
-                    data.cCode = ''
+                    // data.cCode = ''
+                    delete data.cCode
                   }
                   updateEquipment(data)
                     .then((res) => {
