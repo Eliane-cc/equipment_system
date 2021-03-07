@@ -181,6 +181,12 @@
           uName: this.uName,
           uWorknumber: this.uWorknumber
         }
+        if(!this.uName){
+          delete params.uName
+        }
+        if (!this.uWorknumber){
+          delete params.uWorknumber
+        }
         getUserList(params)
           .then((res) => {
             if (res.msg == "SUCCESS"){

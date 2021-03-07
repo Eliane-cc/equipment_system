@@ -33,6 +33,7 @@ export const maintainInfo =(params) => postform(`index/maintain`,params);
 //获取用户列表
 //export const getUserList =(params) => post(`admin/user/list`,params);
 export const getUserList =(params) => post(`user/listUser`,params);
+// export const getUser = (params) => post(`user/getUser`,params);
 
 //添加用户
 export const addUser =(params) => post(`user/addUser`,params);
