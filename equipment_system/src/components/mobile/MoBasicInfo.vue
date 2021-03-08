@@ -22,7 +22,7 @@
         </a-tree-select>
       </a-col>
       <a-col :span="4">
-        <a-button :style="{ marginLeft: '8px' }" type="primary" html-type="submit" size="small">
+        <a-button :style="{ marginLeft: '8px' }" type="primary" html-type="submit" size="small"  @click="handleSearch">
           筛选
         </a-button>
       </a-col>
@@ -84,7 +84,7 @@
 <script>
   import DevModal from "../Modal/DevModal";
   import ScanCode from "../Modal/ScanCode";
-  import {getDropIndexList, getIndexList} from "../../api";
+  import {getDropIndexList, getIndexList, getEquitInfo} from "../../api";
 
   export default {
     name: "MoBasicInfo.vue",
@@ -142,8 +142,26 @@
           .then((res) => {
             if (res.msg == "SUCCESS"){
               this.data = res.data.list
+              console.log("我的首页数据", this.data)
             }
           })
+      },
+      //筛选查询
+      handleSearch() {
+        if (this.cNamesValue){
+          let params = {
+            cName: this.cNamesValue
+          }
+          getEquitInfo(params)
+            .then((res) => {
+              if (res.msg == "SUCCESS"){
+                this.codeData = res.data
+                this.deviceName = res.data.eName
+                this.comInfo = res.data.components
+                // console.log("我的首页数据", this.data)
+              }
+            })
+        }
       },
       //下拉列表信息显示
       getDropList(){

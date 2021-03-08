@@ -19,7 +19,10 @@ export const login = (params) => post(`user/login`,params);
 export const getDropIndexList =() => get(`index/allCName`);
 
 //首页扫描二维码接口
-export const scannCode =(params) => post(`index/getInfoByECode`,params);
+export const scannCode =(params) => post(`index/getInfosByECode`,params);
+
+//手机端首页筛选零件名
+export const getEquitInfo =(params) => post(`/index/getInfoByCname`,params);
 
 //获取用户列表
 export const getIndexList =(params) => post(`index/allBaseList`,params);
